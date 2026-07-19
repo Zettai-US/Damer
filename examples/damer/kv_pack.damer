@@ -1,0 +1,7 @@
+damer.switchlet @kv_pack(
+    %src : memref<?xf16, "cxl">,
+    %dst : memref<?xi8, "cxl">) {
+  %v = damer.read %src
+  %q = damer.quantize %v
+  damer.write %q, %dst
+}

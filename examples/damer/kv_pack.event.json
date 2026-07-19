@@ -1,0 +1,25 @@
+{
+  "switchlet": "kv_pack",
+  "source": {
+    "name": "src",
+    "type": "memref<?xf16, \"cxl\">",
+    "node": "cxl_memory_device"
+  },
+  "destination": {
+    "name": "dst",
+    "type": "memref<?xi8, \"cxl\">",
+    "node": "cxl_memory_device"
+  },
+  "actions": ["move", "quantize"],
+  "edge": {
+    "bytes": 0,
+    "stride": "contiguous",
+    "reuse_distance": "short",
+    "read_write_ratio": "1:1",
+    "ordering_requirement": "program_order",
+    "alias_set": "kv",
+    "ownership": "destination",
+    "priority": 8,
+    "ttl": 4
+  }
+}

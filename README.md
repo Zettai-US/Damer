@@ -1,7 +1,190 @@
-# CXL Data Movement Aware MLIR/CIRCT Passes
+# Damer eBPF Middleware Compiler
 
-This is an out-of-tree pass scaffold for co-analyzing CXL data movement in both
-software MLIR and CIRCT hardware IR.
+Damer uses bpftime/eBPF as the programmable frontend for data-movement intent.
+The middleware compiler turns that intent into a verified semantic movement
+plan, chooses where movement-side transforms should run, and emits bpftime-facing
+artifacts.
+
+The main path does not require CIRCT:
+
+```text
+bpftime/eBPF policy or event JSON
+        |
+        v
+Damer switchlet / movement intent
+        |
+        v
+damer-compile
+        |
+        +--> semantic movement plan
+        +--> bpftime BPF C stub
+        +--> bpftime runtime manifest
+```
+
+## eBPF Middleware Compiler
+
+Compile the high-level switchlet form:
+
+```mlir
+damer.switchlet @kv_pack(
+    %src : memref<?xf16, "cxl">,
+    %dst : memref<?xi8, "cxl">) {
+  %v = damer.read %src
+  %q = damer.quantize %v
+  damer.write %q, %dst
+}
+```
+
+Generate an optimized plan:
+
+```bash
+tools/damer_compile.py examples/damer/kv_pack.damer --emit plan
+```
+
+Generate bpftime-facing eBPF C:
+
+```bash
+tools/damer_compile.py examples/damer/kv_pack.event.json --emit bpf-c
+```
+
+Generate all middleware artifacts:
+
+```bash
+tools/damer_compile.py examples/damer/kv_pack.event.json \
+  --emit all \
+  --output-dir out/kv_pack
+```
+
+The compiler recognizes these fused movement actions:
+
+```text
+Move
+Move + Quantize
+Move + Compress
+Move + Checksum
+Move + Filter
+Move + Reduce
+Move + Scatter/Gather
+Move + Replicate
+Move + Persist
+```
+
+It models:
+
+```text
+Node: host memory, CXL memory device, GPU memory, accelerator,
+      switch compute engine
+Edge: bytes, stride, reuse distance, read/write ratio, source/destination,
+      ordering requirement, alias set, ownership, transformation
+```
+
+The compiler also emits a verifier summary with bounded helper calls, bounded
+RDMA fanout, TTL requirements for retry/redirect, no blocking waits, and
+epoch-atomic update assumptions.
+
+The eBPF-facing ABI is in `include/damer/bpftime_frontend.h`, with a minimal
+example in `examples/bpftime/kv_pack.bpf.c`.
+
+## Qwen 27B DPU E2E
+
+The Qwen 27B E2E test exercises the complete Damer middleware path for a
+serving-style data-movement workload:
+
+```text
+Qwen phase JSON
+    -> Damer semantic movement plan
+    -> bpftime BPF C
+    -> bpftime manifest
+    -> clang -target bpf object
+```
+
+Run the local artifact-level test:
+
+```bash
+tools/run_qwen27b_dpu_e2e.py --clean
+```
+
+The default workload is `examples/qwen27b/qwen27b_workload.json`. It covers:
+
+```text
+Move: logits movement
+Move + Quantize: KV packing
+Move + Compress: prefill activation spill
+Move + Checksum: decode KV fetch
+Move + Filter: attention mask movement
+Move + Reduce: tensor-parallel logits reduction
+Move + Scatter/Gather: tensor shard exchange
+Move + Replicate: KV replica refresh
+Move + Persist: checkpoint persistence
+```
+
+Artifacts and the report are written under:
+
+```text
+out/qwen27b-dpu-e2e/
+```
+
+To validate the same generated artifacts on a reachable DPU Arm OS:
+
+```bash
+tools/run_qwen27b_dpu_e2e.py \
+  --clean \
+  --dpu-host root@<dpu-ip-or-hostname> \
+  --remote-dir /tmp/damer-qwen27b-e2e
+```
+
+The remote path requires `ssh`, `scp`, and `clang` on the DPU. The local host
+can still detect a BlueField PCIe device without rshim or DPU SSH being active;
+in that case the script produces local bpftime/DPU-ready artifacts but does not
+claim remote execution.
+
+Run a repeated local benchmark for Damer compiler latency, BPF object compile
+latency, artifact size, and BPF instruction count:
+
+```bash
+tools/benchmark_qwen27b_damer.py --clean --repeat 10 --warmup 1
+```
+
+Benchmark reports are written to:
+
+```text
+out/qwen27b-damer-benchmark/qwen27b_damer_benchmark.json
+out/qwen27b-damer-benchmark/qwen27b_damer_benchmark.md
+```
+
+## Damer Compiler Fuzzer
+
+The fuzzer stresses the bpftime-facing middleware compiler with deterministic
+JSON and DSL switchlets. It generates valid movement plans plus malformed inputs
+that should be rejected cleanly by `CompileError` or the effect verifier.
+
+Run the CI-style smoke test through lit:
+
+```bash
+llvm-lit -av test --filter damer-fuzzer
+```
+
+Run a longer local fuzz campaign:
+
+```bash
+tools/fuzz_damer_compile.py \
+  --iterations 10000 \
+  --seed 0xD00D \
+  --invalid-rate 0.25
+```
+
+On an unexpected compiler exception, the fuzzer exits non-zero and writes a
+reproducer under:
+
+```text
+out/damer-fuzzer-crashes/
+```
+
+## Optional MLIR/CXL Passes
+
+The repository also contains an out-of-tree pass scaffold for co-analyzing CXL
+data movement in software MLIR and CIRCT hardware IR. This is not the primary
+eBPF middleware path.
 
 It contains two metadata-only passes:
 
@@ -11,8 +194,7 @@ It contains two metadata-only passes:
 - `--cxl-hw-data-movement`: walks CIRCT `hw.module` operations, classifies
   host/CXL/device-facing ports and datapath operations, and annotates CXL-facing
   hardware movement boundaries.
-
-Both passes use a shared annotation:
+The MLIR passes use a shared annotation:
 
 ```mlir
 {cxl.data_movement = {
@@ -24,7 +206,7 @@ Both passes use a shared annotation:
 }}
 ```
 
-## Build
+## MLIR Build
 
 Build CIRCT first, then point this project at the generated LLVM, MLIR, and
 CIRCT CMake package directories:
@@ -37,7 +219,7 @@ cmake -G Ninja -S . -B build \
 ninja -C build cxl-data-movement-opt
 ```
 
-## Software Example
+## MLIR Software Example
 
 ```bash
 build/bin/cxl-data-movement-opt \
@@ -48,7 +230,7 @@ build/bin/cxl-data-movement-opt \
 By default, `memref<..., "cxl">` is considered CXL memory. Integer memory
 spaces can be enabled with `--cxl-space-id=<n>`.
 
-## Hardware Example
+## MLIR Hardware Example
 
 ```bash
 build/bin/cxl-data-movement-opt \
