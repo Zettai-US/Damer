@@ -1,0 +1,114 @@
+{
+  "model": "prefill_decode_colocation",
+  "description": "Mixed prefill, decode, training, and checkpoint traffic sharing the same GPU fabric.",
+  "events": [
+    {
+      "switchlet": "colocate_decode_kv_deadline_fetch",
+      "source": {"name": "src", "type": "memref<?xi8, \"cxl\">", "node": "cxl_memory_device"},
+      "destination": {"name": "dst", "type": "memref<?xi8, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "checksum"],
+      "edge": {
+        "bytes": 524288,
+        "stride": 1,
+        "reuse_distance": 1,
+        "read_write_ratio": "8:1",
+        "ordering_requirement": "acquire_release",
+        "alias_set": "colocate_decode_kv",
+        "ownership": "borrowed",
+        "priority": 10,
+        "deadline_us": 120,
+        "semantic_class": "decode_kv_fetch",
+        "ttl": 3
+      }
+    },
+    {
+      "switchlet": "colocate_decode_logits_move",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move"],
+      "edge": {
+        "bytes": 2359296,
+        "stride": 1,
+        "reuse_distance": 1,
+        "read_write_ratio": "1:1",
+        "ordering_requirement": "program_order",
+        "alias_set": "colocate_decode_logits",
+        "ownership": "borrowed",
+        "priority": 9,
+        "deadline_us": 180,
+        "ttl": 4
+      }
+    },
+    {
+      "switchlet": "colocate_prefill_activation_spill",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xi8, \"cxl\">", "node": "cxl_memory_device"},
+      "actions": ["move", "compress"],
+      "edge": {
+        "bytes": 67108864,
+        "stride": 1,
+        "reuse_distance": 128,
+        "read_write_ratio": "1:1",
+        "ordering_requirement": "program_order",
+        "alias_set": "colocate_prefill_activation",
+        "ownership": "destination",
+        "priority": 4,
+        "compression_ratio": 0.35,
+        "semantic_class": "prefill_activation",
+        "ttl": 6
+      }
+    },
+    {
+      "switchlet": "colocate_prefill_kv_pack",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xi8, \"cxl\">", "node": "cxl_memory_device"},
+      "actions": ["move", "quantize"],
+      "edge": {
+        "bytes": 16777216,
+        "stride": 1,
+        "reuse_distance": 16,
+        "read_write_ratio": "1:1",
+        "ordering_requirement": "program_order",
+        "alias_set": "colocate_prefill_kv",
+        "ownership": "destination",
+        "priority": 7,
+        "ttl": 4
+      }
+    },
+    {
+      "switchlet": "colocate_training_allreduce",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "reduce"],
+      "edge": {
+        "bytes": 134217728,
+        "stride": 1,
+        "reuse_distance": 64,
+        "read_write_ratio": "4:1",
+        "ordering_requirement": "total",
+        "alias_set": "colocate_training_gradients",
+        "ownership": "shared",
+        "priority": 2,
+        "reduction_ratio": 0.25,
+        "ttl": 6
+      }
+    },
+    {
+      "switchlet": "colocate_checkpoint_throttle",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xf16, \"cxl\">", "node": "cxl_memory_device"},
+      "actions": ["move", "persist"],
+      "edge": {
+        "bytes": 536870912,
+        "stride": 1,
+        "reuse_distance": 4096,
+        "read_write_ratio": "1:1",
+        "ordering_requirement": "program_order",
+        "alias_set": "colocate_checkpoint",
+        "ownership": "destination",
+        "priority": 1,
+        "ttl": 8
+      }
+    }
+  ]
+}

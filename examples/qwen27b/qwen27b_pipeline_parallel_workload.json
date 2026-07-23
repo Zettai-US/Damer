@@ -1,0 +1,118 @@
+{
+  "model": "qwen27b_pipeline_parallel",
+  "description": "Qwen 27B pipeline and tensor parallel data movement across GPU peers, DPU-visible collectives, and CXL staging.",
+  "events": [
+    {
+      "switchlet": "qwen27b_pp_stage_activation_send",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move"],
+      "edge": {
+        "bytes": 134217728,
+        "stride": 1,
+        "reuse_distance": 8,
+        "read_write_ratio": "1:1",
+        "ordering_requirement": "program_order",
+        "alias_set": "qwen27b_pp_activation",
+        "ownership": "borrowed",
+        "priority": 8,
+        "semantic_class": "pipeline_activation_send",
+        "ttl": 4
+      }
+    },
+    {
+      "switchlet": "qwen27b_pp_activation_compress_spill",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xi8, \"cxl\">", "node": "cxl_memory_device"},
+      "actions": ["move", "compress"],
+      "edge": {
+        "bytes": 268435456,
+        "stride": 1,
+        "reuse_distance": 128,
+        "read_write_ratio": "1:1",
+        "ordering_requirement": "program_order",
+        "alias_set": "qwen27b_pp_activation_spill",
+        "ownership": "destination",
+        "priority": 6,
+        "compression_ratio": 0.45,
+        "semantic_class": "pipeline_activation_spill",
+        "ttl": 6
+      }
+    },
+    {
+      "switchlet": "qwen27b_pp_tensor_allreduce",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "reduce"],
+      "edge": {
+        "bytes": 268435456,
+        "stride": 1,
+        "reuse_distance": 32,
+        "read_write_ratio": "4:1",
+        "ordering_requirement": "total",
+        "alias_set": "qwen27b_pp_allreduce",
+        "ownership": "shared",
+        "priority": 5,
+        "reduction_ratio": 0.25,
+        "semantic_class": "tensor_parallel_allreduce",
+        "ttl": 6
+      }
+    },
+    {
+      "switchlet": "qwen27b_pp_weight_stream_quantize",
+      "source": {"name": "src", "type": "memref<?xf16, \"cxl\">", "node": "cxl_memory_device"},
+      "destination": {"name": "dst", "type": "memref<?xi8, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "quantize"],
+      "edge": {
+        "bytes": 536870912,
+        "stride": 1,
+        "reuse_distance": 256,
+        "read_write_ratio": "4:1",
+        "ordering_requirement": "acquire_release",
+        "alias_set": "qwen27b_pp_weight_stream",
+        "ownership": "borrowed",
+        "priority": 4,
+        "quantization_ratio": 0.5,
+        "semantic_class": "weight_stream_quantize",
+        "ttl": 6
+      }
+    },
+    {
+      "switchlet": "qwen27b_pp_microbatch_scatter",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "scatter/gather"],
+      "edge": {
+        "bytes": 134217728,
+        "stride": 1,
+        "fragments": 8,
+        "reuse_distance": 16,
+        "read_write_ratio": "1:1",
+        "ordering_requirement": "acquire_release",
+        "alias_set": "qwen27b_pp_microbatch",
+        "ownership": "shared",
+        "priority": 7,
+        "semantic_class": "microbatch_scatter",
+        "ttl": 5
+      }
+    },
+    {
+      "switchlet": "qwen27b_pp_checkpoint_persist",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xf16, \"cxl\">", "node": "cxl_memory_device"},
+      "actions": ["move", "persist"],
+      "edge": {
+        "bytes": 1073741824,
+        "stride": 1,
+        "reuse_distance": 4096,
+        "read_write_ratio": "1:1",
+        "ordering_requirement": "program_order",
+        "alias_set": "qwen27b_pp_checkpoint",
+        "ownership": "destination",
+        "priority": 1,
+        "semantic_class": "pipeline_checkpoint_persist",
+        "ttl": 8
+      }
+    }
+  ]
+}

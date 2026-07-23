@@ -1,0 +1,121 @@
+{
+  "model": "qwen27b_long_context_cxl",
+  "description": "Qwen 27B long-context serving with CXL-backed KV cache, prefix reuse, sequence migration, and DPU-visible copy policy.",
+  "events": [
+    {
+      "switchlet": "qwen27b_longctx_decode_hot_kv_fetch",
+      "source": {"name": "src", "type": "memref<?xi8, \"cxl\">", "node": "cxl_memory_device"},
+      "destination": {"name": "dst", "type": "memref<?xi8, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "checksum"],
+      "edge": {
+        "bytes": 1048576,
+        "stride": 1,
+        "reuse_distance": 1,
+        "read_write_ratio": "8:1",
+        "ordering_requirement": "acquire_release",
+        "alias_set": "qwen27b_longctx_hot_kv",
+        "ownership": "borrowed",
+        "priority": 10,
+        "semantic_class": "decode_kv_fetch",
+        "deadline_us": 100,
+        "ttl": 3
+      }
+    },
+    {
+      "switchlet": "qwen27b_longctx_prefix_cache_replicate",
+      "source": {"name": "src", "type": "memref<?xi8, \"cxl\">", "node": "cxl_memory_device"},
+      "destination": {"name": "dst", "type": "memref<?xi8, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "replicate"],
+      "edge": {
+        "bytes": 67108864,
+        "stride": 1,
+        "fanout": 3,
+        "reuse_distance": 2,
+        "read_write_ratio": "1:3",
+        "ordering_requirement": "acquire_release",
+        "alias_set": "qwen27b_prefix_cache",
+        "ownership": "shared",
+        "priority": 8,
+        "semantic_class": "prefix_cache_replica",
+        "ttl": 4
+      }
+    },
+    {
+      "switchlet": "qwen27b_longctx_cold_kv_evict_compress",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xi8, \"cxl\">", "node": "cxl_memory_device"},
+      "actions": ["move", "compress", "persist"],
+      "edge": {
+        "bytes": 536870912,
+        "stride": 1,
+        "reuse_distance": 2048,
+        "read_write_ratio": "1:1",
+        "ordering_requirement": "program_order",
+        "alias_set": "qwen27b_longctx_cold_kv",
+        "ownership": "destination",
+        "priority": 2,
+        "compression_ratio": 0.3,
+        "semantic_class": "cold_kv_evict",
+        "ttl": 8
+      }
+    },
+    {
+      "switchlet": "qwen27b_longctx_block_table_filter",
+      "source": {"name": "src", "type": "memref<?xi8, \"host\">", "node": "host_memory"},
+      "destination": {"name": "dst", "type": "memref<?xi8, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "filter"],
+      "edge": {
+        "bytes": 4194304,
+        "stride": 1,
+        "reuse_distance": 1,
+        "read_write_ratio": "1:1",
+        "ordering_requirement": "program_order",
+        "alias_set": "qwen27b_longctx_block_table",
+        "ownership": "destination",
+        "priority": 8,
+        "filter_selectivity": 0.1,
+        "semantic_class": "block_table_filter",
+        "ttl": 4
+      }
+    },
+    {
+      "switchlet": "qwen27b_longctx_sequence_migrate",
+      "source": {"name": "src", "type": "memref<?xi8, \"cxl\">", "node": "cxl_memory_device"},
+      "destination": {"name": "dst", "type": "memref<?xi8, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "scatter/gather"],
+      "edge": {
+        "bytes": 134217728,
+        "stride": 1,
+        "fragments": 8,
+        "reuse_distance": 4,
+        "read_write_ratio": "4:1",
+        "ordering_requirement": "acquire_release",
+        "alias_set": "qwen27b_longctx_sequence",
+        "ownership": "borrowed",
+        "priority": 9,
+        "retry": true,
+        "semantic_class": "sequence_migration",
+        "ttl": 5
+      }
+    },
+    {
+      "switchlet": "qwen27b_longctx_attention_reduce",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "reduce"],
+      "edge": {
+        "bytes": 67108864,
+        "stride": 1,
+        "reuse_distance": 4,
+        "read_write_ratio": "2:1",
+        "ordering_requirement": "total",
+        "alias_set": "qwen27b_longctx_attention",
+        "ownership": "shared",
+        "priority": 7,
+        "reduction_ratio": 0.25,
+        "semantic_class": "attention_reduce",
+        "ttl": 4
+      }
+    }
+  ]
+}

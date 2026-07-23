@@ -1,0 +1,113 @@
+{
+  "model": "training_checkpoint",
+  "description": "Training fabric workload with gradient reduction, optimizer sharding, activation checkpointing, and persistent checkpoints.",
+  "events": [
+    {
+      "switchlet": "train_gradient_bucket_reduce",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "reduce"],
+      "edge": {
+        "bytes": 268435456,
+        "stride": 1,
+        "reuse_distance": 16,
+        "read_write_ratio": "8:1",
+        "ordering_requirement": "total",
+        "alias_set": "train_gradient_bucket",
+        "ownership": "shared",
+        "priority": 8,
+        "reduction_ratio": 0.125,
+        "ttl": 5
+      }
+    },
+    {
+      "switchlet": "train_optimizer_shard_exchange",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xf16, \"cxl\">", "node": "cxl_memory_device"},
+      "actions": ["move", "scatter/gather"],
+      "edge": {
+        "bytes": 134217728,
+        "stride": 1,
+        "fragments": 8,
+        "reuse_distance": 128,
+        "read_write_ratio": "1:1",
+        "ordering_requirement": "acquire_release",
+        "alias_set": "train_optimizer_shards",
+        "ownership": "shared",
+        "priority": 5,
+        "ttl": 5
+      }
+    },
+    {
+      "switchlet": "train_activation_checkpoint_compress",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xi8, \"cxl\">", "node": "cxl_memory_device"},
+      "actions": ["move", "compress"],
+      "edge": {
+        "bytes": 536870912,
+        "stride": 1,
+        "reuse_distance": 1024,
+        "read_write_ratio": "1:1",
+        "ordering_requirement": "program_order",
+        "alias_set": "train_activation_checkpoint",
+        "ownership": "destination",
+        "priority": 4,
+        "compression_ratio": 0.3,
+        "ttl": 6
+      }
+    },
+    {
+      "switchlet": "train_parameter_broadcast",
+      "source": {"name": "src", "type": "memref<?xf16, \"cxl\">", "node": "cxl_memory_device"},
+      "destination": {"name": "dst", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "replicate"],
+      "edge": {
+        "bytes": 268435456,
+        "stride": 1,
+        "fanout": 4,
+        "reuse_distance": 64,
+        "read_write_ratio": "1:4",
+        "ordering_requirement": "acquire_release",
+        "alias_set": "train_parameter_broadcast",
+        "ownership": "shared",
+        "priority": 7,
+        "ttl": 5
+      }
+    },
+    {
+      "switchlet": "train_step_checkpoint_persist",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xf16, \"cxl\">", "node": "cxl_memory_device"},
+      "actions": ["move", "persist"],
+      "edge": {
+        "bytes": 1073741824,
+        "stride": 1,
+        "reuse_distance": 8192,
+        "read_write_ratio": "1:1",
+        "ordering_requirement": "program_order",
+        "alias_set": "train_step_checkpoint",
+        "ownership": "destination",
+        "priority": 1,
+        "ttl": 8
+      }
+    },
+    {
+      "switchlet": "train_data_loader_filter",
+      "source": {"name": "src", "type": "memref<?xi8, \"host\">", "node": "host_memory"},
+      "destination": {"name": "dst", "type": "memref<?xi8, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "filter"],
+      "edge": {
+        "bytes": 33554432,
+        "stride": 1,
+        "reuse_distance": 4,
+        "read_write_ratio": "1:1",
+        "ordering_requirement": "program_order",
+        "alias_set": "train_data_loader",
+        "ownership": "destination",
+        "priority": 6,
+        "filter_selectivity": 0.5,
+        "ttl": 4
+      }
+    }
+  ]
+}

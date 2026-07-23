@@ -112,6 +112,7 @@ def compile_event(
     out_dir: str,
     clang: str,
     compile_bpf: bool,
+    max_rdma_ops: int,
 ) -> Dict[str, object]:
     name = str(event["switchlet"])
     event_dir = os.path.join(out_dir, "events")
@@ -138,7 +139,7 @@ def compile_event(
         "--output-dir",
         artifact_dir,
         "--max-rdma-ops",
-        "16",
+        str(max_rdma_ops),
     ]
     compile_result = run_command(compile_cmd)
     result["compile"] = compile_result
@@ -187,8 +188,17 @@ def compile_event(
     return result
 
 
-def copy_and_run_remote(out_dir: str, dpu_host: str, remote_dir: str, clang: str) -> Dict[str, object]:
-    package = os.path.join(out_dir, "qwen27b-dpu-e2e.tar.gz")
+def copy_and_run_remote(
+    out_dir: str,
+    dpu_host: str,
+    remote_dir: str,
+    clang: str,
+    ssh_options: Sequence[str],
+) -> Dict[str, object]:
+    package = os.path.join(
+        os.path.dirname(out_dir),
+        f"{os.path.basename(out_dir)}.tar.gz",
+    )
     if os.path.exists(package):
         os.remove(package)
 
@@ -197,11 +207,14 @@ def copy_and_run_remote(out_dir: str, dpu_host: str, remote_dir: str, clang: str
         check=True,
     )
 
-    remote_setup = run_command(["ssh", dpu_host, f"mkdir -p {remote_dir}"])
+    ssh_base = ["ssh"] + list(ssh_options) + [dpu_host]
+    scp_base = ["scp"] + list(ssh_options)
+
+    remote_setup = run_command(ssh_base + [f"mkdir -p {remote_dir}"])
     if remote_setup["returncode"] != 0:
         return {"ok": False, "stage": "mkdir", "result": remote_setup}
 
-    copy = run_command(["scp", package, f"{dpu_host}:{remote_dir}/qwen27b-dpu-e2e.tar.gz"])
+    copy = run_command(scp_base + [package, f"{dpu_host}:{remote_dir}/qwen27b-dpu-e2e.tar.gz"])
     if copy["returncode"] != 0:
         return {"ok": False, "stage": "scp", "result": copy}
 
@@ -209,15 +222,15 @@ def copy_and_run_remote(out_dir: str, dpu_host: str, remote_dir: str, clang: str
 set -eu
 cd {remote_dir}
 tar -xzf qwen27b-dpu-e2e.tar.gz
-OUT=$(find . -type d -path '*/qwen27b-dpu-e2e' | head -1)
-test -n "$OUT"
-for c in $(find "$OUT/artifacts" -name '*.bpf.c' | sort); do
+ARTIFACTS=$(find . -type d -name artifacts | head -1)
+test -n "$ARTIFACTS"
+for c in $(find "$ARTIFACTS" -name '*.bpf.c' | sort); do
   o="${{c%.c}}.o"
   {clang} -target bpf -O2 -g -I ./include -c "$c" -o "$o"
 done
-find "$OUT/artifacts" -name '*.bpf.o' | sort
+find "$ARTIFACTS" -name '*.bpf.o' | sort
 """
-    remote = run_command(["ssh", dpu_host, remote_script])
+    remote = run_command(ssh_base + [remote_script])
     return {
         "ok": remote["returncode"] == 0,
         "stage": "remote-compile",
@@ -241,12 +254,19 @@ def run_e2e(args: argparse.Namespace) -> Dict[str, object]:
                 out_dir,
                 clang=args.clang,
                 compile_bpf=not args.no_bpf_object,
+                max_rdma_ops=args.max_rdma_ops,
             )
         )
 
     remote = None
     if args.dpu_host:
-        remote = copy_and_run_remote(out_dir, args.dpu_host, args.remote_dir, args.remote_clang)
+        remote = copy_and_run_remote(
+            out_dir,
+            args.dpu_host,
+            args.remote_dir,
+            args.remote_clang,
+            args.ssh_option or [],
+        )
 
     ok = all(phase["plan_ok"] for phase in phases)
     if not args.no_bpf_object:
@@ -276,10 +296,17 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser.add_argument("--out-dir", default=DEFAULT_OUT)
     parser.add_argument("--clean", action="store_true", help="remove output dir before running")
     parser.add_argument("--clang", default="clang")
+    parser.add_argument("--max-rdma-ops", type=int, default=128)
     parser.add_argument("--no-bpf-object", action="store_true", help="skip clang -target bpf")
     parser.add_argument("--dpu-host", help="optional ssh target for remote DPU validation")
     parser.add_argument("--remote-dir", default="/tmp/damer-qwen27b-e2e")
     parser.add_argument("--remote-clang", default="clang")
+    parser.add_argument(
+        "--ssh-option",
+        action="append",
+        default=[],
+        help="extra option passed to ssh/scp; repeat for each argument",
+    )
     return parser.parse_args(argv)
 
 

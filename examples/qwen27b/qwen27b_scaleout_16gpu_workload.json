@@ -1,0 +1,119 @@
+{
+  "model": "qwen27b_scaleout_16gpu",
+  "description": "Qwen 27B scale-out fabric workload for 16 logical GPUs with larger collective, scatter/gather, replica refresh, redirect, and checkpoint fanout.",
+  "events": [
+    {
+      "switchlet": "qwen27b_16gpu_decode_kv_fetch",
+      "source": {"name": "src", "type": "memref<?xi8, \"cxl\">", "node": "cxl_memory_device"},
+      "destination": {"name": "dst", "type": "memref<?xi8, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "checksum"],
+      "edge": {
+        "bytes": 8388608,
+        "stride": 1,
+        "reuse_distance": 1,
+        "read_write_ratio": "8:1",
+        "ordering_requirement": "acquire_release",
+        "alias_set": "qwen27b_16gpu_decode_kv",
+        "ownership": "borrowed",
+        "priority": 10,
+        "semantic_class": "scaleout_decode_kv_fetch",
+        "ttl": 3
+      }
+    },
+    {
+      "switchlet": "qwen27b_16gpu_tensor_allreduce",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "reduce"],
+      "edge": {
+        "bytes": 536870912,
+        "stride": 1,
+        "reuse_distance": 16,
+        "read_write_ratio": "16:1",
+        "ordering_requirement": "total",
+        "alias_set": "qwen27b_16gpu_allreduce",
+        "ownership": "shared",
+        "priority": 7,
+        "reduction_ratio": 0.25,
+        "semantic_class": "scaleout_tensor_allreduce",
+        "ttl": 5
+      }
+    },
+    {
+      "switchlet": "qwen27b_16gpu_tensor_scatter",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "scatter/gather"],
+      "edge": {
+        "bytes": 1073741824,
+        "stride": 1,
+        "fragments": 16,
+        "reuse_distance": 16,
+        "read_write_ratio": "1:1",
+        "ordering_requirement": "acquire_release",
+        "alias_set": "qwen27b_16gpu_scatter",
+        "ownership": "shared",
+        "priority": 8,
+        "semantic_class": "scaleout_tensor_scatter",
+        "ttl": 5
+      }
+    },
+    {
+      "switchlet": "qwen27b_16gpu_kv_replica_refresh",
+      "source": {"name": "src", "type": "memref<?xi8, \"cxl\">", "node": "cxl_memory_device"},
+      "destination": {"name": "dst", "type": "memref<?xi8, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "replicate"],
+      "edge": {
+        "bytes": 134217728,
+        "stride": 1,
+        "fanout": 16,
+        "reuse_distance": 4,
+        "read_write_ratio": "1:16",
+        "ordering_requirement": "acquire_release",
+        "alias_set": "qwen27b_16gpu_kv_replica",
+        "ownership": "shared",
+        "priority": 8,
+        "semantic_class": "scaleout_kv_replica",
+        "ttl": 4
+      }
+    },
+    {
+      "switchlet": "qwen27b_16gpu_remote_kv_redirect",
+      "source": {"name": "src", "type": "memref<?xi8, \"cxl\">", "node": "cxl_memory_device"},
+      "destination": {"name": "dst", "type": "memref<?xi8, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "scatter/gather"],
+      "edge": {
+        "bytes": 268435456,
+        "stride": 1,
+        "fragments": 16,
+        "reuse_distance": 4,
+        "read_write_ratio": "4:1",
+        "ordering_requirement": "acquire_release",
+        "alias_set": "qwen27b_16gpu_remote_kv_redirect",
+        "ownership": "borrowed",
+        "priority": 9,
+        "retry": true,
+        "semantic_class": "scaleout_remote_kv_redirect",
+        "ttl": 5
+      }
+    },
+    {
+      "switchlet": "qwen27b_16gpu_checkpoint_persist",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xf16, \"cxl\">", "node": "cxl_memory_device"},
+      "actions": ["move", "persist"],
+      "edge": {
+        "bytes": 2147483648,
+        "stride": 1,
+        "reuse_distance": 4096,
+        "read_write_ratio": "1:1",
+        "ordering_requirement": "program_order",
+        "alias_set": "qwen27b_16gpu_checkpoint",
+        "ownership": "destination",
+        "priority": 2,
+        "semantic_class": "scaleout_checkpoint_persist",
+        "ttl": 8
+      }
+    }
+  ]
+}

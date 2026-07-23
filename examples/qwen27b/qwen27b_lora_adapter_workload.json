@@ -1,0 +1,119 @@
+{
+  "model": "qwen27b_lora_adapter",
+  "description": "Qwen 27B online LoRA/adapter update movement with decode traffic sharing the same DPU and CXL fabric.",
+  "events": [
+    {
+      "switchlet": "qwen27b_lora_adapter_delta_reduce",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "reduce"],
+      "edge": {
+        "bytes": 67108864,
+        "stride": 1,
+        "reuse_distance": 32,
+        "read_write_ratio": "2:1",
+        "ordering_requirement": "total",
+        "alias_set": "qwen27b_lora_delta",
+        "ownership": "shared",
+        "priority": 5,
+        "reduction_ratio": 0.25,
+        "semantic_class": "adapter_delta_reduce",
+        "ttl": 5
+      }
+    },
+    {
+      "switchlet": "qwen27b_lora_adapter_quantized_push",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xi8, \"cxl\">", "node": "cxl_memory_device"},
+      "actions": ["move", "quantize"],
+      "edge": {
+        "bytes": 33554432,
+        "stride": 1,
+        "reuse_distance": 64,
+        "read_write_ratio": "1:1",
+        "ordering_requirement": "program_order",
+        "alias_set": "qwen27b_lora_quantized",
+        "ownership": "destination",
+        "priority": 6,
+        "quantization_ratio": 0.5,
+        "semantic_class": "adapter_quantized_push",
+        "ttl": 4
+      }
+    },
+    {
+      "switchlet": "qwen27b_lora_optimizer_state_compress",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xi8, \"cxl\">", "node": "cxl_memory_device"},
+      "actions": ["move", "compress", "persist"],
+      "edge": {
+        "bytes": 134217728,
+        "stride": 1,
+        "reuse_distance": 512,
+        "read_write_ratio": "1:1",
+        "ordering_requirement": "program_order",
+        "alias_set": "qwen27b_lora_optimizer",
+        "ownership": "destination",
+        "priority": 3,
+        "compression_ratio": 0.4,
+        "semantic_class": "optimizer_state_persist",
+        "ttl": 8
+      }
+    },
+    {
+      "switchlet": "qwen27b_lora_decode_kv_fetch",
+      "source": {"name": "src", "type": "memref<?xi8, \"cxl\">", "node": "cxl_memory_device"},
+      "destination": {"name": "dst", "type": "memref<?xi8, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "checksum"],
+      "edge": {
+        "bytes": 524288,
+        "stride": 1,
+        "reuse_distance": 1,
+        "read_write_ratio": "8:1",
+        "ordering_requirement": "acquire_release",
+        "alias_set": "qwen27b_lora_decode_kv",
+        "ownership": "borrowed",
+        "priority": 10,
+        "deadline_us": 120,
+        "semantic_class": "decode_kv_fetch",
+        "ttl": 3
+      }
+    },
+    {
+      "switchlet": "qwen27b_lora_adapter_replica_refresh",
+      "source": {"name": "src", "type": "memref<?xi8, \"cxl\">", "node": "cxl_memory_device"},
+      "destination": {"name": "dst", "type": "memref<?xi8, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "replicate"],
+      "edge": {
+        "bytes": 16777216,
+        "stride": 1,
+        "fanout": 2,
+        "reuse_distance": 16,
+        "read_write_ratio": "1:2",
+        "ordering_requirement": "acquire_release",
+        "alias_set": "qwen27b_lora_replica",
+        "ownership": "shared",
+        "priority": 6,
+        "semantic_class": "adapter_replica_refresh",
+        "ttl": 4
+      }
+    },
+    {
+      "switchlet": "qwen27b_lora_checkpoint_persist",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xf16, \"cxl\">", "node": "cxl_memory_device"},
+      "actions": ["move", "persist"],
+      "edge": {
+        "bytes": 134217728,
+        "stride": 1,
+        "reuse_distance": 2048,
+        "read_write_ratio": "1:1",
+        "ordering_requirement": "program_order",
+        "alias_set": "qwen27b_lora_checkpoint",
+        "ownership": "destination",
+        "priority": 2,
+        "semantic_class": "adapter_checkpoint_persist",
+        "ttl": 8
+      }
+    }
+  ]
+}

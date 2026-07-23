@@ -1,0 +1,117 @@
+{
+  "model": "remote_kv_cache",
+  "description": "Remote KV cache and networked GPU memory workload with prefetch, redirect, retry, and placement decisions.",
+  "events": [
+    {
+      "switchlet": "remote_kv_page_fault_prefetch",
+      "source": {"name": "src", "type": "memref<?xi8, \"cxl\">", "node": "cxl_memory_device"},
+      "destination": {"name": "dst", "type": "memref<?xi8, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "checksum"],
+      "edge": {
+        "bytes": 4194304,
+        "stride": 1,
+        "reuse_distance": 1,
+        "read_write_ratio": "6:1",
+        "ordering_requirement": "acquire_release",
+        "alias_set": "remote_kv_prefetch",
+        "ownership": "borrowed",
+        "priority": 10,
+        "deadline_us": 150,
+        "semantic_class": "page_fault_prefetch",
+        "ttl": 3
+      }
+    },
+    {
+      "switchlet": "remote_kv_block_reuse_pack",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xi8, \"cxl\">", "node": "cxl_memory_device"},
+      "actions": ["move", "quantize"],
+      "edge": {
+        "bytes": 16777216,
+        "stride": 1,
+        "reuse_distance": 2,
+        "read_write_ratio": "1:1",
+        "ordering_requirement": "program_order",
+        "alias_set": "remote_kv_reuse_pack",
+        "ownership": "destination",
+        "priority": 8,
+        "ttl": 4
+      }
+    },
+    {
+      "switchlet": "remote_kv_replica_selection",
+      "source": {"name": "src", "type": "memref<?xi8, \"cxl\">", "node": "cxl_memory_device"},
+      "destination": {"name": "dst", "type": "memref<?xi8, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "replicate"],
+      "edge": {
+        "bytes": 8388608,
+        "stride": 1,
+        "fanout": 2,
+        "reuse_distance": 4,
+        "read_write_ratio": "1:2",
+        "ordering_requirement": "acquire_release",
+        "alias_set": "remote_kv_replica",
+        "ownership": "shared",
+        "priority": 8,
+        "semantic_class": "replica_selection",
+        "ttl": 4
+      }
+    },
+    {
+      "switchlet": "remote_kv_failed_server_redirect",
+      "source": {"name": "src", "type": "memref<?xi8, \"cxl\">", "node": "cxl_memory_device"},
+      "destination": {"name": "dst", "type": "memref<?xi8, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "scatter/gather"],
+      "edge": {
+        "bytes": 33554432,
+        "stride": 1,
+        "fragments": 4,
+        "reuse_distance": 2,
+        "read_write_ratio": "4:1",
+        "ordering_requirement": "acquire_release",
+        "alias_set": "remote_kv_failed_server",
+        "ownership": "borrowed",
+        "priority": 9,
+        "retry": true,
+        "semantic_class": "failed_memory_server_retry",
+        "ttl": 4
+      }
+    },
+    {
+      "switchlet": "remote_kv_compact_persist",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xi8, \"cxl\">", "node": "cxl_memory_device"},
+      "actions": ["move", "compress", "persist"],
+      "edge": {
+        "bytes": 67108864,
+        "stride": 1,
+        "reuse_distance": 512,
+        "read_write_ratio": "1:1",
+        "ordering_requirement": "program_order",
+        "alias_set": "remote_kv_compaction",
+        "ownership": "destination",
+        "priority": 3,
+        "compression_ratio": 0.4,
+        "ttl": 8
+      }
+    },
+    {
+      "switchlet": "remote_kv_sequence_filter",
+      "source": {"name": "src", "type": "memref<?xi8, \"host\">", "node": "host_memory"},
+      "destination": {"name": "dst", "type": "memref<?xi8, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "filter"],
+      "edge": {
+        "bytes": 524288,
+        "stride": 1,
+        "reuse_distance": 1,
+        "read_write_ratio": "1:1",
+        "ordering_requirement": "program_order",
+        "alias_set": "remote_kv_sequence_lifecycle",
+        "ownership": "destination",
+        "priority": 7,
+        "filter_selectivity": 0.2,
+        "ttl": 4
+      }
+    }
+  ]
+}

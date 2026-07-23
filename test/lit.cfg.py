@@ -30,13 +30,27 @@ if not hasattr(config, "llvm_tools_dir"):
     config.llvm_tools_dir = os.path.dirname(filecheck) if filecheck else "/usr/local/firtool-1.62.0/bin"
 config.test_exec_root = os.path.join(config.cxl_data_movement_obj_root, "test")
 
-config.excludes = ["Inputs", "CMakeLists.txt", "damer_middleware_compiler_test.py"]
+config.excludes = [
+    "Inputs",
+    "CMakeLists.txt",
+    "damer_middleware_compiler_test.py",
+    "lit.cfg.py",
+]
 
 tool_dirs = [config.cxl_data_movement_tools_dir, config.llvm_tools_dir]
 tools = [
     "cxl-data-movement-opt",
     "FileCheck",
 ]
+
+tool_search_path = os.pathsep.join(tool_dirs + [os.environ.get("PATH", "")])
+if not shutil.which("cxl-data-movement-opt", path=tool_search_path):
+    config.excludes.extend(
+        [
+            "cxl-hw-data-movement.mlir",
+            "cxl-sw-data-movement.mlir",
+        ]
+    )
 
 if llvm_config:
     llvm_config.with_system_environment(["HOME", "INCLUDE", "LIB", "TMP", "TEMP"])

@@ -1,0 +1,101 @@
+{
+  "model": "moe_alltoall",
+  "description": "MoE all-to-all fabric workload with expert routing, replica redirection, and critical-path token movement.",
+  "events": [
+    {
+      "switchlet": "moe_critical_expert_tokens",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "scatter/gather"],
+      "edge": {
+        "bytes": 8388608,
+        "stride": 1,
+        "fragments": 16,
+        "reuse_distance": 1,
+        "read_write_ratio": "1:1",
+        "ordering_requirement": "acquire_release",
+        "alias_set": "moe_critical_expert_tokens",
+        "ownership": "shared",
+        "priority": 10,
+        "deadline_us": 200,
+        "semantic_class": "critical_expert",
+        "ttl": 3
+      }
+    },
+    {
+      "switchlet": "moe_background_expert_tokens",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "scatter/gather"],
+      "edge": {
+        "bytes": 67108864,
+        "stride": 1,
+        "fragments": 64,
+        "reuse_distance": 8,
+        "read_write_ratio": "1:1",
+        "ordering_requirement": "acquire_release",
+        "alias_set": "moe_background_expert_tokens",
+        "ownership": "shared",
+        "priority": 5,
+        "semantic_class": "background_expert",
+        "ttl": 4
+      }
+    },
+    {
+      "switchlet": "moe_expert_replica_redirect",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "replicate"],
+      "edge": {
+        "bytes": 16777216,
+        "stride": 1,
+        "fanout": 2,
+        "reuse_distance": 4,
+        "read_write_ratio": "1:2",
+        "ordering_requirement": "acquire_release",
+        "alias_set": "moe_expert_replica",
+        "ownership": "shared",
+        "priority": 9,
+        "retry": true,
+        "semantic_class": "straggler_redirect",
+        "ttl": 4
+      }
+    },
+    {
+      "switchlet": "moe_expert_output_reduce",
+      "source": {"name": "src", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "destination": {"name": "dst", "type": "memref<?xf16, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "reduce"],
+      "edge": {
+        "bytes": 33554432,
+        "stride": 1,
+        "reuse_distance": 2,
+        "read_write_ratio": "4:1",
+        "ordering_requirement": "total",
+        "alias_set": "moe_expert_output",
+        "ownership": "shared",
+        "priority": 8,
+        "reduction_ratio": 0.25,
+        "ttl": 4
+      }
+    },
+    {
+      "switchlet": "moe_routing_table_filter",
+      "source": {"name": "src", "type": "memref<?xi8, \"host\">", "node": "host_memory"},
+      "destination": {"name": "dst", "type": "memref<?xi8, \"gpu\">", "node": "gpu_memory"},
+      "actions": ["move", "filter"],
+      "edge": {
+        "bytes": 1048576,
+        "stride": 1,
+        "reuse_distance": 1,
+        "read_write_ratio": "1:1",
+        "ordering_requirement": "program_order",
+        "alias_set": "moe_routing_table",
+        "ownership": "destination",
+        "priority": 7,
+        "filter_selectivity": 0.1,
+        "ttl": 4
+      }
+    }
+  ]
+}
