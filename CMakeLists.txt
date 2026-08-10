@@ -7,6 +7,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(CMAKE_CXX_EXTENSIONS NO)
 set(LLVM_LIT_ARGS "-sv" CACHE STRING "Default options for lit")
 
+option(CXL_DATA_MOVEMENT_ENABLE_MLIR
+  "Build the legacy MLIR/CIRCT cxl-data-movement-opt backend" OFF)
+option(CXL_DATA_MOVEMENT_INCLUDE_TESTS "Generate lit test targets" ON)
+
+if(NOT CXL_DATA_MOVEMENT_ENABLE_MLIR)
+  message(STATUS "MLIR/CIRCT backend disabled; eBPF middleware tools are Python entrypoints under tools/")
+  message(STATUS "Run regression tests directly with: llvm-lit -av test")
+  return()
+endif()
+
 find_package(LLVM REQUIRED CONFIG)
 find_package(MLIR REQUIRED CONFIG)
 find_package(CIRCT REQUIRED CONFIG)
@@ -38,8 +48,6 @@ if(NOT LLVM_EXTERNAL_LIT AND EXISTS "${LLVM_TOOLS_BINARY_DIR}/llvm-lit")
   set(LLVM_EXTERNAL_LIT "${LLVM_TOOLS_BINARY_DIR}/llvm-lit" CACHE STRING
       "Command used to spawn lit")
 endif()
-
-option(CXL_DATA_MOVEMENT_INCLUDE_TESTS "Generate lit test targets" ON)
 
 add_subdirectory(include)
 add_subdirectory(lib)

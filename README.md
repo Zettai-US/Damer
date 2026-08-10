@@ -85,6 +85,41 @@ epoch-atomic update assumptions.
 The eBPF-facing ABI is in `include/damer/bpftime_frontend.h`, with a minimal
 example in `examples/bpftime/kv_pack.bpf.c`.
 
+## Artifact Smoke
+
+The default CMake path is eBPF-first and does not require MLIR or CIRCT:
+
+```bash
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build
+llvm-lit -av test
+```
+
+For a submission-readiness run that matches the paper's larger evaluation
+scope:
+
+```bash
+tools/benchmark_e2e_speedup.py --out-dir out/osdi-readiness/e2e-speedup --max-rdma-ops 128
+tools/optimize_copy_paths.py \
+  --report out/osdi-readiness/e2e-speedup/e2e_speedup_report.json \
+  --out-dir out/osdi-readiness/copy-path
+tools/fuzz_damer_compile.py \
+  --iterations 4096 \
+  --seed 0xD00D \
+  --invalid-rate 0.25 \
+  --crash-dir out/osdi-readiness/fuzzer-crashes
+tools/benchmark_qwen27b_damer.py \
+  --out-dir out/osdi-readiness/qwen27b-damer-benchmark \
+  --repeat 30 \
+  --warmup 3 \
+  --clean \
+  --llvm-objdump "$(command -v llvm-objdump)"
+tools/run_cxl_switch_hwjit_sim.py \
+  examples/damer/kv_pack.event.json \
+  --out-dir out/osdi-readiness/cxl-switch-hwjit \
+  --clean
+```
+
 ## Data Movement + eBPF Offload
 
 Damer's full offload path uses `dputime`, the bpftime fork checked out at
@@ -214,6 +249,50 @@ Run the lit smoke for this path:
 ```bash
 llvm-lit -av test --filter damer-offload
 ```
+
+## CXL Switch Hardware-JIT Simulation
+
+Damer can also lower a verified movement plan into a small CXL-switch
+Hardware-JIT module. The generated SystemVerilog models the near-Type-2 control
+core that specializes movement descriptors into local commands for the adjacent
+queue/DMA/memory dataflow island.
+
+Emit the generated RTL directly:
+
+```bash
+tools/damer_compile.py examples/damer/kv_pack.event.json --emit hw-jit
+```
+
+Generate the RTL, a Verilator C++ harness, and a manifest, then build and run
+the simulation:
+
+```bash
+tools/run_cxl_switch_hwjit_sim.py \
+  examples/damer/kv_pack.event.json \
+  --out-dir out/cxl-switch-hwjit-sim \
+  --clean
+```
+
+Expected output:
+
+```text
+HW_JIT_SIM ok=true switchlet=kv_pack ... commands=1
+```
+
+The runner also accepts workload JSON files and simulates one generated
+hardware-JIT per event:
+
+```bash
+tools/run_cxl_switch_hwjit_sim.py \
+  examples/qwen27b/qwen27b_workload.json \
+  --out-dir out/cxl-switch-hwjit-qwen27b \
+  --clean \
+  --max-rdma-ops 128
+```
+
+The harness checks that a verifier-approved policy emits the expected bounded
+number of commands, each command carries a nonzero TTL, and the max-operation
+bound is preserved in the generated hardware command.
 
 ## Qwen 27B DPU E2E
 
@@ -428,6 +507,7 @@ CIRCT CMake package directories:
 
 ```bash
 cmake -G Ninja -S . -B build \
+  -DCXL_DATA_MOVEMENT_ENABLE_MLIR=ON \
   -DLLVM_DIR=/path/to/circt/llvm/build/lib/cmake/llvm \
   -DMLIR_DIR=/path/to/circt/llvm/build/lib/cmake/mlir \
   -DCIRCT_DIR=/path/to/circt/build/lib/cmake/circt
