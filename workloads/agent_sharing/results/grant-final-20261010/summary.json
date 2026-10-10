@@ -1,0 +1,47 @@
+{
+  "grant": [
+    {
+      "workers": 1,
+      "successful_runs": 5,
+      "attempted_runs": 5,
+      "throughput_ops_s": 14703.555731475431,
+      "acquire_release_p50_us": 59.791,
+      "acquire_release_p95_us": 71.639,
+      "issue_p50_us": 50.747,
+      "revoke_p50_us": 29.735
+    },
+    {
+      "workers": 2,
+      "successful_runs": 5,
+      "attempted_runs": 5,
+      "throughput_ops_s": 27657.433370822986,
+      "acquire_release_p50_us": 64.578,
+      "acquire_release_p95_us": 77.688,
+      "issue_p50_us": 52.75,
+      "revoke_p50_us": 31.177
+    },
+    {
+      "workers": 4,
+      "successful_runs": 5,
+      "attempted_runs": 5,
+      "throughput_ops_s": 31852.444189341757,
+      "acquire_release_p50_us": 107.423,
+      "acquire_release_p95_us": 173.003,
+      "issue_p50_us": 55.604,
+      "revoke_p50_us": 33.952
+    }
+  ],
+  "sentry": {
+    "status": "not_measured",
+    "reason": "No configured NVIDIA Sentry endpoint/SDK and no BlueField device in this host PCI inventory",
+    "hardware_inventory": "pci.txt",
+    "speedup": null,
+    "official_source": "https://www.nvidia.com/en-us/solutions/ai/agent-safety/"
+  },
+  "caveats": [
+    "Local CXL JSON registry under native CXL mutex; no DPU trust-domain equivalence",
+    "Measured API includes Python, lock, serialization and trace logging; excludes LLM and data payload access",
+    "Throughput includes process barriers/queue; per-operation timing excludes them",
+    "ACL revoke blocks new MCP requests, not arbitrary CPU pointers or existing OS mappings"
+  ]
+}

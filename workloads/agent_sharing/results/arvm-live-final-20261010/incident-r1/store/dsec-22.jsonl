@@ -1,0 +1,12 @@
+{"event": "pin", "ns": 597257292929793, "pid": 22, "agent": "analyst-1", "object": "evidence", "op": "read", "token": "19ffc672d2244dd5a07d6816a4dd64a0", "grant_ns": 6004828, "generation": 0}
+{"event": "unpin", "ns": 597257298900789, "pid": 22, "agent": "analyst-1", "object": "evidence", "token": "19ffc672d2244dd5a07d6816a4dd64a0", "revoke_ns": 58509}
+{"event": "pin", "ns": 597257299068934, "pid": 22, "agent": "analyst-1", "object": "ledger", "op": "read", "token": "0e118312ae9342faa17344d224edc040", "grant_ns": 41743, "generation": 0}
+{"event": "unpin", "ns": 597257304772013, "pid": 22, "agent": "analyst-1", "object": "ledger", "token": "0e118312ae9342faa17344d224edc040", "revoke_ns": 60903}
+{"event": "pin", "ns": 597257304918175, "pid": 22, "agent": "analyst-1", "object": "finding-1", "op": "read", "token": "610648d99e984bb785450dd485d758c1", "grant_ns": 41914, "generation": 0}
+{"event": "unpin", "ns": 597257310571679, "pid": 22, "agent": "analyst-1", "object": "finding-1", "token": "610648d99e984bb785450dd485d758c1", "revoke_ns": 52409}
+{"event": "pin", "ns": 597259993294447, "pid": 22, "agent": "analyst-1", "object": "finding-1", "op": "write", "token": "d2907e15f5764c07b4412345f896ac09", "grant_ns": 164900, "generation": 0}
+{"event": "unpin", "ns": 597259995082302, "pid": 22, "agent": "analyst-1", "object": "finding-1", "token": "d2907e15f5764c07b4412345f896ac09", "revoke_ns": 40231}
+{"event": "pin", "ns": 597259995192018, "pid": 22, "agent": "analyst-1", "object": "ledger", "op": "append", "token": "a0902217ba704acb8be191692b66c81f", "grant_ns": 27401, "generation": 0}
+{"event": "unpin", "ns": 597259996065084, "pid": 22, "agent": "analyst-1", "object": "ledger", "token": "a0902217ba704acb8be191692b66c81f", "revoke_ns": 29455}
+{"event": "pin", "ns": 597260439030361, "pid": 22, "agent": "analyst-1", "object": "ledger", "op": "read", "token": "424213cd9d7846268137388c697bdc8d", "grant_ns": 206283, "generation": 0}
+{"event": "unpin", "ns": 597260440660987, "pid": 22, "agent": "analyst-1", "object": "ledger", "token": "424213cd9d7846268137388c697bdc8d", "revoke_ns": 36916}

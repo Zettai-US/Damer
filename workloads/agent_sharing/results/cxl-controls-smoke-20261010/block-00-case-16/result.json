@@ -1,0 +1,35 @@
+{
+  "node": 1,
+  "workers": 2,
+  "granularity": "object",
+  "workload": "collaboration",
+  "copy_node": null,
+  "block": 0,
+  "run_id": "block-00-case-16",
+  "status": "ok",
+  "kind": "controlled",
+  "steps": 2,
+  "capacity_bytes": 262144,
+  "duration_ns": 23684099,
+  "worker_times": [
+    {
+      "ok": true,
+      "start_ns": 597258224563279,
+      "end_ns": 597258248154257,
+      "pid": 1800317,
+      "cpu": 0
+    },
+    {
+      "ok": true,
+      "start_ns": 597258224582047,
+      "end_ns": 597258248164492,
+      "pid": 1800318,
+      "cpu": 1
+    }
+  ],
+  "shared_mapping_pss_kib": 1048,
+  "allocated_payload_bytes": 1048576,
+  "backend": "cxl-spin-fast_exp-55b7072",
+  "checksum_ok": true,
+  "lost_updates": 0
+}

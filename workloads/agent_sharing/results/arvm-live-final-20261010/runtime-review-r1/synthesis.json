@@ -1,0 +1,8 @@
+{
+  "object": "synthesis",
+  "version": 1,
+  "producer": "synthesizer",
+  "text": "Synthesis:\nVerified: retire() sets retiring without checking pins/roots, allowing zombie objects. validate() ignores handle generation vs epoch. No write enforcement despite \"read-only\" claim.\nHypotheses disproven: Generation numbers prevent stale access (false). External pin management is sufficient (fragile).\nTest: Publish object \u2192 admit contract (pin) \u2192 retire \u2192 reclaim without dropping pins. Expect RuntimeError, confirming incomplete retirement protocol.",
+  "logical_bytes": 468,
+  "truncated": false
+}

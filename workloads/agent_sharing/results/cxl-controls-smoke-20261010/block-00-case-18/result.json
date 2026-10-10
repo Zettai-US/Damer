@@ -1,0 +1,35 @@
+{
+  "node": 1,
+  "workers": 2,
+  "granularity": "global",
+  "workload": "collaboration",
+  "copy_node": null,
+  "block": 0,
+  "run_id": "block-00-case-18",
+  "status": "ok",
+  "kind": "controlled",
+  "steps": 2,
+  "capacity_bytes": 262144,
+  "duration_ns": 28711452,
+  "worker_times": [
+    {
+      "ok": true,
+      "start_ns": 597258454910782,
+      "end_ns": 597258483543004,
+      "pid": 1800389,
+      "cpu": 0
+    },
+    {
+      "ok": true,
+      "start_ns": 597258454902059,
+      "end_ns": 597258483556574,
+      "pid": 1800390,
+      "cpu": 1
+    }
+  ],
+  "shared_mapping_pss_kib": 1036,
+  "allocated_payload_bytes": 1048576,
+  "backend": "cxl-spin-fast_exp-55b7072",
+  "checksum_ok": true,
+  "lost_updates": 0
+}

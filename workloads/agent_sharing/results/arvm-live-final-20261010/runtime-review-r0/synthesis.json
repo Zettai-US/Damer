@@ -1,0 +1,8 @@
+{
+  "object": "synthesis",
+  "version": 1,
+  "producer": "synthesizer",
+  "text": "Synthesis:\nVerified: (1) validate() lacks generation checks, permitting stale handles to access republished objects. (2) retire() does not enforce pin draining; if a task is active (pin>0) when retire() runs, reclaim() fails with \"object remains reachable\", risking leaks for hanging tasks.\n\nHypothesis: Stale handles (Finding-0) combined with non-drained pins (Finding-1) create a race where republished objects remain unreclaimable if an old handle holds a pin.\n\nValidation Test: \n1. Create obj, acquire handle H1, start task T1 (pin=1).\n2. Republish obj (new generation).\n3. Call retire(old_gen).\n4. Assert reclaim(new_gen) fails with \"object remains reachable\" due to T1's pin from H1.\nThis confirms the combined vulnerability.",
+  "logical_bytes": 731,
+  "truncated": false
+}

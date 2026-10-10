@@ -1,0 +1,41 @@
+{
+  "model": "local/damer-qwen35",
+  "snapshots": false,
+  "permissions": [
+    {
+      "action": "*",
+      "resource": "*",
+      "effect": "deny"
+    }
+  ],
+  "providers": {
+    "local": {
+      "name": "local",
+      "env": [
+        "DAMER_LOCAL_API_KEY"
+      ],
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "baseURL": "http://127.0.0.1:18081/v1"
+      },
+      "models": {
+        "damer-qwen35": {
+          "name": "damer-qwen35",
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "limit": {
+            "context": 16384,
+            "output": 2048
+          }
+        }
+      }
+    }
+  }
+}

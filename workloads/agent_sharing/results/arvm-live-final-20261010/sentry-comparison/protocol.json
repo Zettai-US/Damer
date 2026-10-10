@@ -1,0 +1,45 @@
+{
+  "schema": "arvm-sentry-comparison-input-v1",
+  "status": "awaiting_actual_sentry_backend",
+  "requests": 107,
+  "request_sha256": "aceee5b04fedc15cba754e7bbfbe2f6521b7ab6a7deea5101289d697d6b1a21c",
+  "semantics": "Grant/check/release/revoke of scoped shared-object access; declare unsupported operations explicitly",
+  "arrival_modes": [
+    "original offsets for behavior replay",
+    "saturated per-agent order for performance; preserve data dependencies"
+  ],
+  "required_baseline_provenance": [
+    "Sentry and DOCA versions",
+    "BlueField generation/firmware",
+    "host hardware and topology",
+    "actual policy and identity mapping",
+    "transport/API and timing boundary",
+    "raw attempt-level decisions and latency including failures"
+  ],
+  "performance_metrics": [
+    "grant issue latency",
+    "grant check + pin/release latency",
+    "revoke acknowledgement latency",
+    "deny-after-revoke result",
+    "throughput",
+    "CPU/DPU utilization",
+    "full task success and end-to-end latency"
+  ],
+  "controls": [
+    "Same accepted task graph and object versions",
+    "Same model and prompts for end-to-end trials",
+    "Same concurrency and object sizes",
+    "Separate cold startup and warm path",
+    "Preserve all failed attempts",
+    "Report trust-domain and enforcement differences; local MCP grants are not DPU pointer enforcement"
+  ],
+  "not_allowed": [
+    "Replacing Sentry with OpenShell, gVisor Sentry, sleep delays or a local mock",
+    "Turning vendor quarantine-time claims into grant latency",
+    "Claiming a relative speedup without a matched measured baseline"
+  ],
+  "primary_sources": [
+    "https://www.nvidia.com/en-us/solutions/ai/agent-safety/",
+    "https://nvidianews.nvidia.com/news/open-agent-safety-platform"
+  ]
+}

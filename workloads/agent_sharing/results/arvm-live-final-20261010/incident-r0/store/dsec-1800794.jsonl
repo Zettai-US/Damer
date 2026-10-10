@@ -1,0 +1,11 @@
+{"event": "admit", "ns": 597269045358292, "pid": 1800794, "agent": "analyst-0"}
+{"event": "admit", "ns": 597269045504945, "pid": 1800794, "agent": "analyst-1"}
+{"event": "finish", "ns": 597276991337205, "pid": 1800794, "agent": "analyst-0", "success": true}
+{"event": "finish", "ns": 597276991411007, "pid": 1800794, "agent": "analyst-1", "success": true}
+{"event": "admit", "ns": 597276991465871, "pid": 1800794, "agent": "synthesizer"}
+{"event": "finish", "ns": 597282995463381, "pid": 1800794, "agent": "synthesizer", "success": true}
+{"event": "retire", "ns": 597282996611995, "pid": 1800794, "object": "evidence"}
+{"event": "retire", "ns": 597282996673268, "pid": 1800794, "object": "finding-0"}
+{"event": "retire", "ns": 597282996723595, "pid": 1800794, "object": "finding-1"}
+{"event": "retire", "ns": 597282996770115, "pid": 1800794, "object": "ledger"}
+{"event": "retire", "ns": 597282996814302, "pid": 1800794, "object": "synthesis"}

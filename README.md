@@ -594,3 +594,15 @@ To upstream this into CIRCT, move the TableGen declarations into the appropriate
 and add the test files under `test/Dialect/HW` or a new CXL-focused test
 directory. CIRCT's own `circt-opt` will expose the passes once they are included
 in the relevant pass registration header.
+
+## Agent Sharing Motivation Experiments
+
+[workloads/agent_sharing](workloads/agent_sharing/README.md) connects real
+OpenCode agents to CXL shared state through our DSec prototype. arVM compiles
+accepted task effects into sharing, admission and retention contracts; observed
+object versions reconstruct RAW/WAR/WAW dataflow after execution. All current
+data/control locks use the pinned `mutex_benchmark/fast_exp` CXL SpinLock.
+The local Qwen model is configured and six live episodes are recorded, alongside
+software grant/revoke measurements. NVIDIA Sentry comparison remains unmeasured:
+this machine has no BlueField hardware or configured Sentry endpoint. Historical
+file-lock controls are excluded from the current results.

@@ -1,0 +1,77 @@
+{
+  "schema": 2,
+  "sandboxes": {
+    "analyst-0": {
+      "depends_on": [],
+      "grants": {
+        "read": [
+          "evidence",
+          "ledger",
+          "finding-0"
+        ],
+        "write": [
+          "finding-0"
+        ],
+        "append": [
+          "ledger"
+        ]
+      },
+      "state": "completed",
+      "generation": 0,
+      "started_ns": 597301818659202,
+      "ended_ns": 597315390416432
+    },
+    "analyst-1": {
+      "depends_on": [],
+      "grants": {
+        "read": [
+          "evidence",
+          "ledger",
+          "finding-1"
+        ],
+        "write": [
+          "finding-1"
+        ],
+        "append": [
+          "ledger"
+        ]
+      },
+      "state": "completed",
+      "generation": 0,
+      "started_ns": 597301818824543,
+      "ended_ns": 597315394960111
+    },
+    "synthesizer": {
+      "depends_on": [
+        "analyst-0",
+        "analyst-1"
+      ],
+      "grants": {
+        "read": [
+          "evidence",
+          "finding-0",
+          "finding-1",
+          "ledger",
+          "synthesis"
+        ],
+        "write": [
+          "synthesis"
+        ]
+      },
+      "state": "completed",
+      "generation": 0,
+      "started_ns": 597315395121386,
+      "ended_ns": 597320156350801
+    }
+  },
+  "pins": {},
+  "retired": [
+    "evidence",
+    "finding-0",
+    "finding-1",
+    "ledger",
+    "synthesis"
+  ],
+  "created_ns": 597299850893732,
+  "state_location": "CXL shared memory"
+}

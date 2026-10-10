@@ -1,0 +1,56 @@
+{
+  "schema": "arvm-accepted-effects-v1",
+  "tasks": {
+    "analyst-0": {
+      "depends_on": [],
+      "grants": {
+        "read": [
+          "evidence",
+          "ledger",
+          "finding-0"
+        ],
+        "write": [
+          "finding-0"
+        ],
+        "append": [
+          "ledger"
+        ]
+      }
+    },
+    "analyst-1": {
+      "depends_on": [],
+      "grants": {
+        "read": [
+          "evidence",
+          "ledger",
+          "finding-1"
+        ],
+        "write": [
+          "finding-1"
+        ],
+        "append": [
+          "ledger"
+        ]
+      }
+    },
+    "synthesizer": {
+      "depends_on": [
+        "analyst-0",
+        "analyst-1"
+      ],
+      "grants": {
+        "read": [
+          "evidence",
+          "finding-0",
+          "finding-1",
+          "ledger",
+          "synthesis"
+        ],
+        "write": [
+          "synthesis"
+        ]
+      }
+    }
+  },
+  "authority": "trusted harness effect summaries; not inferred permissions from model prose"
+}

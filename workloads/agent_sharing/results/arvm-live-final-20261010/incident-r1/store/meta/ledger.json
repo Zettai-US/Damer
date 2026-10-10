@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "size": 219,
+  "sha256": "750e1d0d3cc83803810b0e9665b99a6eb9843b6f0fb601e4ce42b346d2ca68ac",
+  "producer": "analyst-1",
+  "published_ns": 597259995862696,
+  "nodes": {
+    "1": 64
+  }
+}

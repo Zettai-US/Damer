@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+build/
+third_party/
+.dsec-state/
+/build-build.log
+/results/*
+!/results/arvm-live-final-20261010/
+!/results/grant-final-20261010/
+!/results/cxl-controls-smoke-20261010/

@@ -1,0 +1,9 @@
+Synthetic incident evidence for a controlled collaboration task:
+10:00 release r42 enabled a new retry policy and a smaller cache.
+10:01 requests=10000 errors=120 p95_ms=180 cache_hit_pct=92 retries=110.
+10:03 requests=10000 errors=810 p95_ms=940 cache_hit_pct=51 retries=2200.
+10:04 dependency CPU reached 96%; no dependency release was recorded.
+10:06 rollback r42 began.
+10:08 requests=10000 errors=140 p95_ms=210 cache_hit_pct=90 retries=170.
+These are supplied fictional task inputs, NOT measured system performance.
+Goal: distinguish observations from causal hypotheses and propose one check.

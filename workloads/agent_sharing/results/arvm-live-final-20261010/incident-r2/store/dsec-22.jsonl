@@ -1,0 +1,12 @@
+{"event": "pin", "ns": 597333263397660, "pid": 22, "agent": "synthesizer", "object": "finding-0", "op": "read", "token": "783999c890154a40bd12db635fa3c0a6", "grant_ns": 5247697, "generation": 0}
+{"event": "unpin", "ns": 597333271472700, "pid": 22, "agent": "synthesizer", "object": "finding-0", "token": "783999c890154a40bd12db635fa3c0a6", "revoke_ns": 78570}
+{"event": "pin", "ns": 597333271632643, "pid": 22, "agent": "synthesizer", "object": "finding-1", "op": "read", "token": "bdec24173422416f8eb4a5b1fa5b44b4", "grant_ns": 43566, "generation": 0}
+{"event": "unpin", "ns": 597333277804383, "pid": 22, "agent": "synthesizer", "object": "finding-1", "token": "bdec24173422416f8eb4a5b1fa5b44b4", "revoke_ns": 46380}
+{"event": "pin", "ns": 597333277939638, "pid": 22, "agent": "synthesizer", "object": "ledger", "op": "read", "token": "158b6f3331f74c07828d353ed58518c4", "grant_ns": 35513, "generation": 0}
+{"event": "unpin", "ns": 597333283661175, "pid": 22, "agent": "synthesizer", "object": "ledger", "token": "158b6f3331f74c07828d353ed58518c4", "revoke_ns": 38709}
+{"event": "pin", "ns": 597333283777402, "pid": 22, "agent": "synthesizer", "object": "evidence", "op": "read", "token": "4a9f57912ba94989b82936a493843c88", "grant_ns": 31919, "generation": 0}
+{"event": "unpin", "ns": 597333289653222, "pid": 22, "agent": "synthesizer", "object": "evidence", "token": "4a9f57912ba94989b82936a493843c88", "revoke_ns": 49986}
+{"event": "pin", "ns": 597333863949112, "pid": 22, "agent": "synthesizer", "object": "synthesis", "op": "read", "token": "7ccd2561c9904ea1b0d2acb4010c1d61", "grant_ns": 124389, "generation": 0}
+{"event": "unpin", "ns": 597333873079414, "pid": 22, "agent": "synthesizer", "object": "synthesis", "token": "7ccd2561c9904ea1b0d2acb4010c1d61", "revoke_ns": 71208}
+{"event": "pin", "ns": 597335989598780, "pid": 22, "agent": "synthesizer", "object": "synthesis", "op": "write", "token": "9ff0d557bb5a43778d9eb762f7c0000e", "grant_ns": 164751, "generation": 0}
+{"event": "unpin", "ns": 597335991502991, "pid": 22, "agent": "synthesizer", "object": "synthesis", "token": "9ff0d557bb5a43778d9eb762f7c0000e", "revoke_ns": 39399}

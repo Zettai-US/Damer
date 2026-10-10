@@ -1,0 +1,51 @@
+{
+  "events": 18,
+  "successful": 18,
+  "errors": 0,
+  "conflicts": 0,
+  "objects": 5,
+  "shared_objects": 4,
+  "multiwriter_objects": 1,
+  "readonly_operations": 13,
+  "shared_version_read_operations": 8,
+  "shared_read_ratio": 0.6153846153846154,
+  "bytes_scanned": 4718592,
+  "bytes_written": 1772,
+  "bytes_copied": 0,
+  "response_bytes": 5219,
+  "lock_contended": 1,
+  "lock_attempts": 18,
+  "contention_ratio": 0.05555555555555555,
+  "wait_p50_ns": 1980597,
+  "wait_p95_ns": 6878253,
+  "wait_total_ns": 31823859,
+  "hold_total_ns": 58200774,
+  "wait_share_of_lock_time": 0.35350167992353826,
+  "cross_agent_read_operations": 4,
+  "collaboration_edges": [
+    {
+      "producer": "analyst-0",
+      "consumer": "synthesizer",
+      "object": "finding-0",
+      "reads": 1
+    },
+    {
+      "producer": "analyst-1",
+      "consumer": "analyst-0",
+      "object": "ledger",
+      "reads": 1
+    },
+    {
+      "producer": "analyst-1",
+      "consumer": "synthesizer",
+      "object": "finding-1",
+      "reads": 1
+    },
+    {
+      "producer": "analyst-1",
+      "consumer": "synthesizer",
+      "object": "ledger",
+      "reads": 1
+    }
+  ]
+}

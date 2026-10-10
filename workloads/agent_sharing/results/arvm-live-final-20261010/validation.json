@@ -1,0 +1,28 @@
+{
+  "assessment": "Share with caveats",
+  "attempted": 6,
+  "pipeline_complete": 6,
+  "strict_tool_protocol_complete": 5,
+  "recorded_events": 107,
+  "errors": 0,
+  "checks": [
+    "source snapshots",
+    "version lineage",
+    "CXL payload/lock residency",
+    "balanced pins",
+    "all planned attempts",
+    "independent required-tool coverage",
+    "nonempty read denominators"
+  ],
+  "incomplete": [
+    "NVIDIA Sentry comparison requires actual service/hardware access"
+  ],
+  "caveats": [
+    "Prescribed 3-agent tasks, 3 repeats each; no claim of natural agent workload prevalence",
+    "Pipeline completion means publications; stricter required-tool compliance is independently audited and may differ",
+    "No independent semantic answer-quality scorer; all attempts, including protocol omissions, retained",
+    "CXL allocation is shared by trusted MCP tool processes; OpenCode/LLM receives copied bounded text",
+    "Measured warm software grant API; NVIDIA Sentry is not measured and no relative speedup is reported",
+    "CXL SpinLock is exclusive even for reads; single host, no cross-host or DPU security equivalence"
+  ]
+}

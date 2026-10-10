@@ -1,0 +1,1 @@
+Read evidence, finding-0, finding-1 and ledger using sharing_read. Synthesize the two findings, distinguish verified behavior from hypotheses, and propose one concrete validation test. Read synthesis and publish your result there using sharing_write with expected_version. Keep it below 1500 characters.

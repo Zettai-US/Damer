@@ -1,0 +1,8 @@
+{
+  "object": "synthesis",
+  "version": 1,
+  "producer": "synthesizer",
+  "text": "Synthesis of Findings:\nVerified Behavior:\n1. `admit` accepts contracts with `reservation_bytes > 0` even if `pins` is empty, reserving capacity without pinning objects (finding-0).\n2. `finish` decrements `pins` but does not touch `roots` (finding-1).\n3. `reclaim` requires both `pins == 0` and `roots == 0` for an object to be reclaimed.\n\nHypothesis / Issue:\nThe `roots` counter is only decremented by `drop_root`, which is never called by `admit`, `finish`, or `retire`. An object published via `publish` has `roots=1` by default. If a contract is admitted and finished for an object that was never explicitly dropped, `roots` remains 1. This leaves the object in a state where `reclaim` will raise `RuntimeError('object remains reachable')`, preventing garbage collection and causing a memory leak.\n\nValidation Test:\nWrite a unit test that:\n1. Publishes an object.\n2. Admits a contract pinning that object.\n3. Calls `finish` on the contract.\n4. Calls `retire` on the object.\n5. Attempts to call `reclaim`.\nExpected: `reclaim` raises `RuntimeError('object remains reachable')`, confirming the leak.",
+  "logical_bytes": 1099,
+  "truncated": false
+}

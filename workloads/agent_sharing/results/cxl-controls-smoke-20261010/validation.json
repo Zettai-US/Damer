@@ -1,0 +1,24 @@
+{
+  "assessment": "Share with caveats",
+  "planned_runs": 26,
+  "successful_runs": 26,
+  "measured_events": 150,
+  "checks": [
+    "source snapshot hashes",
+    "event uniqueness",
+    "complete operation counts",
+    "NUMA residency",
+    "source-version producer linkage",
+    "contiguous committed versions",
+    "checksums",
+    "ledger contents"
+  ],
+  "limitations": [
+    "Controlled processes, not observed OpenCode agents or DSec",
+    "Warm-cache tool path timings; not raw CXL bandwidth or LLM end-to-end speedup",
+    "Single host; Python/metadata/placement instrumentation included",
+    "Sharing and cooperation are prescribed by workload; their rates are not discovery",
+    "PSS covers live shared mappings only; excludes retained unmapped backing and transient copy buffers",
+    "Repeated runs are descriptive; operation p95 is not an independent-trial confidence interval"
+  ]
+}

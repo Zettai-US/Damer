@@ -1,0 +1,110 @@
+Review this actual arVM registry prototype. Find a concrete correctness or scope issue; distinguish implemented guarantees from limitations.
+"""Executable control-path prototype for accepted, read-only object plans.
+Native mappings are exercised separately by cxl_bench.c. This module does not
+claim to interpose on arbitrary tools, manage GPU pointers, or persist state.
+"""
+from dataclasses import dataclass
+from collections import defaultdict, deque
+from threading import RLock
+
+
+@dataclass(frozen=True)
+class Handle:
+    name: str
+    generation: int
+
+
+@dataclass
+class Object:
+    handle: Handle
+    size: int
+    scopes: frozenset
+    roots: int = 1
+    pins: int = 0
+    retiring: bool = False
+    live: bool = True
+
+
+@dataclass(frozen=True)
+class Task:
+    name: str
+    predecessors: tuple
+    inputs: tuple
+    output_bound: int
+
+
+@dataclass(frozen=True)
+class Contract:
+    epoch: int
+    scope: str
+    order: tuple
+    pins: frozenset
+    reservation_bytes: int
+
+
+class Registry:
+    def __init__(self, capacity):
+        self.lock = RLock()
+        self.capacity = capacity
+        self.reserved = 0
+        self.epoch = 0
+        self.generations = defaultdict(int)
+        self.objects = {}
+        self.active = {}
+        self.next_lease = 0
+
+    def publish(self, name, size, scopes):
+        if size < 0 or not scopes: raise ValueError('invalid object')
+        with self.lock:
+            self.generations[name] += 1
+            h = Handle(name, self.generations[name])
+            self.objects[h] = Object(h, size, frozenset(scopes))
+            self.epoch += 1
+            return h
+
+    def validate(self, handle, scope):
+        obj = self.objects.get(handle)
+        if obj is None or not obj.live or obj.retiring:
+            raise ValueError('stale or retiring object')
+        if scope not in obj.scopes: raise PermissionError('unauthorized reader')
+        return obj
+
+    def admit(self, contract):
+        with self.lock:
+            if contract.epoch != self.epoch: raise ValueError('stale plan epoch')
+            objects = [self.validate(h, contract.scope) for h in contract.pins]
+            if contract.reservation_bytes < 0: raise ValueError('negative reservation')
+            if self.reserved + contract.reservation_bytes > self.capacity:
+                raise MemoryError('insufficient capacity')
+            for o in objects: o.pins += 1
+            self.reserved += contract.reservation_bytes
+            self.next_lease += 1
+            self.active[self.next_lease] = contract
+            return self.next_lease
+
+    def finish(self, lease):
+        with self.lock:
+            c = self.active.pop(lease)
+            for h in c.pins: self.objects[h].pins -= 1
+            self.reserved -= c.reservation_bytes
+
+    def retire(self, handle):
+        with self.lock:
+            o = self.objects[handle]
+            o.retiring = True
+            self.epoch += 1
+
+    def drop_root(self, handle):
+        with self.lock:
+            o = self.objects[handle]
+            if not o.roots: raise ValueError('root already dropped')
+            o.roots -= 1
+
+    def reclaim(self, handle):
+        with self.lock:
+            o = self.objects[handle]
+            if not o.live: raise ValueError('already reclaimed')
+            if not o.retiring or o.pins or o.roots:
+                raise RuntimeError('object remains reachable')
+            o.live = False
+

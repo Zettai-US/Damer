@@ -1,0 +1,53 @@
+{
+  "schema": 2,
+  "sandboxes": {
+    "agent-0": {
+      "grants": {
+        "read": [
+          "state"
+        ]
+      },
+      "state": "completed",
+      "generation": 200,
+      "started_ns": 597180595043730,
+      "ended_ns": 597180675071445
+    },
+    "agent-1": {
+      "grants": {
+        "read": [
+          "state"
+        ]
+      },
+      "state": "completed",
+      "generation": 0,
+      "started_ns": 597180595161228,
+      "ended_ns": 597180675110294
+    },
+    "agent-2": {
+      "grants": {
+        "read": [
+          "state"
+        ]
+      },
+      "state": "completed",
+      "generation": 0,
+      "started_ns": 597180595215771,
+      "ended_ns": 597180675146559
+    },
+    "agent-3": {
+      "grants": {
+        "read": [
+          "state"
+        ]
+      },
+      "state": "completed",
+      "generation": 0,
+      "started_ns": 597180595258155,
+      "ended_ns": 597180675180580
+    }
+  },
+  "pins": {},
+  "retired": [],
+  "created_ns": 597180590716670,
+  "state_location": "CXL shared memory"
+}

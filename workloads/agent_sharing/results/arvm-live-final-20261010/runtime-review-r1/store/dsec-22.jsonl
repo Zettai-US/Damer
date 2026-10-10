@@ -1,0 +1,24 @@
+{"event": "pin", "ns": 597288289108134, "pid": 22, "agent": "analyst-1", "object": "evidence", "op": "read", "token": "dcccc6f7e0db42388a4b862b8addc4e1", "grant_ns": 180263, "generation": 0}
+{"event": "unpin", "ns": 597288382073862, "pid": 22, "agent": "analyst-1", "object": "evidence", "token": "dcccc6f7e0db42388a4b862b8addc4e1", "revoke_ns": 130468}
+{"event": "pin", "ns": 597288382436052, "pid": 22, "agent": "analyst-1", "object": "ledger", "op": "read", "token": "5d9bf3269c15410dad9ceb2a0b51b3c5", "grant_ns": 88685, "generation": 0}
+{"event": "unpin", "ns": 597288393312436, "pid": 22, "agent": "analyst-1", "object": "ledger", "token": "5d9bf3269c15410dad9ceb2a0b51b3c5", "revoke_ns": 65089}
+{"event": "pin", "ns": 597288393459309, "pid": 22, "agent": "analyst-1", "object": "finding-1", "op": "read", "token": "c7f6c55476e9435ab4d2155c7e5c0caa", "grant_ns": 42134, "generation": 0}
+{"event": "unpin", "ns": 597288398558461, "pid": 22, "agent": "analyst-1", "object": "finding-1", "token": "c7f6c55476e9435ab4d2155c7e5c0caa", "revoke_ns": 43526}
+{"event": "pin", "ns": 597292665783676, "pid": 22, "agent": "analyst-1", "object": "finding-1", "op": "write", "token": "0df71f1a3307463ca71b512aad710005", "grant_ns": 141184, "generation": 0}
+{"event": "unpin", "ns": 597292667512401, "pid": 22, "agent": "analyst-1", "object": "finding-1", "token": "0df71f1a3307463ca71b512aad710005", "revoke_ns": 39891}
+{"event": "pin", "ns": 597292667634636, "pid": 22, "agent": "analyst-1", "object": "ledger", "op": "append", "token": "99d5790432924d60b15b77f08c9ba95f", "grant_ns": 30396, "generation": 0}
+{"event": "unpin", "ns": 597292668609777, "pid": 22, "agent": "analyst-1", "object": "ledger", "token": "99d5790432924d60b15b77f08c9ba95f", "revoke_ns": 33241}
+{"event": "pin", "ns": 597293603613799, "pid": 22, "agent": "analyst-1", "object": "ledger", "op": "read", "token": "63f2a782db67487d920a28780fc654be", "grant_ns": 136627, "generation": 0}
+{"event": "unpin", "ns": 597293604928415, "pid": 22, "agent": "analyst-1", "object": "ledger", "token": "63f2a782db67487d920a28780fc654be", "revoke_ns": 34702}
+{"event": "pin", "ns": 597296816488981, "pid": 22, "agent": "synthesizer", "object": "evidence", "op": "read", "token": "15761e467faa4f8b9497bf7bfcc74582", "grant_ns": 7595031, "generation": 0}
+{"event": "unpin", "ns": 597296824082780, "pid": 22, "agent": "synthesizer", "object": "evidence", "token": "15761e467faa4f8b9497bf7bfcc74582", "revoke_ns": 62936}
+{"event": "pin", "ns": 597296824254791, "pid": 22, "agent": "synthesizer", "object": "finding-0", "op": "read", "token": "00c148ffda764f9db35ab10776431c43", "grant_ns": 42975, "generation": 0}
+{"event": "unpin", "ns": 597296830880721, "pid": 22, "agent": "synthesizer", "object": "finding-0", "token": "00c148ffda764f9db35ab10776431c43", "revoke_ns": 44958}
+{"event": "pin", "ns": 597296831018340, "pid": 22, "agent": "synthesizer", "object": "finding-1", "op": "read", "token": "1a4eea73c74748d48f18eeddb4677c82", "grant_ns": 41934, "generation": 0}
+{"event": "unpin", "ns": 597296839864281, "pid": 22, "agent": "synthesizer", "object": "finding-1", "token": "1a4eea73c74748d48f18eeddb4677c82", "revoke_ns": 58909}
+{"event": "pin", "ns": 597296840016752, "pid": 22, "agent": "synthesizer", "object": "ledger", "op": "read", "token": "bb61b89da2f44456a73f9fe9d374ef28", "grant_ns": 48193, "generation": 0}
+{"event": "unpin", "ns": 597296845688113, "pid": 22, "agent": "synthesizer", "object": "ledger", "token": "bb61b89da2f44456a73f9fe9d374ef28", "revoke_ns": 52820}
+{"event": "pin", "ns": 597296845828717, "pid": 22, "agent": "synthesizer", "object": "synthesis", "op": "read", "token": "ef18ae380ae84b42879cc3ce2773d011", "grant_ns": 41132, "generation": 0}
+{"event": "unpin", "ns": 597296852981947, "pid": 22, "agent": "synthesizer", "object": "synthesis", "token": "ef18ae380ae84b42879cc3ce2773d011", "revoke_ns": 45829}
+{"event": "pin", "ns": 597298961288377, "pid": 22, "agent": "synthesizer", "object": "synthesis", "op": "write", "token": "b843f5ccfc6e42b7ad9a32b36ede7e88", "grant_ns": 118289, "generation": 0}
+{"event": "unpin", "ns": 597298963033136, "pid": 22, "agent": "synthesizer", "object": "synthesis", "token": "b843f5ccfc6e42b7ad9a32b36ede7e88", "revoke_ns": 45919}

@@ -1,0 +1,14 @@
+{
+  "assessment": "Share with caveats",
+  "trials": 15,
+  "access_pairs": 3500,
+  "issue_revoke_pairs": 1500,
+  "checks": [
+    "source snapshots",
+    "all raw sample counts and quantiles",
+    "throughput denominator",
+    "trial aggregation",
+    "finished tasks and drained pins"
+  ],
+  "sentry": "not_measured"
+}

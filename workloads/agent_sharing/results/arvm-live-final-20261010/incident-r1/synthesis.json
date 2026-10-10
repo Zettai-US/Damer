@@ -1,0 +1,8 @@
+{
+  "object": "synthesis",
+  "version": 1,
+  "producer": "synthesizer",
+  "text": "Verified: r42 (10:00) enabled smaller cache + retry policy. Errors rose 120\u2192810, cache hits 92%\u219251%, retries 110\u21922200 at 10:03. Dependency CPU hit 96%. Rollback (10:06) restored metrics.\n\nHypothesis: Cache thrashing (92%\u219251%) caused cache misses, triggering retries (110\u21922200) that saturated dependency CPU (96%).\n\nValidation: Replay r42 with controlled burst. Measure: if cache hit rate <70%, retry count >10x baseline, and dependency CPU >90%, hypothesis confirmed.",
+  "logical_bytes": 477,
+  "truncated": false
+}

@@ -1,0 +1,20 @@
+{
+  "schema": 2,
+  "sandboxes": {
+    "agent-0": {
+      "grants": {
+        "read": [
+          "state"
+        ]
+      },
+      "state": "completed",
+      "generation": 200,
+      "started_ns": 597180870442393,
+      "ended_ns": 597180941103517
+    }
+  },
+  "pins": {},
+  "retired": [],
+  "created_ns": 597180866507559,
+  "state_location": "CXL shared memory"
+}

@@ -1,0 +1,36 @@
+{
+  "kind": "live-opencode-arvm-dataflow",
+  "seed": 6619,
+  "planned_episodes": 6,
+  "roles_per_episode": 3,
+  "order": [
+    [
+      "runtime-review",
+      0
+    ],
+    [
+      "incident",
+      1
+    ],
+    [
+      "incident",
+      0
+    ],
+    [
+      "runtime-review",
+      1
+    ],
+    [
+      "runtime-review",
+      2
+    ],
+    [
+      "incident",
+      2
+    ]
+  ],
+  "started_utc": "2026-10-10T22:06:16Z",
+  "finished_utc": "2026-10-10T22:07:57Z",
+  "complete": 6,
+  "attempted": 6
+}

@@ -1,0 +1,2 @@
+# Preserve measured inputs and archived source hashes byte for byte.
+results/** -text whitespace=-blank-at-eof,cr-at-eol

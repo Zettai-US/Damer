@@ -1,0 +1,8 @@
+{
+  "object": "synthesis",
+  "version": 1,
+  "producer": "synthesizer",
+  "text": "Synthesis: Verified timeline shows r42 release at 10:00 preceded cache_hit drop (92%\u219251%) at 10:03, error spike (120\u2192810), retry surge (110\u21922200), dependency CPU=96% at 10:04. Rollback at 10:06 restored metrics.\n\nHypotheses: (1) Smaller cache in r42 caused increased cache misses \u2192 more dependency calls. (2) Retry amplification (110\u21922200) compounded load on dependency. Combined: cache reduction triggered cascade via dependency overload.\n\nValidation Test: Inspect r41 vs r42 deployment artifacts to verify r42 cache size reduction. If r42 cache < r41 cache, root cause hypothesis confirmed.",
+  "logical_bytes": 602,
+  "truncated": false
+}

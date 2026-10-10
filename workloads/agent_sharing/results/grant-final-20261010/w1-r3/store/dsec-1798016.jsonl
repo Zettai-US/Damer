@@ -1,0 +1,202 @@
+{"event": "admit", "ns": 597180957132173, "pid": 1798016, "agent": "agent-0"}
+{"event": "revoke", "ns": 597181019086878, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 1, "duration_ns": 96146}
+{"event": "grant", "ns": 597181019365621, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 2, "duration_ns": 118309}
+{"event": "revoke", "ns": 597181019467496, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 3, "duration_ns": 37277}
+{"event": "grant", "ns": 597181019641520, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 4, "duration_ns": 87102}
+{"event": "revoke", "ns": 597181019723304, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 5, "duration_ns": 29235}
+{"event": "grant", "ns": 597181019875115, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 6, "duration_ns": 76476}
+{"event": "revoke", "ns": 597181019950950, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 7, "duration_ns": 26381}
+{"event": "grant", "ns": 597181020113086, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 8, "duration_ns": 77017}
+{"event": "revoke", "ns": 597181020149351, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 9, "duration_ns": 12589}
+{"event": "grant", "ns": 597181020215542, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 10, "duration_ns": 33641}
+{"event": "revoke", "ns": 597181020250084, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 11, "duration_ns": 11738}
+{"event": "grant", "ns": 597181020314732, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 12, "duration_ns": 32459}
+{"event": "revoke", "ns": 597181020348654, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 13, "duration_ns": 11578}
+{"event": "grant", "ns": 597181020412150, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 14, "duration_ns": 31468}
+{"event": "revoke", "ns": 597181020444529, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 15, "duration_ns": 11287}
+{"event": "grant", "ns": 597181020506674, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 16, "duration_ns": 31407}
+{"event": "revoke", "ns": 597181020538392, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 17, "duration_ns": 10797}
+{"event": "grant", "ns": 597181020600226, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 18, "duration_ns": 31317}
+{"event": "revoke", "ns": 597181020632054, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 19, "duration_ns": 11317}
+{"event": "grant", "ns": 597181020693507, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 20, "duration_ns": 31057}
+{"event": "revoke", "ns": 597181020724384, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 21, "duration_ns": 10696}
+{"event": "grant", "ns": 597181020784506, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 22, "duration_ns": 30206}
+{"event": "revoke", "ns": 597181020815433, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 23, "duration_ns": 10836}
+{"event": "grant", "ns": 597181020875924, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 24, "duration_ns": 30426}
+{"event": "revoke", "ns": 597181020907412, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 25, "duration_ns": 11077}
+{"event": "grant", "ns": 597181020967754, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 26, "duration_ns": 30065}
+{"event": "revoke", "ns": 597181020999452, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 27, "duration_ns": 11267}
+{"event": "grant", "ns": 597181021067816, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 28, "duration_ns": 31067}
+{"event": "revoke", "ns": 597181021107316, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 29, "duration_ns": 12769}
+{"event": "grant", "ns": 597181021170812, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 30, "duration_ns": 31398}
+{"event": "revoke", "ns": 597181021202941, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 31, "duration_ns": 10947}
+{"event": "grant", "ns": 597181021283203, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 32, "duration_ns": 50366}
+{"event": "revoke", "ns": 597181021320119, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 33, "duration_ns": 14482}
+{"event": "grant", "ns": 597181021382373, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 34, "duration_ns": 30817}
+{"event": "revoke", "ns": 597181021413921, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 35, "duration_ns": 10776}
+{"event": "grant", "ns": 597181021475655, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 36, "duration_ns": 30507}
+{"event": "revoke", "ns": 597181021507543, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 37, "duration_ns": 11057}
+{"event": "grant", "ns": 597181021567264, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 38, "duration_ns": 29946}
+{"event": "revoke", "ns": 597181021597971, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 39, "duration_ns": 10896}
+{"event": "grant", "ns": 597181021657050, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 40, "duration_ns": 29815}
+{"event": "revoke", "ns": 597181021689540, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 41, "duration_ns": 10996}
+{"event": "grant", "ns": 597181021750803, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 42, "duration_ns": 31467}
+{"event": "revoke", "ns": 597181021781309, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 43, "duration_ns": 10576}
+{"event": "grant", "ns": 597181021841570, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 44, "duration_ns": 30136}
+{"event": "revoke", "ns": 597181021873058, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 45, "duration_ns": 11247}
+{"event": "grant", "ns": 597181021934832, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 46, "duration_ns": 30827}
+{"event": "revoke", "ns": 597181021965979, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 47, "duration_ns": 10776}
+{"event": "grant", "ns": 597181022038119, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 48, "duration_ns": 38889}
+{"event": "revoke", "ns": 597181022071109, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 49, "duration_ns": 11358}
+{"event": "grant", "ns": 597181022132132, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 50, "duration_ns": 30176}
+{"event": "revoke", "ns": 597181022164100, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 51, "duration_ns": 11137}
+{"event": "grant", "ns": 597181022224001, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 52, "duration_ns": 29796}
+{"event": "revoke", "ns": 597181022254828, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 53, "duration_ns": 10626}
+{"event": "grant", "ns": 597181022314028, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 54, "duration_ns": 29554}
+{"event": "revoke", "ns": 597181022344534, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 55, "duration_ns": 10476}
+{"event": "grant", "ns": 597181022410384, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 56, "duration_ns": 30927}
+{"event": "revoke", "ns": 597181022440800, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 57, "duration_ns": 10296}
+{"event": "grant", "ns": 597181022499279, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 58, "duration_ns": 29054}
+{"event": "revoke", "ns": 597181022529004, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 59, "duration_ns": 10296}
+{"event": "grant", "ns": 597181022587613, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 60, "duration_ns": 29014}
+{"event": "revoke", "ns": 597181022617609, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 61, "duration_ns": 10396}
+{"event": "grant", "ns": 597181022675717, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 62, "duration_ns": 29114}
+{"event": "revoke", "ns": 597181022705482, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 63, "duration_ns": 10206}
+{"event": "grant", "ns": 597181022763981, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 64, "duration_ns": 29735}
+{"event": "revoke", "ns": 597181022794648, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 65, "duration_ns": 10355}
+{"event": "grant", "ns": 597181022854749, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 66, "duration_ns": 30066}
+{"event": "revoke", "ns": 597181022885796, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 67, "duration_ns": 10917}
+{"event": "grant", "ns": 597181022945827, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 68, "duration_ns": 30066}
+{"event": "revoke", "ns": 597181022977315, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 69, "duration_ns": 10787}
+{"event": "grant", "ns": 597181023043776, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 70, "duration_ns": 31247}
+{"event": "revoke", "ns": 597181023075324, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 71, "duration_ns": 10967}
+{"event": "grant", "ns": 597181023134534, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 72, "duration_ns": 29004}
+{"event": "revoke", "ns": 597181023164639, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 73, "duration_ns": 10466}
+{"event": "grant", "ns": 597181023224721, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 74, "duration_ns": 29695}
+{"event": "revoke", "ns": 597181023254726, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 75, "duration_ns": 10216}
+{"event": "grant", "ns": 597181023312874, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 76, "duration_ns": 29194}
+{"event": "revoke", "ns": 597181023343431, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 77, "duration_ns": 10747}
+{"event": "grant", "ns": 597181023403722, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 78, "duration_ns": 30717}
+{"event": "revoke", "ns": 597181023435080, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 79, "duration_ns": 10837}
+{"event": "grant", "ns": 597181023500179, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 80, "duration_ns": 32178}
+{"event": "revoke", "ns": 597181023528942, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 81, "duration_ns": 9935}
+{"event": "grant", "ns": 597181023582524, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 82, "duration_ns": 26279}
+{"event": "revoke", "ns": 597181023622885, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 83, "duration_ns": 10817}
+{"event": "grant", "ns": 597181023679201, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 84, "duration_ns": 27742}
+{"event": "revoke", "ns": 597181023706632, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 85, "duration_ns": 9434}
+{"event": "grant", "ns": 597181023760624, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 86, "duration_ns": 27502}
+{"event": "revoke", "ns": 597181023788076, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 87, "duration_ns": 9415}
+{"event": "grant", "ns": 597181023840806, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 88, "duration_ns": 25910}
+{"event": "revoke", "ns": 597181023868378, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 89, "duration_ns": 9455}
+{"event": "grant", "ns": 597181023920817, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 90, "duration_ns": 25909}
+{"event": "revoke", "ns": 597181023948439, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 91, "duration_ns": 9484}
+{"event": "grant", "ns": 597181024005025, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 92, "duration_ns": 30166}
+{"event": "revoke", "ns": 597181024218910, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 93, "duration_ns": 64658}
+{"event": "grant", "ns": 597181024467167, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 94, "duration_ns": 114974}
+{"event": "revoke", "ns": 597181024563693, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 95, "duration_ns": 34372}
+{"event": "grant", "ns": 597181024735905, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 96, "duration_ns": 86932}
+{"event": "revoke", "ns": 597181024819522, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 97, "duration_ns": 29635}
+{"event": "grant", "ns": 597181024975609, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 98, "duration_ns": 77167}
+{"event": "revoke", "ns": 597181025064464, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 99, "duration_ns": 28233}
+{"event": "grant", "ns": 597181025166689, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 100, "duration_ns": 33580}
+{"event": "revoke", "ns": 597181025199509, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 101, "duration_ns": 11457}
+{"event": "grant", "ns": 597181025263856, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 102, "duration_ns": 32379}
+{"event": "revoke", "ns": 597181025296236, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 103, "duration_ns": 11237}
+{"event": "grant", "ns": 597181025359452, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 104, "duration_ns": 31548}
+{"event": "revoke", "ns": 597181025392051, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 105, "duration_ns": 11558}
+{"event": "grant", "ns": 597181025455067, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 106, "duration_ns": 31217}
+{"event": "revoke", "ns": 597181025486344, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 107, "duration_ns": 10736}
+{"event": "grant", "ns": 597181025546926, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 108, "duration_ns": 29785}
+{"event": "revoke", "ns": 597181025578574, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 109, "duration_ns": 11247}
+{"event": "grant", "ns": 597181025639697, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 110, "duration_ns": 31278}
+{"event": "revoke", "ns": 597181025676643, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 111, "duration_ns": 11838}
+{"event": "grant", "ns": 597181025739939, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 112, "duration_ns": 31448}
+{"event": "revoke", "ns": 597181025771557, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 113, "duration_ns": 10756}
+{"event": "grant", "ns": 597181025831829, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 114, "duration_ns": 30487}
+{"event": "revoke", "ns": 597181025862806, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 115, "duration_ns": 10847}
+{"event": "grant", "ns": 597181025922817, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 116, "duration_ns": 30106}
+{"event": "revoke", "ns": 597181025953213, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 117, "duration_ns": 10406}
+{"event": "grant", "ns": 597181026019874, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 118, "duration_ns": 37307}
+{"event": "revoke", "ns": 597181026053025, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 119, "duration_ns": 11096}
+{"event": "grant", "ns": 597181026115049, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 120, "duration_ns": 30176}
+{"event": "revoke", "ns": 597181026145625, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 121, "duration_ns": 10436}
+{"event": "grant", "ns": 597181026204945, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 122, "duration_ns": 29955}
+{"event": "revoke", "ns": 597181026235922, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 123, "duration_ns": 10586}
+{"event": "grant", "ns": 597181026296555, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 124, "duration_ns": 30566}
+{"event": "revoke", "ns": 597181026327211, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 125, "duration_ns": 10376}
+{"event": "grant", "ns": 597181026386771, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 126, "duration_ns": 29935}
+{"event": "revoke", "ns": 597181026416757, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 127, "duration_ns": 10196}
+{"event": "grant", "ns": 597181026475586, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 128, "duration_ns": 29415}
+{"event": "revoke", "ns": 597181026507505, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 129, "duration_ns": 9335}
+{"event": "grant", "ns": 597181026560255, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 130, "duration_ns": 26510}
+{"event": "revoke", "ns": 597181026587787, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 131, "duration_ns": 9634}
+{"event": "grant", "ns": 597181026640887, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 132, "duration_ns": 26831}
+{"event": "revoke", "ns": 597181026673507, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 133, "duration_ns": 11458}
+{"event": "grant", "ns": 597181026733137, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 134, "duration_ns": 30176}
+{"event": "revoke", "ns": 597181026764745, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 135, "duration_ns": 10446}
+{"event": "grant", "ns": 597181026823695, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 136, "duration_ns": 29244}
+{"event": "revoke", "ns": 597181026854502, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 137, "duration_ns": 10506}
+{"event": "grant", "ns": 597181026920652, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 138, "duration_ns": 30607}
+{"event": "revoke", "ns": 597181026951168, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 139, "duration_ns": 10356}
+{"event": "grant", "ns": 597181027015135, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 140, "duration_ns": 34673}
+{"event": "revoke", "ns": 597181027046563, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 141, "duration_ns": 10566}
+{"event": "grant", "ns": 597181027106775, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 142, "duration_ns": 29835}
+{"event": "revoke", "ns": 597181027136460, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 143, "duration_ns": 9995}
+{"event": "grant", "ns": 597181027194378, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 144, "duration_ns": 28894}
+{"event": "revoke", "ns": 597181027224573, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 145, "duration_ns": 10746}
+{"event": "grant", "ns": 597181027282762, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 146, "duration_ns": 28904}
+{"event": "revoke", "ns": 597181027312637, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 147, "duration_ns": 10356}
+{"event": "grant", "ns": 597181027370565, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 148, "duration_ns": 28814}
+{"event": "revoke", "ns": 597181027400641, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 149, "duration_ns": 10415}
+{"event": "grant", "ns": 597181027459320, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 150, "duration_ns": 29364}
+{"event": "revoke", "ns": 597181027489345, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 151, "duration_ns": 10396}
+{"event": "grant", "ns": 597181027545651, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 152, "duration_ns": 28083}
+{"event": "revoke", "ns": 597181027575015, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 153, "duration_ns": 9985}
+{"event": "grant", "ns": 597181027632803, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 154, "duration_ns": 28574}
+{"event": "revoke", "ns": 597181027663129, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 155, "duration_ns": 10556}
+{"event": "grant", "ns": 597181027721498, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 156, "duration_ns": 29064}
+{"event": "revoke", "ns": 597181027751904, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 157, "duration_ns": 10817}
+{"event": "grant", "ns": 597181027809121, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 158, "duration_ns": 28884}
+{"event": "revoke", "ns": 597181027839187, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 159, "duration_ns": 10446}
+{"event": "grant", "ns": 597181027896453, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 160, "duration_ns": 28543}
+{"event": "revoke", "ns": 597181027926669, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 161, "duration_ns": 10516}
+{"event": "grant", "ns": 597181027983536, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 162, "duration_ns": 28132}
+{"event": "revoke", "ns": 597181028018739, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 163, "duration_ns": 11347}
+{"event": "grant", "ns": 597181028078931, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 164, "duration_ns": 29985}
+{"event": "revoke", "ns": 597181028113553, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 165, "duration_ns": 11047}
+{"event": "grant", "ns": 597181028173093, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 166, "duration_ns": 29675}
+{"event": "revoke", "ns": 597181028202769, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 167, "duration_ns": 10175}
+{"event": "grant", "ns": 597181028260887, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 168, "duration_ns": 28823}
+{"event": "revoke", "ns": 597181028290952, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 169, "duration_ns": 10546}
+{"event": "grant", "ns": 597181028349892, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 170, "duration_ns": 29736}
+{"event": "revoke", "ns": 597181028381510, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 171, "duration_ns": 11257}
+{"event": "grant", "ns": 597181028439528, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 172, "duration_ns": 28984}
+{"event": "revoke", "ns": 597181028469804, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 173, "duration_ns": 10376}
+{"event": "grant", "ns": 597181028526991, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 174, "duration_ns": 26771}
+{"event": "revoke", "ns": 597181028554312, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 175, "duration_ns": 9314}
+{"event": "grant", "ns": 597181028606341, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 176, "duration_ns": 25729}
+{"event": "revoke", "ns": 597181028633162, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 177, "duration_ns": 9134}
+{"event": "grant", "ns": 597181028692182, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 178, "duration_ns": 28002}
+{"event": "revoke", "ns": 597181028721757, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 179, "duration_ns": 10145}
+{"event": "grant", "ns": 597181028780326, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 180, "duration_ns": 29024}
+{"event": "revoke", "ns": 597181028810812, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 181, "duration_ns": 10385}
+{"event": "grant", "ns": 597181028868359, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 182, "duration_ns": 28734}
+{"event": "revoke", "ns": 597181028898024, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 183, "duration_ns": 10276}
+{"event": "grant", "ns": 597181028955542, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 184, "duration_ns": 28673}
+{"event": "revoke", "ns": 597181028985247, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 185, "duration_ns": 10195}
+{"event": "grant", "ns": 597181029049454, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 186, "duration_ns": 29806}
+{"event": "revoke", "ns": 597181029082765, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 187, "duration_ns": 12550}
+{"event": "grant", "ns": 597181029139661, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 188, "duration_ns": 28443}
+{"event": "revoke", "ns": 597181029169056, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 189, "duration_ns": 10036}
+{"event": "grant", "ns": 597181029226313, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 190, "duration_ns": 28693}
+{"event": "revoke", "ns": 597181029255607, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 191, "duration_ns": 10186}
+{"event": "grant", "ns": 597181029317611, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 192, "duration_ns": 29505}
+{"event": "revoke", "ns": 597181029348017, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 193, "duration_ns": 10436}
+{"event": "grant", "ns": 597181029405124, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 194, "duration_ns": 28423}
+{"event": "revoke", "ns": 597181029434429, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 195, "duration_ns": 10265}
+{"event": "grant", "ns": 597181029492086, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 196, "duration_ns": 28724}
+{"event": "revoke", "ns": 597181029522723, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 197, "duration_ns": 10476}
+{"event": "grant", "ns": 597181029579749, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 198, "duration_ns": 28273}
+{"event": "revoke", "ns": 597181029610576, "pid": 1798016, "agent": "agent-0", "object": "state", "generation": 199, "duration_ns": 10967}
+{"event": "grant", "ns": 597181029667643, "pid": 1798016, "agent": "agent-0", "object": "state", "operations": ["read"], "generation": 200, "duration_ns": 28303}
+{"event": "finish", "ns": 597181029701424, "pid": 1798016, "agent": "agent-0", "success": true}

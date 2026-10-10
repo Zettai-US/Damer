@@ -1,0 +1,10 @@
+{
+  "version": 0,
+  "size": 599,
+  "sha256": "eb7ea17510b3831552d0f4f0c9a6a8a5fd6f1f358a3f451257044b1c694b4dc3",
+  "producer": "harness",
+  "published_ns": 597267136487241,
+  "nodes": {
+    "1": 64
+  }
+}

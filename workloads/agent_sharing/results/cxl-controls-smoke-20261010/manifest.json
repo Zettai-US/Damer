@@ -1,0 +1,152 @@
+{
+  "schema": 1,
+  "kind": "controlled-not-llm",
+  "started_utc": "2026-10-10T22:06:37Z",
+  "argv": [
+    "workloads/agent_sharing/run_experiments.py",
+    "--output",
+    "workloads/agent_sharing/results/cxl-controls-smoke-20261010",
+    "--workers",
+    "1",
+    "2",
+    "--repeats",
+    "1",
+    "--steps",
+    "2"
+  ],
+  "seed": 20261010,
+  "hardware": [
+    {
+      "node": 0,
+      "node_cpus": "0-47",
+      "memory_blocks": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "block_bytes": 2147483648,
+      "cxl_decoders": [
+        {
+          "name": "decoder0.0",
+          "start": 19327352832,
+          "size": 137438953472
+        }
+      ],
+      "verified_cxl_node": false,
+      "kernel": "7.0.0-mk1+"
+    },
+    {
+      "node": 1,
+      "node_cpus": "",
+      "memory_blocks": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72
+      ],
+      "block_bytes": 2147483648,
+      "cxl_decoders": [
+        {
+          "name": "decoder0.0",
+          "start": 19327352832,
+          "size": 137438953472
+        }
+      ],
+      "verified_cxl_node": true,
+      "kernel": "7.0.0-mk1+"
+    }
+  ],
+  "source_sha256": {
+    "dataflow.py": "14d8c0a01cdb9d94a267fb6fe43a1aef4e0cd92b0f9a49be3d5ba7619a1a825a",
+    "test_store.py": "e9260737fe5b2aa805b36a69eeac923c3cdc27496a81fa1993b5ef9a62fa4709",
+    "run_live_suite.py": "0b8654f8c42b2c2bda9e4badf6e7f756c9e00d14d95d6e2cfc898ded9c17f210",
+    "analyze.py": "5d995359fa4dd21b4da9c405cdb7a6a63eb60f0e8e4d7a134a4764c42c94978d",
+    "store.py": "5b61a6ed52adac4b7584fc01d6af80efa5139a564b2aaa6f60b5e1fdc3894998",
+    "cxl_lock.py": "a74674fdbd8decf18937e262c23f389f0be0685479133d02aef89f9ddd2b16e3",
+    "build_cxl_lock.py": "76e880144813b894b7c939c1fc4f383d2519e95770e0e16efaaede5f57e74b3e",
+    "plot.py": "44685dbd1c85f976af77f54467e933d77c0fe568b055e7926e755e7df0d56708",
+    "run_experiments.py": "e22ddf3795d7adb047fd6343165e09af94187d1f201229020b45df10469e8d2c",
+    "dsec.py": "6c822c84877a86bbc19181d2f45a8bfba40dde8cdfb0995fb89bf5ecd8c6bd92",
+    "serve_model.py": "8bed0c8beaaf5c504109113d4b7bb58b1cc27c1ce002df8179f2b6b840a029cc",
+    "mcp_server.py": "dcfb0e42963d60257f7be44cdd23814a8897387bcb6e24781f56d96479f88c6b",
+    "run_live.py": "02eb728fd01c04b9c5782af168028f4466516c33629a76a59f933cdd960848a1",
+    "bench_grant.py": "157d3bbf081623feacfeeaf91bfc7c10aa58520c63380d767c6a5b2ea665dd9a"
+  },
+  "planned_runs": 26,
+  "python": "3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]",
+  "notes": [
+    "warm caches; one untimed corpus warmup per worker",
+    "not a dedicated host",
+    "fresh private-copy buffer per read; no retained-copy baseline",
+    "Python checksums, metadata I/O and placement checks included in lock hold time"
+  ],
+  "finished_utc": "2026-10-10T22:06:40Z",
+  "run_status": {
+    "ok": 26
+  }
+}

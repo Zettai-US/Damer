@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "size": 1151,
+  "sha256": "ecb620e3a99fd8a0020d80ddf3d5649f738ecd18c239924def9eb59365d54951",
+  "producer": "synthesizer",
+  "published_ns": 597282632845504,
+  "nodes": {
+    "1": 64
+  }
+}

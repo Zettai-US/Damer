@@ -1,0 +1,200 @@
+{
+  "schema": "arvm-memory-contract-v1",
+  "tasks": {
+    "analyst-0": {
+      "depends_on": [],
+      "grants": {
+        "read": [
+          "evidence",
+          "ledger",
+          "finding-0"
+        ],
+        "write": [
+          "finding-0"
+        ],
+        "append": [
+          "ledger"
+        ]
+      }
+    },
+    "analyst-1": {
+      "depends_on": [],
+      "grants": {
+        "read": [
+          "evidence",
+          "ledger",
+          "finding-1"
+        ],
+        "write": [
+          "finding-1"
+        ],
+        "append": [
+          "ledger"
+        ]
+      }
+    },
+    "synthesizer": {
+      "depends_on": [
+        "analyst-0",
+        "analyst-1"
+      ],
+      "grants": {
+        "read": [
+          "evidence",
+          "finding-0",
+          "finding-1",
+          "ledger",
+          "synthesis"
+        ],
+        "write": [
+          "synthesis"
+        ]
+      }
+    }
+  },
+  "admission_order": [
+    "analyst-0",
+    "analyst-1",
+    "synthesizer"
+  ],
+  "objects": [
+    {
+      "object": "evidence",
+      "alias_set": "evidence",
+      "initial_version": 0,
+      "readers": [
+        "analyst-0",
+        "analyst-1",
+        "synthesizer"
+      ],
+      "writers": [],
+      "sharing": "immutable common backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [],
+      "retention_until_tasks_complete": [
+        "analyst-0",
+        "analyst-1",
+        "synthesizer"
+      ],
+      "version_binding": "fixed"
+    },
+    {
+      "object": "finding-0",
+      "alias_set": "finding-0",
+      "initial_version": 0,
+      "readers": [
+        "analyst-0",
+        "synthesizer"
+      ],
+      "writers": [
+        "analyst-0"
+      ],
+      "sharing": "synchronized mutable backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [],
+      "retention_until_tasks_complete": [
+        "analyst-0",
+        "synthesizer"
+      ],
+      "version_binding": "resolve current version at admitted tool call"
+    },
+    {
+      "object": "finding-1",
+      "alias_set": "finding-1",
+      "initial_version": 0,
+      "readers": [
+        "analyst-1",
+        "synthesizer"
+      ],
+      "writers": [
+        "analyst-1"
+      ],
+      "sharing": "synchronized mutable backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [],
+      "retention_until_tasks_complete": [
+        "analyst-1",
+        "synthesizer"
+      ],
+      "version_binding": "resolve current version at admitted tool call"
+    },
+    {
+      "object": "ledger",
+      "alias_set": "ledger",
+      "initial_version": 0,
+      "readers": [
+        "analyst-0",
+        "analyst-1",
+        "synthesizer"
+      ],
+      "writers": [
+        "analyst-0",
+        "analyst-1"
+      ],
+      "sharing": "synchronized mutable backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [
+        [
+          "analyst-0",
+          "analyst-1"
+        ]
+      ],
+      "retention_until_tasks_complete": [
+        "analyst-0",
+        "analyst-1",
+        "synthesizer"
+      ],
+      "version_binding": "resolve current version at admitted tool call"
+    },
+    {
+      "object": "synthesis",
+      "alias_set": "synthesis",
+      "initial_version": 0,
+      "readers": [
+        "synthesizer"
+      ],
+      "writers": [
+        "synthesizer"
+      ],
+      "sharing": "synchronized mutable backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [],
+      "retention_until_tasks_complete": [
+        "synthesizer"
+      ],
+      "version_binding": "resolve current version at admitted tool call"
+    }
+  ],
+  "data_dependencies": [
+    {
+      "producer": "analyst-0",
+      "consumer": "synthesizer",
+      "object": "finding-0",
+      "type": "publication_dependency"
+    },
+    {
+      "producer": "analyst-1",
+      "consumer": "synthesizer",
+      "object": "finding-1",
+      "type": "publication_dependency"
+    },
+    {
+      "producer": "analyst-0",
+      "consumer": "synthesizer",
+      "object": "ledger",
+      "type": "publication_dependency"
+    },
+    {
+      "producer": "analyst-1",
+      "consumer": "synthesizer",
+      "object": "ledger",
+      "type": "publication_dependency"
+    }
+  ],
+  "authority": "trusted harness effect summaries",
+  "reclamation": "DSec checks pending tasks and in-flight pins",
+  "limitations": [
+    "Object-granularity effects; no automatic alias analysis for arbitrary pointers",
+    "Scopes are local MCP enforcement, not DPU isolation or transparent memory revocation"
+  ]
+}

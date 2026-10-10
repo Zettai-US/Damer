@@ -1,0 +1,8 @@
+{
+  "object": "synthesis",
+  "version": 1,
+  "producer": "synthesizer",
+  "text": "Synthesized findings distinguish verified behavior from hypotheses:\n\n**Verified behavior (from evidence):**\n- Release r42 at 10:00 enabled a new retry policy and smaller cache.\n- 10:01: cache_hit=92%, errors=120, retries=110.\n- 10:03: cache_hit dropped to 51%, errors spiked to 810, retries surged to 2200, p95_ms worsened to 940ms.\n- 10:04: dependency CPU hit 96%; no dependency release occurred.\n- 10:06\u201310:08: rollback of r42 restored cache_hit to 90% and errors to 140.\n\n**Hypotheses (from findings):**\n- The smaller cache caused cache hit rate collapse, triggering more retries.\n- The new retry policy amplified load, overloading the dependency service.\n- Cache-thrashing plus aggressive retries created a feedback loop causing the cascade.\n- Rollback resolved the issue by restoring cache size and reverting retry policy.\n\n**Proposed validation test:**\nRe-deploy r42 in isolation (same retry policy, same small cache) with synthetic traffic. Measure if cache_hit drops and retries increase proportionally. If retries spike only after cache misses, and dependency CPU rises, the hypothesis is confirmed. If not, the interaction is more complex.",
+  "logical_bytes": 1151,
+  "truncated": false
+}

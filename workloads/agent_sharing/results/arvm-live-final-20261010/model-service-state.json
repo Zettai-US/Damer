@@ -1,0 +1,6 @@
+{
+  "owned_model_service": "stopped after measurements",
+  "port": 18081,
+  "restart": "python3 workloads/agent_sharing/serve_model.py",
+  "utc": "2026-10-10T22:11:49Z"
+}
