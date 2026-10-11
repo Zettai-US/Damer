@@ -1,0 +1,10 @@
+{"event": "pin", "ns": 604432063239610, "pid": 22, "agent": "draft-0", "object": "corpus", "op": "read", "token": "802228d77de3467f84dbb7261aff90fb", "grant_ns": 259894, "generation": 0}
+{"event": "unpin", "ns": 604432072999282, "pid": 22, "agent": "draft-0", "object": "corpus", "token": "802228d77de3467f84dbb7261aff90fb", "revoke_ns": 70017}
+{"event": "pin", "ns": 604433070839918, "pid": 22, "agent": "draft-0", "object": "scratch-0", "op": "append", "token": "14633fa5c229460abf2353a70a8985c2", "grant_ns": 172802, "generation": 0}
+{"event": "unpin", "ns": 604433079466599, "pid": 22, "agent": "draft-0", "object": "scratch-0", "token": "14633fa5c229460abf2353a70a8985c2", "revoke_ns": 131460}
+{"event": "pin", "ns": 604433387589544, "pid": 22, "agent": "draft-0", "object": "draft-0", "op": "read", "token": "79be7151105d41f0996c84350d59219f", "grant_ns": 182567, "generation": 0}
+{"event": "unpin", "ns": 604433395176286, "pid": 22, "agent": "draft-0", "object": "draft-0", "token": "79be7151105d41f0996c84350d59219f", "revoke_ns": 91960}
+{"event": "pin", "ns": 604434387398037, "pid": 22, "agent": "draft-0", "object": "draft-0", "op": "write", "token": "22c2fbbabf78454cae9915af00c395b3", "grant_ns": 193494, "generation": 0}
+{"event": "unpin", "ns": 604434389203750, "pid": 22, "agent": "draft-0", "object": "draft-0", "token": "22c2fbbabf78454cae9915af00c395b3", "revoke_ns": 106762}
+{"event": "pin", "ns": 604436472997116, "pid": 22, "agent": "draft-0", "object": "ledger", "op": "append", "token": "4fb03ed9151444fc9c9b1e4b3e4c4d89", "grant_ns": 235467, "generation": 0}
+{"event": "unpin", "ns": 604436481327768, "pid": 22, "agent": "draft-0", "object": "ledger", "token": "4fb03ed9151444fc9c9b1e4b3e4c4d89", "revoke_ns": 109837}

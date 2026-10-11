@@ -9,6 +9,9 @@ from dsec import SandboxStore
 
 
 TOOLS = [
+    dict(name="search", description="Search a shared source snapshot; return matching lines and nearby code plus object version. Scans shared memory, returns bounded text.",
+         inputSchema=dict(type="object",properties={"object":{"type":"string"},"query":{"type":"string"}},
+                          required=["object","query"],additionalProperties=False)),
     dict(name="objects", description="List shared CXL object IDs.",
          inputSchema=dict(type="object", properties={}, additionalProperties=False)),
     dict(name="read", description="Read a shared object version. Returns bounded text plus version and producer.",
@@ -37,9 +40,10 @@ def dispatch(store, method, params):
             name, args = params["name"], params.get("arguments", {})
             if name == "objects":
                 result = store.list_objects()
-            elif name in {"read", "write", "append"}:
-                result = store.access(args["object"], op=name, text=args.get("text", ""),
+            elif name in {"read", "write", "append","search"}:
+                result = store.access(args["object"], op="read" if name=="search" else name, text=args.get("text", ""),
                                       expected_version=args.get("expected_version"),
+                                      query=args.get("query") if name=="search" else None,
                                       session_id=params.get("_meta", {}).get("ai.opencode/sessionID"))
             else:
                 raise ValueError("unknown tool")

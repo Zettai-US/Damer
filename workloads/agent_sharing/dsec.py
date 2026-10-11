@@ -21,15 +21,20 @@ class DSec:
         self.path=store.root/"dsec.json"
 
     @classmethod
-    def initialize(cls, store, specs):
+    def initialize(cls, store, specs, retention_policy="scope", session_roots=()):
         if (store.root/"dsec.json").exists():raise FileExistsError("DSec already initialized")
         objects=store.list_objects()
+        if retention_policy not in {"scope","dataflow"}:raise ValueError("unknown retention policy")
+        if not set(session_roots)<=set(objects):raise ValueError("unknown session root")
         for agent,spec in specs.items():
             validate_name(agent)
             if not set(spec.get("depends_on",[]))<=set(specs):raise ValueError("unknown task dependency")
             for access,keys in spec["grants"].items():
                 if access not in {"read","write","append"} or not set(keys)<=set(objects):
                     raise ValueError("invalid object grants")
+            for access,keys in spec.get("effects",spec["grants"]).items():
+                if not set(keys)<=set(spec["grants"].get(access,[])):
+                    raise ValueError("accepted effects exceed access scope")
         # Reject cyclic admission graphs before publishing them.
         visited,active=set(),set()
         def visit(agent):
@@ -40,7 +45,8 @@ class DSec:
             active.remove(agent);visited.add(agent)
         for agent in specs:visit(agent)
         state=dict(schema=2,sandboxes={a:dict(**s,state="ready",generation=0) for a,s in specs.items()},
-                   pins={},retired=[],created_ns=time.monotonic_ns(),state_location="CXL shared memory")
+                   pins={},retired=[],created_ns=time.monotonic_ns(),state_location="CXL shared memory",
+                   retention_policy=retention_policy,session_roots=list(session_roots))
         store.record("dsec-registry",initial=state,capacity=262144)
         dump(store.root/"dsec.json",state)
         return cls(store)
@@ -85,6 +91,8 @@ class DSec:
             if task is None or task["state"]!="running":raise PermissionError("sandbox not admitted")
             if key in state["retired"] or key not in task["grants"].get(operation,[]):
                 raise PermissionError(f"sandbox {agent} has no {operation} grant for {key}")
+            if key not in task.get("effects",task["grants"]).get(operation,[]):
+                raise PermissionError("operation not in accepted effects; a new plan is required")
             state["pins"][token]=dict(agent=agent,object=key,op=operation,started_ns=time.monotonic_ns())
         self.event("pin",agent=agent,object=key,op=operation,token=token,
                    grant_ns=time.monotonic_ns()-begin,generation=task["generation"])
@@ -128,24 +136,46 @@ class DSec:
 
     def retire(self,key):
         with self.registry() as state:
+            if key in state.get("session_roots",[]):raise RuntimeError("object retained by session root")
             if any(p["object"]==key for p in state["pins"].values()):raise RuntimeError("object still pinned")
             for task in state["sandboxes"].values():
-                if task["state"] in {"ready","running"} and any(key in ids for ids in task["grants"].values()):
+                uses=task.get("effects",task["grants"]) if state.get("retention_policy")=="dataflow" else task["grants"]
+                if task["state"] in {"ready","running"} and any(key in ids for ids in uses.values()):
                     raise RuntimeError("object retained for a scheduled consumer")
             if key not in state["retired"]:state["retired"].append(key)
         self.event("retire",object=key)
+
+    def release_root(self,key):
+        with self.registry() as state:state["session_roots"].remove(key)
+        self.event("release_root",object=key)
+
+    def reclaim(self,key):
+        """Controller-only: task processes must have exited before finish().
+
+        Retirement prevents new pins; completed task namespaces have drained
+        cached mappings. Arbitrary external mappings are outside this protocol.
+        """
+        self.retire(key)
+        begin=time.monotonic_ns()
+        released=self.store.reclaim_payload(key)
+        self.event("reclaim",object=key,bytes=released,duration_ns=time.monotonic_ns()-begin)
+        return released
 
 
 class SandboxStore(Store):
     def __init__(self,root,agent,trace_kind="opencode-live"):
         super().__init__(root,agent,trace_kind)
         self.dsec=DSec(self)
+        with self.dsec.registry() as state:
+            spec=state["sandboxes"].get(agent,{})
+            self.actor=spec.get("actor",agent)
+            self.phase=spec.get("phase","single")
 
     def list_objects(self):
         with self.dsec.registry() as state:
             task=state["sandboxes"].get(self.agent)
             if task is None or task["state"]!="running":raise PermissionError("sandbox not admitted")
-            return sorted(set(sum(task["grants"].values(),[]))-set(state["retired"]))
+            return sorted(set(sum(task.get("effects",task["grants"]).values(),[]))-set(state["retired"]))
 
     def access(self,key,op="read",**kwargs):
         with self.dsec.pin(self.agent,key,op):return super().access(key,op,**kwargs)

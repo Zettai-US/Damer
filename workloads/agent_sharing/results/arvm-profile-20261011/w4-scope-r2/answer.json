@@ -1,0 +1,8 @@
+{
+  "object": "answer",
+  "version": 1,
+  "producer": "synthesis",
+  "text": "Implemented guarantees: (1) Registry.retire() strictly validates no session roots/pins/active consumers before marking retired, raising RuntimeError on violation. (2) ObjectStore.retire() increments epoch atomically and sets retiring=True, enabling reader detection but deferring deallocation. (3) expected_version requires int (bool rejected); CAS compares meta[\"version\"] and returns version_conflict on mismatch, forcing client retries. (4) retention_until_tasks_complete binds object live duration to sorted readers+writers union for deterministic ordering.\n\nLimitations: (1) No immediate deallocation\u2014epoch-based eventual cleanup required. (2) Task-scoped retention fails for external references outside task context, risking premature reclamation. (3) No fetch-current-version operation; clients must retry on version_conflict.\n\nProposed test: Verify external reference bypasses task-scoped retention. Create task with handle as input, retire object, then attempt reclaim while external agent holds reference. Expected: RuntimeError raised (pins active), confirming external references not protected.",
+  "logical_bytes": 1108,
+  "truncated": false
+}

@@ -1,0 +1,1 @@
+Linux 7.0.0-mk1+ #4 SMP PREEMPT_DYNAMIC Wed Aug 12 03:55:37 UTC 2026 GNU/Linux

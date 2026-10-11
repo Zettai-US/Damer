@@ -1,0 +1,201 @@
+{
+  "schema": "arvm-sharing-profile-v1",
+  "kind": "opencode-live-multiphase",
+  "workers": 4,
+  "retention_policy": "scope",
+  "model": "local/damer-qwen35",
+  "status": "complete",
+  "task_sessions": 9,
+  "started_utc": "2026-10-11T00:09:15Z",
+  "opencode_version": "opencode v2.0.24",
+  "task_results": [
+    {
+      "agent": "draft-0",
+      "returncode": 0,
+      "timeout": false,
+      "duration_ns": 19254154019,
+      "errors": [],
+      "session_ids": [
+        "ses_ed7b523f4ffeQApFTghmhmurYy"
+      ],
+      "process_ok": true,
+      "protocol": {
+        "complete": true,
+        "missing": [],
+        "events": 5
+      },
+      "published": true
+    },
+    {
+      "agent": "draft-1",
+      "returncode": 0,
+      "timeout": false,
+      "duration_ns": 20137245387,
+      "errors": [],
+      "session_ids": [
+        "ses_ed7b52423ffetvssBz575YqHa1"
+      ],
+      "process_ok": true,
+      "protocol": {
+        "complete": true,
+        "missing": [],
+        "events": 5
+      },
+      "published": true
+    },
+    {
+      "agent": "draft-2",
+      "returncode": 0,
+      "timeout": false,
+      "duration_ns": 22228275142,
+      "errors": [],
+      "session_ids": [
+        "ses_ed7b523e3ffeuPxj0QWTfPOvz7"
+      ],
+      "process_ok": true,
+      "protocol": {
+        "complete": true,
+        "missing": [],
+        "events": 5
+      },
+      "published": true
+    },
+    {
+      "agent": "draft-3",
+      "returncode": 0,
+      "timeout": false,
+      "duration_ns": 22539938950,
+      "errors": [],
+      "session_ids": [
+        "ses_ed7b5243cffe5lEyGOuTyLCbvZ"
+      ],
+      "process_ok": true,
+      "protocol": {
+        "complete": true,
+        "missing": [],
+        "events": 6
+      },
+      "published": true
+    },
+    {
+      "agent": "review-1",
+      "returncode": 0,
+      "timeout": false,
+      "duration_ns": 13376093911,
+      "errors": [],
+      "session_ids": [
+        "ses_ed7b4cc36ffebG9TEJP16AWhV1"
+      ],
+      "process_ok": true,
+      "protocol": {
+        "complete": true,
+        "missing": [],
+        "events": 6
+      },
+      "published": true
+    },
+    {
+      "agent": "review-0",
+      "returncode": 0,
+      "timeout": false,
+      "duration_ns": 16954223096,
+      "errors": [],
+      "session_ids": [
+        "ses_ed7b4cbf4ffeRfrZQ6q2cHoTCq"
+      ],
+      "process_ok": true,
+      "protocol": {
+        "complete": true,
+        "missing": [],
+        "events": 6
+      },
+      "published": true
+    },
+    {
+      "agent": "review-2",
+      "returncode": 0,
+      "timeout": false,
+      "duration_ns": 19048071863,
+      "errors": [],
+      "session_ids": [
+        "ses_ed7b4cbdcffeMsjKK7bKCde3Q2"
+      ],
+      "process_ok": true,
+      "protocol": {
+        "complete": true,
+        "missing": [],
+        "events": 6
+      },
+      "published": true
+    },
+    {
+      "agent": "review-3",
+      "returncode": 0,
+      "timeout": false,
+      "duration_ns": 19210765078,
+      "errors": [],
+      "session_ids": [
+        "ses_ed7b4cba6ffeLHyw0ugP5Da9HK"
+      ],
+      "process_ok": true,
+      "protocol": {
+        "complete": true,
+        "missing": [],
+        "events": 6
+      },
+      "published": true
+    },
+    {
+      "agent": "synthesis",
+      "returncode": 0,
+      "timeout": false,
+      "duration_ns": 9979526270,
+      "errors": [],
+      "session_ids": [
+        "ses_ed7b481e4ffeHjrTBPg73tGjvu"
+      ],
+      "process_ok": true,
+      "protocol": {
+        "complete": true,
+        "missing": [],
+        "events": 9
+      },
+      "published": true
+    }
+  ],
+  "capacity_kib": 64,
+  "source_sha256": {
+    "dataflow.py": "abc4ff632302479ed4ce497c6ca0a5943766a84b27641ad6088d1b92ee2fcb2d",
+    "summarize_live.py": "c61e746dccb0597f1843d9af34b2153eda1e0ccd082c03eff9ff70e5ac178dd8",
+    "test_store.py": "f245df25e039c6c0b574772aa23cae259423c922a4369a450196c9490a89a5e2",
+    "run_profile.py": "c80d2f03770f4ec253d15f104e4b86e5fc48767d9e52b36efbbcc134bde20771",
+    "run_live_suite.py": "0b8654f8c42b2c2bda9e4badf6e7f756c9e00d14d95d6e2cfc898ded9c17f210",
+    "export_sentry_workload.py": "7fbb1d29b7bbd558d11ff8576f727cc7888837286dfa21a655deded5a7f01567",
+    "probe_sharing.py": "162d224b5b02f17276e36a1dec4a11583471d44bef96374eca66b488c8d54d76",
+    "analyze.py": "72ecdbdd5c5d02710157698bc83ab95ef60520e3b72a7bd14a9ce27ddda16e9b",
+    "store.py": "56246e42d352d815997a357ed9fbd41fc4312faa61fba8640376d2ce4a21fd6f",
+    "cxl_lock.py": "a74674fdbd8decf18937e262c23f389f0be0685479133d02aef89f9ddd2b16e3",
+    "profile_analysis.py": "71280225e0afabbc54f2191c3ebf8890bcbf0da6eab618fdf16dbd8f0729f353",
+    "build_cxl_lock.py": "8f94649c59bd303a894eaa5547f832804875483540388413a7754effda0454d6",
+    "plot.py": "0d0ee97da27a1924bea931ebcee450a2b33b5ade6d584ed0114ac12b37a2f070",
+    "run_experiments.py": "e22ddf3795d7adb047fd6343165e09af94187d1f201229020b45df10469e8d2c",
+    "run_profile_suite.py": "9570e505d111fecfdc902f88d8b39c5d5f6089c02db2feaa22420216e8c8608c",
+    "report_profile.py": "7b3e59f3fc883eb707795a53ac3c917dca5db30c6d892688c9366644feb50d13",
+    "dsec.py": "7a6199b529b3e5e20b021ea3fb6397c0235fa41f7a1e04d45f2fb24ed980e78f",
+    "serve_model.py": "8bed0c8beaaf5c504109113d4b7bb58b1cc27c1ce002df8179f2b6b840a029cc",
+    "mcp_server.py": "7f721610783d648c4c7891b5de4db6b9af7aaae7e26d5f2b04bbea245b9a0769",
+    "run_live.py": "406b1e0860dfe00d482f85b339bea09d57caa412f08e90705794e4d40d88c36e",
+    "bench_grant.py": "157d3bbf081623feacfeeaf91bfc7c10aa58520c63380d767c6a5b2ea665dd9a"
+  },
+  "corpus_sources": {
+    "fixtures/arvm_registry.py": "d2fbc056ffd3b40d46a1232a5ca1dd08496c31032aa29e24d8cf590cecfb0e4b",
+    "store.py": "56246e42d352d815997a357ed9fbd41fc4312faa61fba8640376d2ce4a21fd6f",
+    "dsec.py": "7a6199b529b3e5e20b021ea3fb6397c0235fa41f7a1e04d45f2fb24ed980e78f",
+    "dataflow.py": "abc4ff632302479ed4ce497c6ca0a5943766a84b27641ad6088d1b92ee2fcb2d"
+  },
+  "scope": "prescribed accepted effects with broad project read scope; tool-process shared memory, copied model responses",
+  "compile_ns": 156948,
+  "protocol_complete": true,
+  "duration_ns": 51943380019,
+  "finished_utc": "2026-10-11T00:10:07Z"
+}

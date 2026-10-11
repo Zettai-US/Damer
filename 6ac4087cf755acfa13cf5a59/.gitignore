@@ -1,0 +1,32 @@
+# LaTeX generated files
+*.aux
+*.log
+*.bbl
+*.blg
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.nav
+*.snm
+*.vrb
+comment.cut
+
+# PDF output
+*.pdf
+!/main.pdf
+!/figures/*.pdf
+
+# Local executable/test caches
+__pycache__/
+*.pyc
+/experiments/cxl_bench
+
+# Editor files
+*.swp
+*.swo
+*~
+.DS_Store

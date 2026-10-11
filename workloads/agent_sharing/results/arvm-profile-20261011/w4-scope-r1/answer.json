@@ -1,0 +1,8 @@
+{
+  "object": "answer",
+  "version": 1,
+  "producer": "synthesis",
+  "text": "Synthesis:\nGuarantees: (1) Admit validates scope via self.validate() and capacity; two paths (contracts/sandboxes) use locks/state checks. (2) Retire blocks on session roots, pins (line 656), and active task usage. (3) expected_version enforces integer-only CAS; conflicts return current_version for caller-managed retries. (4) retention_until_tasks_complete tracks readers+writers until completion.\nLimitations: (1) self.validate() logic is encapsulated/unauditable here. (2) Pin check has a race window (no post-check blocking). (3) No built-in retry for version conflicts.\nTest Proposal: Concurrent retire vs. pin test. Thread A calls retire(obj), Thread B calls pin(obj). Verify atomicity: does the lock prevent retiring while pin is being registered? Expect failure if race allows retire to pass before pin check completes.",
+  "logical_bytes": 828,
+  "truncated": false
+}

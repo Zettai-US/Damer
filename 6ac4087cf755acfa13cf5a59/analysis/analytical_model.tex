@@ -1,0 +1,57 @@
+% Supplementary derivation retained from the manuscript; not empirical data.
+\section{Analytical Model}
+\label{sec:analysis}
+
+A simple model separates three effects that the experiments must distinguish:
+capacity saved by sharing, the cost of repeated reads, and the opportunity
+created by planning lead time. These equations describe conditional behavior;
+they are not fitted to the measurements in Section~\ref{sec:evaluation}.
+
+\subsection{Capacity and Access Cost}
+
+Let $n$ branches each retain $S$ bytes, with a common immutable fraction
+$\rho$ and otherwise distinct inputs. After producer handoff, private copies
+require $nS$ bytes, while shared backing requires
+$\rho S+n(1-\rho)S$. The payload saving is therefore $\rho(1-1/n)$.
+Metadata, cache residency, retained source copies, and migration buffers must
+be accounted for separately. A workload with no simultaneous authorized
+overlap has no deduplication opportunity, regardless of branch count.
+
+Suppose the pool and local DRAM provide bandwidths $B_p$ and $B_d$, and every
+branch scans its input $r$ times. A copy policy stages all inputs locally; a
+selective-sharing policy reads the common part from the pool and stages the
+private part. With mapping cost $h$ per branch and compiler cost $c$, a simple
+aggregate service-demand model is
+\begin{align}
+ D_{\mathrm{copy}} &= \frac{nS}{B_p}+\frac{nrS}{B_d}, \\
+ D_{\mathrm{share}} &= \frac{nS(1-\rho+r\rho)}{B_p}
+   +\frac{nrS(1-\rho)}{B_d}+nh+c.
+\end{align}
+It counts source reads and scan reads and excludes destination writes, useful
+cache reuse, overlap, and queueing. Thus, it exposes a tradeoff rather than
+predicting runtime.
+Small objects may fail to amortize control overhead. Repeated uncached reads
+may justify a local replica even when pooled backing saves capacity. Real
+cache behavior can change this result, which is why the experiment varies
+scan count and reports tuned copying separately from fresh allocation.
+
+\subsection{Value of Lookahead}
+
+For a speculative transfer taking $d=S/B_p$, let $L$ be its lead time,
+$p$ the probability it is used, and $c_p$ the exposed decision cost. In an
+otherwise idle path, expected exposed-stall saving is
+\begin{equation}
+ E[\mathrm{saving}]=p\min\{L,d\}-c_p,
+\end{equation}
+and unused traffic is $(1-p)S$. This assumes the hinted version is correct
+when used and excludes interference. A late correct prediction may offer
+little benefit; an early wrong prediction consumes bandwidth without
+removing demand work. The controller must therefore consider accuracy,
+lead time, and foreground pressure together.
+
+The artifact's analytical script exports 412 deterministic parameter points
+and the corresponding sensitivity plots. They remain separate from native
+measurements. In particular, the empirical phase replay does not charge a
+hypothetical compiler cost: it measures the native data path and reports
+compiler overhead independently. Combining them requires knowing how much
+compilation can overlap with the actual agent's planning interval.

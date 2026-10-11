@@ -210,8 +210,25 @@ class Store:
     def list_objects(self):
         return sorted(p.stem for p in (self.root / "meta").glob("*.json"))
 
+    def reclaim_payload(self,key):
+        """Harness allocator: invoke only after DSec retirement and map drain."""
+        key=validate_name(key)
+        grant=self.backend.acquire(key if self.config["granularity"]=="object" else "all","write",10)
+        try:
+            path=Path(self.config["payload_root"])/key
+            released=path.stat().st_size
+            if key in self.maps:self.maps.pop(key).close()
+            record="meta-"+key
+            if record in self.records:self.records.pop(record).close()
+            path.unlink()
+            (Path(self.config["payload_root"])/".records"/record).unlink()
+            # Keep immutable disk snapshots and lock pages for audit. Names
+            # cannot be recycled while the experiment store remains alive.
+            return released
+        finally:self.backend.release(grant["token"])
+
     def access(self, key, op="read", text="", expected_version=None,
-               return_limit=4096, timeout_s=10, copy_node=None, session_id=None):
+               return_limit=4096, timeout_s=10, copy_node=None, session_id=None,query=None):
         """read, CAS write, or atomic append. No lock is held during LLM thinking."""
         key = validate_name(key)
         if op not in {"read", "write", "append"}:
@@ -222,7 +239,10 @@ class Store:
             raise ValueError("return_limit outside 0..65536")
         if not 0 < timeout_s <= 60:
             raise ValueError("timeout outside 0..60s")
+        if query is not None and (op!="read" or not isinstance(query,str) or not 1<=len(query)<=100):
+            raise ValueError("query must be 1..100 characters for a read")
         e = dict(schema=1, event_id=uuid.uuid4().hex, agent=self.agent, pid=os.getpid(), session_id=session_id,
+                 actor=getattr(self,"actor",self.agent),phase=getattr(self,"phase","single"),
                  kind=self.trace_kind, object=key, op=op, backend=self.backend.name,
                  granularity=self.config["granularity"], request_ns=time.monotonic_ns(),
                  read_bytes=0, write_bytes=0, copy_bytes=0, response_bytes=0,
@@ -260,9 +280,19 @@ class Store:
                          producer=meta["producer"], published_ns=meta["published_ns"],
                          logical_bytes_read=meta["size"],backing_id=key,byte_range=[0,len(buf)],
                          memory_tier="cxl" if self.config["hardware"]["verified_cxl_node"] else "dram")
+                stat=(Path(self.config["payload_root"])/key).stat()
+                e.update(backing_inode=stat.st_ino,backing_device=stat.st_dev,allocated_bytes=stat.st_blocks*512,
+                         mapping_address=address(buf),payload_capacity=len(buf))
                 if op == "read":
+                    content=data_view[:min(meta["size"],return_limit)].decode(errors="replace")
+                    if query is not None:
+                        lines=data_view[:meta["size"]].decode(errors="replace").splitlines()
+                        hits=[i for i,line in enumerate(lines) if query.lower() in line.lower()]
+                        selected=sorted({j for i in hits for j in range(max(0,i-2),min(len(lines),i+9))})
+                        content="\n".join(f"{i+1}: {lines[i]}" for i in selected)[:return_limit]
+                        e.update(query=query,matching_lines=len(hits),access_kind="search")
                     result = dict(object=key, version=meta["version"], producer=meta["producer"],
-                                  text=data_view[:min(meta["size"], return_limit)].decode(errors="replace"),
+                                  text=content,
                                   logical_bytes=meta["size"], truncated=meta["size"] > return_limit)
                 elif expected_version is not None and expected_version != meta["version"]:
                     e["status"] = "conflict"

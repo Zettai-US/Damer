@@ -155,6 +155,50 @@ class StoreTests(unittest.TestCase):
         tasks["a"]["depends_on"]=["b"]
         with self.assertRaises(ValueError):compile_memory_contract(tasks,{"evidence":0,"out":0})
 
+    def test_dataflow_reclaims_authorized_but_unneeded_state(self):
+        self.store.seed("scratch","temporary")
+        tasks={"producer":dict(grants={"read":["ledger","scratch"]},effects={"read":["scratch"]}),
+            "later":dict(depends_on=["producer"],grants={"read":["ledger","scratch"]},effects={"read":["ledger"]})}
+        contract=compile_memory_contract(tasks,{"ledger":0,"scratch":0})
+        scratch=next(o for o in contract["objects"] if o["object"]=="scratch")
+        self.assertEqual(scratch["readers"],["producer"])
+        dsec=DSec.initialize(self.store,tasks,retention_policy="dataflow")
+        dsec.admit("producer");dsec.finish("producer",True)
+        self.assertEqual(dsec.reclaim("scratch"),4096)
+        self.assertFalse((self.payload/"scratch").exists())
+        with self.assertRaises(RuntimeError):dsec.reclaim("ledger")
+        dsec.admit("later")
+        client=SandboxStore(self.store.root,"later")
+        try:
+            with self.assertRaises(PermissionError):client.access("scratch")
+            self.assertEqual(client.access("ledger")["version"],0)
+        finally:client.close()
+        dsec.finish("later",True);dsec.reclaim("ledger")
+
+    def test_scope_retention_is_conservative_and_roots_survive(self):
+        self.store.seed("scratch","temporary")
+        dsec=DSec.initialize(self.store,{"later":dict(grants={"read":["ledger","scratch"]},effects={"read":["ledger"]})},
+                             retention_policy="scope",session_roots=["ledger"])
+        with self.assertRaises(RuntimeError):dsec.reclaim("scratch")
+        dsec.admit("later")
+        client=SandboxStore(self.store.root,"later")
+        try:
+            with self.assertRaisesRegex(PermissionError,"accepted effects"):client.access("scratch")
+        finally:client.close()
+        dsec.finish("later",True);dsec.reclaim("scratch")
+        with self.assertRaisesRegex(RuntimeError,"session root"):dsec.reclaim("ledger")
+        dsec.release_root("ledger");dsec.reclaim("ledger")
+
+    def test_search_records_shared_backing_and_residency(self):
+        self.store.access("ledger","write",text="alpha\nbeta\ngamma",expected_version=0)
+        reply=self.store.access("ledger",query="beta")
+        self.assertIn("2: beta",reply["text"])
+        events=[json.loads(line) for p in (self.store.root/"events").glob("*.jsonl") for line in p.read_text().splitlines()]
+        e=next(e for e in events if e.get("query")=="beta")
+        self.assertEqual(e["backing_inode"],(self.payload/"ledger").stat().st_ino)
+        self.assertEqual(e["nodes"],{"1":1})
+        self.assertEqual(e["payload_capacity"],4096)
+
 
 if __name__ == "__main__":
     unittest.main()

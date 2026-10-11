@@ -1,0 +1,8 @@
+{
+  "object": "answer",
+  "version": 1,
+  "producer": "synthesis",
+  "text": "Synthesis:\nGuarantees: 1) admit() validates contract.scope via validate() before pinning; 2) retire() enforces atomic rejection of session-roots, pinned objects, and ready/running tasks; 3) retired keys append to state atomically.\nLimitations: 1) admit() lacks scope validation for sandbox/dependency state checks; 2) retire() does not validate non-scheduled in-flight tasks holding references post-retirement.\nTest: Assert retire() succeeds when called on an object held by a task in 'processing' (in-flight) state, demonstrating the in-flight gap.",
+  "logical_bytes": 549,
+  "truncated": false
+}

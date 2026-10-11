@@ -1,0 +1,27 @@
+{
+  "assessment": "Share with caveats",
+  "attempted": 12,
+  "completed": 12,
+  "protocol_completed": 11,
+  "events": 484,
+  "errors": 0,
+  "checks": [
+    "source snapshot hashes",
+    "versioned producer-consumer linkage",
+    "actual CXL data and lock pages",
+    "same backing inode across task mappings",
+    "no reclaim before future task or pin drain",
+    "session roots released before reclaim; reclaimed backing absent",
+    "all payload files reclaimed on success",
+    "logical actor versus task-instance separation"
+  ],
+  "limitations": [
+    "Fixed accepted review graph, not prevalence of natural agent behavior",
+    "64 KiB payload slots include unused output capacity; control state and LLM memory reported separately",
+    "Scope replay is a capacity-time counterfactual; idle replay is future-access risk, not observed crashes",
+    "Graph information can be represented by equivalent reference/effect tables; this does not prove a unique representation",
+    "Model tool responses are copied; shared mappings belong to trusted tool processes",
+    "Sampled whole-episode latency includes model/server startup; no causal inference-speedup claim"
+  ],
+  "sentry": "Not measured; unavailable baseline remains outside this dataflow ablation"
+}

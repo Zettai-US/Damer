@@ -1,0 +1,73 @@
+{
+  "schema": "arvm-cxl-profile-suite-v1",
+  "seed": 71291,
+  "planned": 12,
+  "order": [
+    [
+      4,
+      "scope",
+      0
+    ],
+    [
+      4,
+      "dataflow",
+      0
+    ],
+    [
+      2,
+      "dataflow",
+      0
+    ],
+    [
+      2,
+      "scope",
+      0
+    ],
+    [
+      2,
+      "dataflow",
+      1
+    ],
+    [
+      4,
+      "dataflow",
+      1
+    ],
+    [
+      2,
+      "scope",
+      1
+    ],
+    [
+      4,
+      "scope",
+      1
+    ],
+    [
+      2,
+      "scope",
+      2
+    ],
+    [
+      4,
+      "scope",
+      2
+    ],
+    [
+      2,
+      "dataflow",
+      2
+    ],
+    [
+      4,
+      "dataflow",
+      2
+    ]
+  ],
+  "started_utc": "2026-10-11T00:03:51Z",
+  "model_parallel_slots": 2,
+  "note": "Paired worker-count/repeat blocks; policies share graph/prompts but generated text can differ. No latency-speedup claim.",
+  "attempted": 12,
+  "complete": 12,
+  "finished_utc": "2026-10-11T00:11:25Z"
+}

@@ -1,0 +1,1103 @@
+{
+  "schema": "arvm-cxl-profile-analysis-v1",
+  "status": "complete",
+  "protocol_complete": true,
+  "workers": 4,
+  "policy": "scope",
+  "events": 54,
+  "task_sessions": 9,
+  "logical_actors": 5,
+  "successful_events": 54,
+  "errors": 0,
+  "nonempty_reads": 24,
+  "shared_nonempty_reads": 19,
+  "shared_read_ratio": 0.7916666666666666,
+  "cross_task_reads": 13,
+  "data_dependencies": [
+    {
+      "producer": "draft-1",
+      "consumer": "review-1",
+      "object": "draft-1",
+      "version": 1,
+      "source_phase": "draft",
+      "destination_phase": "peer-review"
+    },
+    {
+      "producer": "draft-2",
+      "consumer": "review-1",
+      "object": "draft-2",
+      "version": 1,
+      "source_phase": "draft",
+      "destination_phase": "peer-review"
+    },
+    {
+      "producer": "draft-0",
+      "consumer": "review-0",
+      "object": "draft-0",
+      "version": 1,
+      "source_phase": "draft",
+      "destination_phase": "peer-review"
+    },
+    {
+      "producer": "draft-1",
+      "consumer": "review-0",
+      "object": "draft-1",
+      "version": 1,
+      "source_phase": "draft",
+      "destination_phase": "peer-review"
+    },
+    {
+      "producer": "draft-2",
+      "consumer": "review-2",
+      "object": "draft-2",
+      "version": 1,
+      "source_phase": "draft",
+      "destination_phase": "peer-review"
+    },
+    {
+      "producer": "draft-3",
+      "consumer": "review-2",
+      "object": "draft-3",
+      "version": 1,
+      "source_phase": "draft",
+      "destination_phase": "peer-review"
+    },
+    {
+      "producer": "draft-3",
+      "consumer": "review-3",
+      "object": "draft-3",
+      "version": 1,
+      "source_phase": "draft",
+      "destination_phase": "peer-review"
+    },
+    {
+      "producer": "draft-0",
+      "consumer": "review-3",
+      "object": "draft-0",
+      "version": 1,
+      "source_phase": "draft",
+      "destination_phase": "peer-review"
+    },
+    {
+      "producer": "review-0",
+      "consumer": "synthesis",
+      "object": "review-0",
+      "version": 1,
+      "source_phase": "peer-review",
+      "destination_phase": "synthesis"
+    },
+    {
+      "producer": "review-1",
+      "consumer": "synthesis",
+      "object": "review-1",
+      "version": 1,
+      "source_phase": "peer-review",
+      "destination_phase": "synthesis"
+    },
+    {
+      "producer": "review-2",
+      "consumer": "synthesis",
+      "object": "review-2",
+      "version": 1,
+      "source_phase": "peer-review",
+      "destination_phase": "synthesis"
+    },
+    {
+      "producer": "review-3",
+      "consumer": "synthesis",
+      "object": "review-3",
+      "version": 1,
+      "source_phase": "peer-review",
+      "destination_phase": "synthesis"
+    },
+    {
+      "producer": "review-2",
+      "consumer": "synthesis",
+      "object": "ledger",
+      "version": 8,
+      "source_phase": "peer-review",
+      "destination_phase": "synthesis"
+    }
+  ],
+  "version_rows": [
+    {
+      "object": "answer",
+      "version": 0,
+      "actors": [
+        "synthesizer"
+      ],
+      "tasks": [
+        "synthesis"
+      ],
+      "read_count": 1,
+      "logical_bytes": 0,
+      "first_ns": 604664432423598,
+      "last_ns": 604664436415932,
+      "active_ns": 3992334
+    },
+    {
+      "object": "corpus",
+      "version": 0,
+      "actors": [
+        "reviewer-0",
+        "reviewer-1",
+        "reviewer-2",
+        "reviewer-3",
+        "synthesizer"
+      ],
+      "tasks": [
+        "draft-0",
+        "draft-1",
+        "draft-2",
+        "draft-3",
+        "review-0",
+        "review-1",
+        "review-2",
+        "review-3",
+        "synthesis"
+      ],
+      "read_count": 11,
+      "logical_bytes": 44692,
+      "first_ns": 604618277593956,
+      "last_ns": 604660461181847,
+      "active_ns": 42953479
+    },
+    {
+      "object": "draft-0",
+      "version": 0,
+      "actors": [
+        "reviewer-0"
+      ],
+      "tasks": [
+        "draft-0"
+      ],
+      "read_count": 1,
+      "logical_bytes": 0,
+      "first_ns": 604620634207141,
+      "last_ns": 604620639747135,
+      "active_ns": 5539994
+    },
+    {
+      "object": "draft-0",
+      "version": 1,
+      "actors": [
+        "reviewer-0",
+        "reviewer-3"
+      ],
+      "tasks": [
+        "review-0",
+        "review-3"
+      ],
+      "read_count": 2,
+      "logical_bytes": 349,
+      "first_ns": 604642569876110,
+      "last_ns": 604644873818466,
+      "active_ns": 8842029
+    },
+    {
+      "object": "draft-1",
+      "version": 0,
+      "actors": [
+        "reviewer-1"
+      ],
+      "tasks": [
+        "draft-1"
+      ],
+      "read_count": 1,
+      "logical_bytes": 0,
+      "first_ns": 604624350368455,
+      "last_ns": 604624355942000,
+      "active_ns": 5573545
+    },
+    {
+      "object": "draft-1",
+      "version": 1,
+      "actors": [
+        "reviewer-0",
+        "reviewer-1"
+      ],
+      "tasks": [
+        "review-0",
+        "review-1"
+      ],
+      "read_count": 2,
+      "logical_bytes": 359,
+      "first_ns": 604642117500292,
+      "last_ns": 604642582306189,
+      "active_ns": 9251171
+    },
+    {
+      "object": "draft-2",
+      "version": 0,
+      "actors": [
+        "reviewer-2"
+      ],
+      "tasks": [
+        "draft-2"
+      ],
+      "read_count": 1,
+      "logical_bytes": 0,
+      "first_ns": 604625223078935,
+      "last_ns": 604625228250450,
+      "active_ns": 5171515
+    },
+    {
+      "object": "draft-2",
+      "version": 1,
+      "actors": [
+        "reviewer-1",
+        "reviewer-2"
+      ],
+      "tasks": [
+        "review-1",
+        "review-2"
+      ],
+      "read_count": 2,
+      "logical_bytes": 352,
+      "first_ns": 604642126924286,
+      "last_ns": 604644201529835,
+      "active_ns": 10221405
+    },
+    {
+      "object": "draft-3",
+      "version": 0,
+      "actors": [
+        "reviewer-3"
+      ],
+      "tasks": [
+        "draft-3"
+      ],
+      "read_count": 1,
+      "logical_bytes": 0,
+      "first_ns": 604619396684929,
+      "last_ns": 604619402195549,
+      "active_ns": 5510620
+    },
+    {
+      "object": "draft-3",
+      "version": 1,
+      "actors": [
+        "reviewer-2",
+        "reviewer-3"
+      ],
+      "tasks": [
+        "review-2",
+        "review-3"
+      ],
+      "read_count": 2,
+      "logical_bytes": 392,
+      "first_ns": 604644204359503,
+      "last_ns": 604644867780455,
+      "active_ns": 9813956
+    },
+    {
+      "object": "ledger",
+      "version": 8,
+      "actors": [
+        "synthesizer"
+      ],
+      "tasks": [
+        "synthesis"
+      ],
+      "read_count": 1,
+      "logical_bytes": 2097,
+      "first_ns": 604659748501658,
+      "last_ns": 604659752011579,
+      "active_ns": 3509921
+    },
+    {
+      "object": "review-0",
+      "version": 0,
+      "actors": [
+        "reviewer-0"
+      ],
+      "tasks": [
+        "review-0"
+      ],
+      "read_count": 1,
+      "logical_bytes": 0,
+      "first_ns": 604642584806717,
+      "last_ns": 604642588829958,
+      "active_ns": 4023241
+    },
+    {
+      "object": "review-0",
+      "version": 1,
+      "actors": [
+        "synthesizer"
+      ],
+      "tasks": [
+        "synthesis"
+      ],
+      "read_count": 1,
+      "logical_bytes": 489,
+      "first_ns": 604659721285210,
+      "last_ns": 604659726830833,
+      "active_ns": 5545623
+    },
+    {
+      "object": "review-1",
+      "version": 0,
+      "actors": [
+        "reviewer-1"
+      ],
+      "tasks": [
+        "review-1"
+      ],
+      "read_count": 1,
+      "logical_bytes": 0,
+      "first_ns": 604642139793382,
+      "last_ns": 604642142972040,
+      "active_ns": 3178658
+    },
+    {
+      "object": "review-1",
+      "version": 1,
+      "actors": [
+        "synthesizer"
+      ],
+      "tasks": [
+        "synthesis"
+      ],
+      "read_count": 1,
+      "logical_bytes": 458,
+      "first_ns": 604659729166260,
+      "last_ns": 604659732869895,
+      "active_ns": 3703635
+    },
+    {
+      "object": "review-2",
+      "version": 0,
+      "actors": [
+        "reviewer-2"
+      ],
+      "tasks": [
+        "review-2"
+      ],
+      "read_count": 1,
+      "logical_bytes": 0,
+      "first_ns": 604648073067241,
+      "last_ns": 604648078061407,
+      "active_ns": 4994166
+    },
+    {
+      "object": "review-2",
+      "version": 1,
+      "actors": [
+        "synthesizer"
+      ],
+      "tasks": [
+        "synthesis"
+      ],
+      "read_count": 1,
+      "logical_bytes": 707,
+      "first_ns": 604659735888831,
+      "last_ns": 604659739726199,
+      "active_ns": 3837368
+    },
+    {
+      "object": "review-3",
+      "version": 0,
+      "actors": [
+        "reviewer-3"
+      ],
+      "tasks": [
+        "review-3"
+      ],
+      "read_count": 1,
+      "logical_bytes": 0,
+      "first_ns": 604644883270973,
+      "last_ns": 604644886813203,
+      "active_ns": 3542230
+    },
+    {
+      "object": "review-3",
+      "version": 1,
+      "actors": [
+        "synthesizer"
+      ],
+      "tasks": [
+        "synthesis"
+      ],
+      "read_count": 1,
+      "logical_bytes": 946,
+      "first_ns": 604659742129509,
+      "last_ns": 604659745489783,
+      "active_ns": 3360274
+    }
+  ],
+  "compile_us": 156.948,
+  "e2e_s": 51.943380019,
+  "allocated_payload_kib": 960.0,
+  "initial_control_kib": 384.0,
+  "profile_window_s": 51.782993707,
+  "payload_mib_seconds": 48.5272222896875,
+  "control_mib_seconds": 19.417414245710937,
+  "average_payload_kib": 959.617667255933,
+  "same_timeline_scope_payload_mib_seconds": 48.5098220314375,
+  "same_timeline_payload_reduction": -0.00035869556970791194,
+  "reclaimed_payload_objects": 15,
+  "corpus": {
+    "backing_allocations": 1,
+    "task_mappings": 9,
+    "logical_readers": 5,
+    "allocated_bytes": 65536,
+    "logical_bytes": 44692,
+    "observed_span_s": 42.183587891,
+    "active_access_ms": 42.953479,
+    "alias_verified_by": "same device+inode across task processes, MAP_SHARED, and actual CXL residency"
+  },
+  "idle_expiry_replay": [
+    {
+      "ttl_s": 0.1,
+      "reads_after_expiry": 23,
+      "objects": 10,
+      "events": [
+        {
+          "object": "corpus",
+          "event_id": "2fa945b6f4704d03a71a00b591388770",
+          "gap_ns": 1106551999,
+          "consumer": "draft-3",
+          "version": 0
+        },
+        {
+          "object": "corpus",
+          "event_id": "69b36d43847e41c986f5d71f775b3d3b",
+          "gap_ns": 531662171,
+          "consumer": "draft-2",
+          "version": 0
+        },
+        {
+          "object": "corpus",
+          "event_id": "4d7c5db393764de78ee31bc1e06ead6d",
+          "gap_ns": 695007758,
+          "consumer": "draft-0",
+          "version": 0
+        },
+        {
+          "object": "corpus",
+          "event_id": "a247802ca1d240b09062984c30642a23",
+          "gap_ns": 5483685515,
+          "consumer": "draft-3",
+          "version": 0
+        },
+        {
+          "object": "corpus",
+          "event_id": "2ed5d539a2a8464fb3f2dcc7526be348",
+          "gap_ns": 16016936687,
+          "consumer": "review-1",
+          "version": 0
+        },
+        {
+          "object": "corpus",
+          "event_id": "c1b90d6e52eb438a9f1bc124c8b58efd",
+          "gap_ns": 453392351,
+          "consumer": "review-0",
+          "version": 0
+        },
+        {
+          "object": "corpus",
+          "event_id": "96544dd4f9cf49719ec7472ada8bb3ff",
+          "gap_ns": 1615148627,
+          "consumer": "review-2",
+          "version": 0
+        },
+        {
+          "object": "corpus",
+          "event_id": "f49a2eeeb3ff40dc84db98e7bc311076",
+          "gap_ns": 662509928,
+          "consumer": "review-3",
+          "version": 0
+        },
+        {
+          "object": "corpus",
+          "event_id": "a1a97fa9d1ee4e2ea582df7e2b9763b2",
+          "gap_ns": 14872835395,
+          "consumer": "synthesis",
+          "version": 0
+        },
+        {
+          "object": "corpus",
+          "event_id": "6f87bb81ddfe473fbb54b12d8e8ec138",
+          "gap_ns": 702903981,
+          "consumer": "synthesis",
+          "version": 0
+        },
+        {
+          "object": "draft-3",
+          "event_id": "d2d604d385fd4a87bfe59e73030da589",
+          "gap_ns": 20534237145,
+          "consumer": "review-2",
+          "version": 1
+        },
+        {
+          "object": "draft-3",
+          "event_id": "899c832e20eb47878832daa664856a14",
+          "gap_ns": 653606996,
+          "consumer": "review-3",
+          "version": 1
+        },
+        {
+          "object": "draft-0",
+          "event_id": "1c306455fd27441c9eb881f909f47074",
+          "gap_ns": 14329763626,
+          "consumer": "review-0",
+          "version": 1
+        },
+        {
+          "object": "draft-0",
+          "event_id": "9be7270929eb4356a46063fd142edb8a",
+          "gap_ns": 2295100327,
+          "consumer": "review-3",
+          "version": 1
+        },
+        {
+          "object": "draft-1",
+          "event_id": "fa80a6784219449c8f2ae897a8865fa8",
+          "gap_ns": 14818414079,
+          "consumer": "review-1",
+          "version": 1
+        },
+        {
+          "object": "draft-1",
+          "event_id": "70ada2136ca746f6b68d37466a197d5b",
+          "gap_ns": 455554726,
+          "consumer": "review-0",
+          "version": 1
+        },
+        {
+          "object": "draft-2",
+          "event_id": "71233229b15b47bb877473a8f1da7c78",
+          "gap_ns": 11067985678,
+          "consumer": "review-1",
+          "version": 1
+        },
+        {
+          "object": "draft-2",
+          "event_id": "cca521ef84024ff082ac32bdd0aa4465",
+          "gap_ns": 2064384144,
+          "consumer": "review-2",
+          "version": 1
+        },
+        {
+          "object": "ledger",
+          "event_id": "fbd32fe9c5574c4984952a5b1342fb9f",
+          "gap_ns": 4690634516,
+          "consumer": "synthesis",
+          "version": 8
+        },
+        {
+          "object": "review-1",
+          "event_id": "52be28590e49413ba1bb551ec2b70b95",
+          "gap_ns": 12353183631,
+          "consumer": "synthesis",
+          "version": 1
+        },
+        {
+          "object": "review-0",
+          "event_id": "92b45488f61d4f51bb16657bf8f99728",
+          "gap_ns": 13263795587,
+          "consumer": "synthesis",
+          "version": 1
+        },
+        {
+          "object": "review-3",
+          "event_id": "cfb88402b2f34bb9bd9a5a9c3b94a7ca",
+          "gap_ns": 6576633110,
+          "consumer": "synthesis",
+          "version": 1
+        },
+        {
+          "object": "review-2",
+          "event_id": "b24f0f593d614273a5d49c0c562a37a3",
+          "gap_ns": 7596037816,
+          "consumer": "synthesis",
+          "version": 1
+        }
+      ]
+    },
+    {
+      "ttl_s": 0.5,
+      "reads_after_expiry": 21,
+      "objects": 10,
+      "events": [
+        {
+          "object": "corpus",
+          "event_id": "2fa945b6f4704d03a71a00b591388770",
+          "gap_ns": 1106551999,
+          "consumer": "draft-3",
+          "version": 0
+        },
+        {
+          "object": "corpus",
+          "event_id": "69b36d43847e41c986f5d71f775b3d3b",
+          "gap_ns": 531662171,
+          "consumer": "draft-2",
+          "version": 0
+        },
+        {
+          "object": "corpus",
+          "event_id": "4d7c5db393764de78ee31bc1e06ead6d",
+          "gap_ns": 695007758,
+          "consumer": "draft-0",
+          "version": 0
+        },
+        {
+          "object": "corpus",
+          "event_id": "a247802ca1d240b09062984c30642a23",
+          "gap_ns": 5483685515,
+          "consumer": "draft-3",
+          "version": 0
+        },
+        {
+          "object": "corpus",
+          "event_id": "2ed5d539a2a8464fb3f2dcc7526be348",
+          "gap_ns": 16016936687,
+          "consumer": "review-1",
+          "version": 0
+        },
+        {
+          "object": "corpus",
+          "event_id": "96544dd4f9cf49719ec7472ada8bb3ff",
+          "gap_ns": 1615148627,
+          "consumer": "review-2",
+          "version": 0
+        },
+        {
+          "object": "corpus",
+          "event_id": "f49a2eeeb3ff40dc84db98e7bc311076",
+          "gap_ns": 662509928,
+          "consumer": "review-3",
+          "version": 0
+        },
+        {
+          "object": "corpus",
+          "event_id": "a1a97fa9d1ee4e2ea582df7e2b9763b2",
+          "gap_ns": 14872835395,
+          "consumer": "synthesis",
+          "version": 0
+        },
+        {
+          "object": "corpus",
+          "event_id": "6f87bb81ddfe473fbb54b12d8e8ec138",
+          "gap_ns": 702903981,
+          "consumer": "synthesis",
+          "version": 0
+        },
+        {
+          "object": "draft-3",
+          "event_id": "d2d604d385fd4a87bfe59e73030da589",
+          "gap_ns": 20534237145,
+          "consumer": "review-2",
+          "version": 1
+        },
+        {
+          "object": "draft-3",
+          "event_id": "899c832e20eb47878832daa664856a14",
+          "gap_ns": 653606996,
+          "consumer": "review-3",
+          "version": 1
+        },
+        {
+          "object": "draft-0",
+          "event_id": "1c306455fd27441c9eb881f909f47074",
+          "gap_ns": 14329763626,
+          "consumer": "review-0",
+          "version": 1
+        },
+        {
+          "object": "draft-0",
+          "event_id": "9be7270929eb4356a46063fd142edb8a",
+          "gap_ns": 2295100327,
+          "consumer": "review-3",
+          "version": 1
+        },
+        {
+          "object": "draft-1",
+          "event_id": "fa80a6784219449c8f2ae897a8865fa8",
+          "gap_ns": 14818414079,
+          "consumer": "review-1",
+          "version": 1
+        },
+        {
+          "object": "draft-2",
+          "event_id": "71233229b15b47bb877473a8f1da7c78",
+          "gap_ns": 11067985678,
+          "consumer": "review-1",
+          "version": 1
+        },
+        {
+          "object": "draft-2",
+          "event_id": "cca521ef84024ff082ac32bdd0aa4465",
+          "gap_ns": 2064384144,
+          "consumer": "review-2",
+          "version": 1
+        },
+        {
+          "object": "ledger",
+          "event_id": "fbd32fe9c5574c4984952a5b1342fb9f",
+          "gap_ns": 4690634516,
+          "consumer": "synthesis",
+          "version": 8
+        },
+        {
+          "object": "review-1",
+          "event_id": "52be28590e49413ba1bb551ec2b70b95",
+          "gap_ns": 12353183631,
+          "consumer": "synthesis",
+          "version": 1
+        },
+        {
+          "object": "review-0",
+          "event_id": "92b45488f61d4f51bb16657bf8f99728",
+          "gap_ns": 13263795587,
+          "consumer": "synthesis",
+          "version": 1
+        },
+        {
+          "object": "review-3",
+          "event_id": "cfb88402b2f34bb9bd9a5a9c3b94a7ca",
+          "gap_ns": 6576633110,
+          "consumer": "synthesis",
+          "version": 1
+        },
+        {
+          "object": "review-2",
+          "event_id": "b24f0f593d614273a5d49c0c562a37a3",
+          "gap_ns": 7596037816,
+          "consumer": "synthesis",
+          "version": 1
+        }
+      ]
+    },
+    {
+      "ttl_s": 1.0,
+      "reads_after_expiry": 16,
+      "objects": 10,
+      "events": [
+        {
+          "object": "corpus",
+          "event_id": "2fa945b6f4704d03a71a00b591388770",
+          "gap_ns": 1106551999,
+          "consumer": "draft-3",
+          "version": 0
+        },
+        {
+          "object": "corpus",
+          "event_id": "a247802ca1d240b09062984c30642a23",
+          "gap_ns": 5483685515,
+          "consumer": "draft-3",
+          "version": 0
+        },
+        {
+          "object": "corpus",
+          "event_id": "2ed5d539a2a8464fb3f2dcc7526be348",
+          "gap_ns": 16016936687,
+          "consumer": "review-1",
+          "version": 0
+        },
+        {
+          "object": "corpus",
+          "event_id": "96544dd4f9cf49719ec7472ada8bb3ff",
+          "gap_ns": 1615148627,
+          "consumer": "review-2",
+          "version": 0
+        },
+        {
+          "object": "corpus",
+          "event_id": "a1a97fa9d1ee4e2ea582df7e2b9763b2",
+          "gap_ns": 14872835395,
+          "consumer": "synthesis",
+          "version": 0
+        },
+        {
+          "object": "draft-3",
+          "event_id": "d2d604d385fd4a87bfe59e73030da589",
+          "gap_ns": 20534237145,
+          "consumer": "review-2",
+          "version": 1
+        },
+        {
+          "object": "draft-0",
+          "event_id": "1c306455fd27441c9eb881f909f47074",
+          "gap_ns": 14329763626,
+          "consumer": "review-0",
+          "version": 1
+        },
+        {
+          "object": "draft-0",
+          "event_id": "9be7270929eb4356a46063fd142edb8a",
+          "gap_ns": 2295100327,
+          "consumer": "review-3",
+          "version": 1
+        },
+        {
+          "object": "draft-1",
+          "event_id": "fa80a6784219449c8f2ae897a8865fa8",
+          "gap_ns": 14818414079,
+          "consumer": "review-1",
+          "version": 1
+        },
+        {
+          "object": "draft-2",
+          "event_id": "71233229b15b47bb877473a8f1da7c78",
+          "gap_ns": 11067985678,
+          "consumer": "review-1",
+          "version": 1
+        },
+        {
+          "object": "draft-2",
+          "event_id": "cca521ef84024ff082ac32bdd0aa4465",
+          "gap_ns": 2064384144,
+          "consumer": "review-2",
+          "version": 1
+        },
+        {
+          "object": "ledger",
+          "event_id": "fbd32fe9c5574c4984952a5b1342fb9f",
+          "gap_ns": 4690634516,
+          "consumer": "synthesis",
+          "version": 8
+        },
+        {
+          "object": "review-1",
+          "event_id": "52be28590e49413ba1bb551ec2b70b95",
+          "gap_ns": 12353183631,
+          "consumer": "synthesis",
+          "version": 1
+        },
+        {
+          "object": "review-0",
+          "event_id": "92b45488f61d4f51bb16657bf8f99728",
+          "gap_ns": 13263795587,
+          "consumer": "synthesis",
+          "version": 1
+        },
+        {
+          "object": "review-3",
+          "event_id": "cfb88402b2f34bb9bd9a5a9c3b94a7ca",
+          "gap_ns": 6576633110,
+          "consumer": "synthesis",
+          "version": 1
+        },
+        {
+          "object": "review-2",
+          "event_id": "b24f0f593d614273a5d49c0c562a37a3",
+          "gap_ns": 7596037816,
+          "consumer": "synthesis",
+          "version": 1
+        }
+      ]
+    },
+    {
+      "ttl_s": 2.0,
+      "reads_after_expiry": 14,
+      "objects": 10,
+      "events": [
+        {
+          "object": "corpus",
+          "event_id": "a247802ca1d240b09062984c30642a23",
+          "gap_ns": 5483685515,
+          "consumer": "draft-3",
+          "version": 0
+        },
+        {
+          "object": "corpus",
+          "event_id": "2ed5d539a2a8464fb3f2dcc7526be348",
+          "gap_ns": 16016936687,
+          "consumer": "review-1",
+          "version": 0
+        },
+        {
+          "object": "corpus",
+          "event_id": "a1a97fa9d1ee4e2ea582df7e2b9763b2",
+          "gap_ns": 14872835395,
+          "consumer": "synthesis",
+          "version": 0
+        },
+        {
+          "object": "draft-3",
+          "event_id": "d2d604d385fd4a87bfe59e73030da589",
+          "gap_ns": 20534237145,
+          "consumer": "review-2",
+          "version": 1
+        },
+        {
+          "object": "draft-0",
+          "event_id": "1c306455fd27441c9eb881f909f47074",
+          "gap_ns": 14329763626,
+          "consumer": "review-0",
+          "version": 1
+        },
+        {
+          "object": "draft-0",
+          "event_id": "9be7270929eb4356a46063fd142edb8a",
+          "gap_ns": 2295100327,
+          "consumer": "review-3",
+          "version": 1
+        },
+        {
+          "object": "draft-1",
+          "event_id": "fa80a6784219449c8f2ae897a8865fa8",
+          "gap_ns": 14818414079,
+          "consumer": "review-1",
+          "version": 1
+        },
+        {
+          "object": "draft-2",
+          "event_id": "71233229b15b47bb877473a8f1da7c78",
+          "gap_ns": 11067985678,
+          "consumer": "review-1",
+          "version": 1
+        },
+        {
+          "object": "draft-2",
+          "event_id": "cca521ef84024ff082ac32bdd0aa4465",
+          "gap_ns": 2064384144,
+          "consumer": "review-2",
+          "version": 1
+        },
+        {
+          "object": "ledger",
+          "event_id": "fbd32fe9c5574c4984952a5b1342fb9f",
+          "gap_ns": 4690634516,
+          "consumer": "synthesis",
+          "version": 8
+        },
+        {
+          "object": "review-1",
+          "event_id": "52be28590e49413ba1bb551ec2b70b95",
+          "gap_ns": 12353183631,
+          "consumer": "synthesis",
+          "version": 1
+        },
+        {
+          "object": "review-0",
+          "event_id": "92b45488f61d4f51bb16657bf8f99728",
+          "gap_ns": 13263795587,
+          "consumer": "synthesis",
+          "version": 1
+        },
+        {
+          "object": "review-3",
+          "event_id": "cfb88402b2f34bb9bd9a5a9c3b94a7ca",
+          "gap_ns": 6576633110,
+          "consumer": "synthesis",
+          "version": 1
+        },
+        {
+          "object": "review-2",
+          "event_id": "b24f0f593d614273a5d49c0c562a37a3",
+          "gap_ns": 7596037816,
+          "consumer": "synthesis",
+          "version": 1
+        }
+      ]
+    },
+    {
+      "ttl_s": 5.0,
+      "reads_after_expiry": 11,
+      "objects": 9,
+      "events": [
+        {
+          "object": "corpus",
+          "event_id": "a247802ca1d240b09062984c30642a23",
+          "gap_ns": 5483685515,
+          "consumer": "draft-3",
+          "version": 0
+        },
+        {
+          "object": "corpus",
+          "event_id": "2ed5d539a2a8464fb3f2dcc7526be348",
+          "gap_ns": 16016936687,
+          "consumer": "review-1",
+          "version": 0
+        },
+        {
+          "object": "corpus",
+          "event_id": "a1a97fa9d1ee4e2ea582df7e2b9763b2",
+          "gap_ns": 14872835395,
+          "consumer": "synthesis",
+          "version": 0
+        },
+        {
+          "object": "draft-3",
+          "event_id": "d2d604d385fd4a87bfe59e73030da589",
+          "gap_ns": 20534237145,
+          "consumer": "review-2",
+          "version": 1
+        },
+        {
+          "object": "draft-0",
+          "event_id": "1c306455fd27441c9eb881f909f47074",
+          "gap_ns": 14329763626,
+          "consumer": "review-0",
+          "version": 1
+        },
+        {
+          "object": "draft-1",
+          "event_id": "fa80a6784219449c8f2ae897a8865fa8",
+          "gap_ns": 14818414079,
+          "consumer": "review-1",
+          "version": 1
+        },
+        {
+          "object": "draft-2",
+          "event_id": "71233229b15b47bb877473a8f1da7c78",
+          "gap_ns": 11067985678,
+          "consumer": "review-1",
+          "version": 1
+        },
+        {
+          "object": "review-1",
+          "event_id": "52be28590e49413ba1bb551ec2b70b95",
+          "gap_ns": 12353183631,
+          "consumer": "synthesis",
+          "version": 1
+        },
+        {
+          "object": "review-0",
+          "event_id": "92b45488f61d4f51bb16657bf8f99728",
+          "gap_ns": 13263795587,
+          "consumer": "synthesis",
+          "version": 1
+        },
+        {
+          "object": "review-3",
+          "event_id": "cfb88402b2f34bb9bd9a5a9c3b94a7ca",
+          "gap_ns": 6576633110,
+          "consumer": "synthesis",
+          "version": 1
+        },
+        {
+          "object": "review-2",
+          "event_id": "b24f0f593d614273a5d49c0c562a37a3",
+          "gap_ns": 7596037816,
+          "consumer": "synthesis",
+          "version": 1
+        }
+      ]
+    }
+  ],
+  "output_tokens": 5120,
+  "lock_contended": 0,
+  "native_lock_wait_total_ns": 15683,
+  "checks": [
+    "source snapshot hashes",
+    "versioned producer-consumer linkage",
+    "actual CXL data and lock pages",
+    "same backing inode across task mappings",
+    "no reclaim before future task or pin drain",
+    "session roots released before reclaim; reclaimed backing absent",
+    "all payload files reclaimed on success",
+    "logical actor versus task-instance separation"
+  ],
+  "limitations": [
+    "Fixed accepted review graph, not prevalence of natural agent behavior",
+    "64 KiB payload slots include unused output capacity; control state and LLM memory reported separately",
+    "Scope replay is a capacity-time counterfactual; idle replay is future-access risk, not observed crashes",
+    "Graph information can be represented by equivalent reference/effect tables; this does not prove a unique representation",
+    "Model tool responses are copied; shared mappings belong to trusted tool processes",
+    "Sampled whole-episode latency includes model/server startup; no causal inference-speedup claim"
+  ]
+}

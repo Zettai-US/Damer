@@ -1,0 +1,49 @@
+{"event": "admit", "ns": 604535236644000, "pid": 1925211, "agent": "draft-0"}
+{"event": "admit", "ns": 604535236753366, "pid": 1925211, "agent": "draft-1"}
+{"event": "admit", "ns": 604535236833708, "pid": 1925211, "agent": "draft-2"}
+{"event": "admit", "ns": 604535236910685, "pid": 1925211, "agent": "draft-3"}
+{"event": "finish", "ns": 604551450040580, "pid": 1925211, "agent": "draft-3", "success": true}
+{"event": "finish", "ns": 604553340121225, "pid": 1925211, "agent": "draft-0", "success": true}
+{"event": "finish", "ns": 604555409564413, "pid": 1925211, "agent": "draft-1", "success": true}
+{"event": "finish", "ns": 604557649626225, "pid": 1925211, "agent": "draft-2", "success": true}
+{"event": "admit", "ns": 604557651515444, "pid": 1925211, "agent": "review-0"}
+{"event": "admit", "ns": 604557651616327, "pid": 1925211, "agent": "review-1"}
+{"event": "admit", "ns": 604557651697891, "pid": 1925211, "agent": "review-2"}
+{"event": "admit", "ns": 604557651774377, "pid": 1925211, "agent": "review-3"}
+{"event": "finish", "ns": 604573128209688, "pid": 1925211, "agent": "review-3", "success": true}
+{"event": "finish", "ns": 604574963344919, "pid": 1925211, "agent": "review-2", "success": true}
+{"event": "finish", "ns": 604576312894022, "pid": 1925211, "agent": "review-1", "success": true}
+{"event": "finish", "ns": 604576561307593, "pid": 1925211, "agent": "review-0", "success": true}
+{"event": "admit", "ns": 604576563459651, "pid": 1925211, "agent": "synthesis"}
+{"event": "finish", "ns": 604586801948775, "pid": 1925211, "agent": "synthesis", "success": true}
+{"event": "retire", "ns": 604586802674627, "pid": 1925211, "object": "corpus"}
+{"event": "reclaim", "ns": 604586805541151, "pid": 1925211, "object": "corpus", "bytes": 65536, "duration_ns": 2831711}
+{"event": "retire", "ns": 604586806223488, "pid": 1925211, "object": "draft-0"}
+{"event": "reclaim", "ns": 604586808106077, "pid": 1925211, "object": "draft-0", "bytes": 65536, "duration_ns": 1851703}
+{"event": "retire", "ns": 604586808590453, "pid": 1925211, "object": "draft-1"}
+{"event": "reclaim", "ns": 604586810213037, "pid": 1925211, "object": "draft-1", "bytes": 65536, "duration_ns": 1592499}
+{"event": "retire", "ns": 604586810660056, "pid": 1925211, "object": "draft-2"}
+{"event": "reclaim", "ns": 604586812628516, "pid": 1925211, "object": "draft-2", "bytes": 65536, "duration_ns": 1938874}
+{"event": "retire", "ns": 604586813286936, "pid": 1925211, "object": "draft-3"}
+{"event": "reclaim", "ns": 604586815049603, "pid": 1925211, "object": "draft-3", "bytes": 65536, "duration_ns": 1729848}
+{"event": "retire", "ns": 604586815547750, "pid": 1925211, "object": "ledger"}
+{"event": "reclaim", "ns": 604586818865669, "pid": 1925211, "object": "ledger", "bytes": 65536, "duration_ns": 3287093}
+{"event": "retire", "ns": 604586819545832, "pid": 1925211, "object": "review-0"}
+{"event": "reclaim", "ns": 604586821602526, "pid": 1925211, "object": "review-0", "bytes": 65536, "duration_ns": 2017995}
+{"event": "retire", "ns": 604586822093822, "pid": 1925211, "object": "review-1"}
+{"event": "reclaim", "ns": 604586823953767, "pid": 1925211, "object": "review-1", "bytes": 65536, "duration_ns": 1829288}
+{"event": "retire", "ns": 604586824346914, "pid": 1925211, "object": "review-2"}
+{"event": "reclaim", "ns": 604586825890288, "pid": 1925211, "object": "review-2", "bytes": 65536, "duration_ns": 1514600}
+{"event": "retire", "ns": 604586826264727, "pid": 1925211, "object": "review-3"}
+{"event": "reclaim", "ns": 604586827872549, "pid": 1925211, "object": "review-3", "bytes": 65536, "duration_ns": 1578728}
+{"event": "retire", "ns": 604586828236181, "pid": 1925211, "object": "scratch-0"}
+{"event": "reclaim", "ns": 604586829820157, "pid": 1925211, "object": "scratch-0", "bytes": 65536, "duration_ns": 1555653}
+{"event": "retire", "ns": 604586830175026, "pid": 1925211, "object": "scratch-1"}
+{"event": "reclaim", "ns": 604586833334234, "pid": 1925211, "object": "scratch-1", "bytes": 65536, "duration_ns": 3129383}
+{"event": "retire", "ns": 604586833794764, "pid": 1925211, "object": "scratch-2"}
+{"event": "reclaim", "ns": 604586835491601, "pid": 1925211, "object": "scratch-2", "bytes": 65536, "duration_ns": 1666481}
+{"event": "retire", "ns": 604586835874623, "pid": 1925211, "object": "scratch-3"}
+{"event": "reclaim", "ns": 604586837434442, "pid": 1925211, "object": "scratch-3", "bytes": 65536, "duration_ns": 1531977}
+{"event": "release_root", "ns": 604586842414987, "pid": 1925211, "object": "answer"}
+{"event": "retire", "ns": 604586842651236, "pid": 1925211, "object": "answer"}
+{"event": "reclaim", "ns": 604586842771919, "pid": 1925211, "object": "answer", "bytes": 65536, "duration_ns": 86572}

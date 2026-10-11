@@ -10,7 +10,74 @@ grant、CXL 对象版本与 pin；执行后重建对象版本数据流。重点�
 `55b707259c65d79b5f12a2f216b773c2a2a84124`。没有文件锁 fallback。
 上游 `SpinLock` 对读写都互斥；不是读写锁，也不具备 owner-death 自动恢复。
 
-## 已完成结果
+## 多轮协作与回收消融（2026-10-11）
+
+已在真实 CXL node 1 上完成 **12 个 episode、84 个 OpenCode 任务会话、484 次对象操作**。
+2/4 个 reviewer 各运行 draft 和 peer-review 两轮，再由独立 synthesis 会话汇总；
+每个并发度分别运行 scope-only/dataflow 两种保留策略，各重复 3 次，按固定种子分块随机排序。
+全部发布最终结果，11/12 完整遵循工具步骤；`w4-scope-r1` 的 synthesis 漏读写入前的
+`answer`，但 CAS 写入成功。所有尝试都进入统计，没有删除这个样本。
+
+输入是四个真实原型模块的相同 43.6 KiB 快照。任务、角色、effects 由 harness 指定，
+真实模型负责执行工具及生成审查文本。这不是自然生成任务图的比例调查或答案质量评测。
+模型仍为本地 Qwen3.5-35B-A3B-UD-Q4_K_XL，服务只有 2 个推理 slot；4 个 reviewer
+不代表 4 路并行推理。每轮使用新的 task session，逻辑 reviewer 身份跨轮保持。
+
+| 指标 | 2 个 reviewer | 4 个 reviewer |
+|---|---:|---:|
+| Scope-only 平均 live payload，中位数 | 575.7 KiB | 959.6 KiB |
+| Dataflow 平均 live payload，中位数 | 446.5 KiB | 736.4 KiB |
+| 两策略占用中位数之比的降幅 | 22.4% | 23.3% |
+| 同一 dataflow 时间线重放 scope 的 byte-time 降幅中位数 | 22.2% | 23.3% |
+| Dataflow 非空读取中同版本被多个逻辑 agent 读取 | 28/37，75.7% | 51/66，77.3% |
+| Dataflow corpus 首次至末次读取跨度中位数 | 19.7 s | 37.4 s |
+| Dataflow corpus 读取临界区并集中位数 | 24.2 ms | 43.4 ms |
+
+“平均 live payload”是实际分配页数乘存活时间的积分除以观测时间，再对三个 trial 取中位数。
+每个对象为 64 KiB 固定槽，包括尚未写满的输出预留空间；控制 registry、版本记录及锁字
+另行计量，不计入此表。它不是全进程 RSS、CXL 总线流量或模型内存，也不据此宣称推理加速。
+同时间线重放属于容量计算，不能充当另一次实际延迟测量。
+
+两种策略使用相同权限、accepted effects、槽大小与 CXL 锁。Scope-only 按未结束任务的
+宽读权限保留数据；dataflow 按实际声明的未来用途、pin 和 session root 保留。
+新实现会在任务 namespace 退出后真正关闭、unlink 已死 payload：私有 scratch 在 draft
+结束后回收，draft 等待 peer 消费完，review 等待 synthesis，answer 等待根释放。
+超出已接受 effects 的访问必须重新规划；未知后续会话需要显式 root 保留。
+
+单独的并发 PSS probe 同时保持所有映射，核对 device/inode 和真实 NUMA 驻留页。
+2/4 个进程共享 CXL corpus 均合计 **64 KiB**；保留同一 CXL 源并给每个进程各建 DRAM
+副本则为 **192/320 KiB**（分别包含 128/256 KiB 私有 DRAM）。每种情况实测三次。
+
+对全部六个 dataflow episode 做 **离线 idle-only 回收重放**：1 秒阈值下，62/103
+次非空读取（60.2%）发生在超时的访问间隙之后。这表示仍需保留或可恢复的 backing，
+没有实际执行不安全回收，也没有声称发生 use-after-free。论文因此论证的是：
+**锁和访问活跃度无法回答“还有哪些未来消费者”；arVM 需要对象版本、别名与剩余用途信息。**
+等价的 effect/reference 表也能表达这些信息，数据没有证明 DAG 是唯一实现。
+
+- [论文 PDF](../../6ac4087cf755acfa13cf5a59/main.pdf) / [实测小节源码](../../6ac4087cf755acfa13cf5a59/profile_evaluation.tex)
+- [完整汇总](results/arvm-profile-20261011/summary.json) / [验证](results/arvm-profile-20261011/validation.json) / [全部尝试](results/arvm-profile-20261011/episodes.jsonl)
+- [实际对象版本图](results/arvm-profile-20261011/observed-dataflow.pdf) / [占用与 idle 重放图](results/arvm-profile-20261011/sharing-profile.pdf) / [存活时间线](results/arvm-profile-20261011/retention-timeline.pdf)
+- [并发 PSS 原始记录](results/arvm-sharing-probe-20261011/runs.jsonl)
+
+重建图表不需要模型或仍存活的 payload。完整重跑需要真实 CXL 主机和运行中的本地模型：
+
+```bash
+# 使用归档结果重建、验证并导出论文图表和数值宏
+make -C 6ac4087cf755acfa13cf5a59 profile
+make -C 6ac4087cf755acfa13cf5a59 check
+
+# 新实验：先按下方“复现”构建 CXL 库并启动 serve_model.py
+python3 workloads/agent_sharing/run_profile_suite.py \
+  --output workloads/agent_sharing/results/my-profile --repeats 3
+python3 workloads/agent_sharing/probe_sharing.py \
+  --corpus workloads/agent_sharing/results/my-profile/w4-scope-r0/corpus.txt \
+  --output workloads/agent_sharing/results/my-probe
+python3 workloads/agent_sharing/report_profile.py \
+  workloads/agent_sharing/results/my-profile \
+  --probe workloads/agent_sharing/results/my-probe
+```
+
+## 第一组 live 结果（2026-10-10）
 
 日期：2026-10-10 UTC。OpenCode v2.0.24；本地 RTX 5090 上运行
 Qwen3.5-35B-A3B-UD-Q4_K_XL，2 个 16K context slot。
@@ -100,7 +167,8 @@ issue/revoke 单独在并发阶段结束后由一个 controller 测量。
    共享读者、发布依赖、并发写者与待完成消费者；输出 DSec 接受的权限声明。
    它不从模型自然语言推导权限，也不分析任意程序指针。
 2. `DSec` 是本仓库自行实现的原型。它管理 scoped grants、依赖 admission、in-flight pins、
-   generation、撤销和逻辑 retirement。未开始的合法消费者也会阻止提前 retirement。
+   generation、撤销、retirement 和物理回收。accepted effects 与项目 grants 分开；
+   未开始的合法消费者、active pins 和 session roots 都会阻止提前回收。
 3. payload、版本 metadata、DSec registry 和锁字都在 `MAP_SHARED` 的 tmpfs backing 中。
    在 first touch 前 `mbind`，随后检查 `/proc/self/numa_maps` 的真实驻留页；CXL 身份
    再与 sysfs decoder 地址范围核对。测量主机上 node 1 为 CXL。磁盘 JSON 是审计快照。
@@ -118,7 +186,7 @@ issue/revoke 单独在并发阶段结束后由一个 controller 测量。
 `ledger` 是多写者对象；每个 append 的 RMW 边连接旧版本与新版本，因此保留传递贡献。
 表中 cross-agent reads 只数直接版本生产者与读者不同的显式 read，避免将 RMW 算作协作读取。
 可变版本复用同一 backing；它们不是同时保留的 immutable snapshot。
-对象固定容量 256 KiB，实际逻辑文本只有数 KiB；每次校验会扫描 padding。
+第一组 live 对象固定容量 256 KiB，多轮 profile 使用 64 KiB；每次校验会扫描 padding。
 `bytes_scanned` 不是 CXL 总线流量，`bytes_copied=0` 也不代表 JSON/RPC/model prompt 无复制。
 
 锁不跨模型思考阶段持有。撤销阻止新的工具 grant；已有 pin 必须 drain 后才能结束任务或
@@ -154,8 +222,9 @@ python3 tools/arvm_shared_state.py \
   workloads/agent_sharing/results/my-live/runtime-review-r0
 ```
 
-9 项单元/多进程检查已通过，包括 80 次并发 append 无丢失、CAS 冲突、校验失败、
-CXL owner-death fail closed、权限/依赖/存活约束、撤销后拒绝访问、版本数据流及 DAG 拒绝环。
+12 项单元/多进程检查已通过，包括 80 次并发 append 无丢失、CAS 冲突、校验失败、
+CXL owner-death fail closed、权限/依赖/存活约束、撤销后拒绝访问、版本数据流、DAG 拒绝环、
+scope/effects 分离、未来消费者与 root 保留、实际 backing 回收及搜索的共享别名验证。
 另外完成 26 组当前 CXL 后端的控制实验 smoke check，共 150 次操作；
 该检查用于回归验证，不作为真实 agent motivation 或 Sentry 性能结论。
 
@@ -164,4 +233,6 @@ CXL owner-death fail closed、权限/依赖/存活约束、撤销后拒绝访问
 `controlled-20261010`、早期 `opencode-live-*`、`mcp-*` 等目录是上一版文件锁控制或
 配置排错记录；`cxl-live-20261010-r0`、`arvm-review-20261010-r0`、`grant-20261010`
 是本机保留的探索运行。它们均未合入正式结果，也不纳入这次 Git 提交。
-正式 agent 数据只来自 `arvm-live-final-20261010`，Grant 性能只来自 `grant-final-20261010`。
+正式 agent 数据来自 `arvm-live-final-20261010` 和 `arvm-profile-20261011`，
+并发 PSS probe 来自 `arvm-sharing-probe-20261011`，Grant 性能来自 `grant-final-20261010`。
+新套件的预实验位于 `profile-development`，不进入上述统计。所有 `.dsec-state` 运行缓存均不提交。

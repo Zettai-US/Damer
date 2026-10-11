@@ -1,0 +1,6 @@
+{
+  "source_suite": "/tmp/damer-arvm-cxl-push/workloads/agent_sharing/results/arvm-profile-20261011",
+  "summary_sha256": "cf8ef348789e82af875b9c1be3d858c6841171dd9d259e3d4f7df44ca3861e75",
+  "export_sha256": "05454bfa5b95b6cf79cec598c4dd1a4f0d9009e68ea1f253445a8419195f5649",
+  "reproduce": "python3 workloads/agent_sharing/report_profile.py SUITE --probe PROBE; python3 workloads/agent_sharing/export_profile_paper.py SUITE --paper PAPER"
+}

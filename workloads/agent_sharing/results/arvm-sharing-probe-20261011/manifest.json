@@ -1,0 +1,7 @@
+{
+  "kind": "controlled concurrent mapping probe, not agent latency",
+  "planned": 12,
+  "corpus_sha256": "fbfa45d2ec0fbc5d075733991b9e27ba136d515378b69b23bf263aa2724e03a0",
+  "source_sha256": "162d224b5b02f17276e36a1dec4a11583471d44bef96374eca66b488c8d54d76",
+  "baseline": "both modes retain CXL source; private mode adds one DRAM copy per worker"
+}

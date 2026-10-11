@@ -1,0 +1,25 @@
+% Original arVM diagrams. Muted module colors and explicit transform stages
+% follow the visual organization of SkVM Figures 5 and 7, not their content.
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+\usepackage[scaled=.92]{helvet}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\definecolor{ink}{HTML}{25333D}
+\definecolor{blue}{HTML}{53788F}
+\definecolor{bluewash}{HTML}{EAF0F5}
+\definecolor{red}{HTML}{A26053}
+\definecolor{redwash}{HTML}{F6ECE8}
+\definecolor{green}{HTML}{55785D}
+\definecolor{greenwash}{HTML}{ECF3EC}
+\definecolor{graywash}{HTML}{F3F4F4}
+\tikzset{
+ every node/.style={font=\sffamily\fontsize{9}{10.5}\selectfont,text=ink,align=center,inner sep=3pt},
+ box/.style={draw=ink!60,line width=.65pt,rounded corners=2pt,fill=white},
+ flow/.style={-{Stealth[length=4pt,width=3.5pt]},draw=ink!85,line width=.8pt},
+ feedback/.style={flow,dashed,draw=red},
+ heading/.style={font=\sffamily\bfseries\fontsize{10}{11}\selectfont},
+ smalltext/.style={font=\sffamily\fontsize{8}{9.5}\selectfont},
+ band/.style={font=\sffamily\bfseries\fontsize{9.5}{11}\selectfont,text=white},
+ object/.style={box,draw=green,fill=greenwash},
+ private/.style={box,draw=red,fill=redwash}
+}

@@ -1,0 +1,49 @@
+\documentclass[tikz,border=1pt]{standalone}
+\input{figures/diagram-style}
+\begin{document}
+\begin{tikzpicture}[x=1pt,y=1pt]
+\path[use as bounding box] (0,0) rectangle (502,229);
+% Two domains, with a versioned contract crossing their boundary.
+\draw[box,draw=blue,fill=bluewash] (0,29) rectangle (250,228);
+\fill[blue,rounded corners=2pt] (0,207) rectangle (250,228);
+\node[band,anchor=west] at (8,217.5) {Dynamic compiler};
+\node[smalltext,text=white,anchor=east] at (243,217.5) {Planning boundary};
+\node[box,minimum width=100pt,minimum height=33pt] (plan) at (62,179.5)
+ {Accepted plan\\tasks, inputs, effects};
+\node[box,minimum width=105pt,minimum height=33pt] (facts) at (185.5,179.5)
+ {Registry snapshot\\versions, scope, roots};
+\node[box,draw=blue,minimum width=226pt,minimum height=29pt] (resolve) at (125,135.5)
+ {\textbf{1. Resolve} --- bind tasks to object versions\\validate dependencies and known effects};
+\node[box,draw=blue,minimum width=226pt,minimum height=31pt] (constrain) at (125,92.5)
+ {\textbf{2. Constrain} --- pins and required capacity\\separate hard bounds from optional hints};
+\node[box,draw=blue,minimum width=226pt,minimum height=26pt] (select) at (125,51)
+ {\textbf{3. Select} --- legal movement actions\\share $\mid$ replicate $\mid$ stage $\mid$ release};
+\draw[flow] (plan.south) -- (62,156) -| ([xshift=-40pt]resolve.north);
+\draw[flow] (facts.south) -- (185.5,156) -| ([xshift=40pt]resolve.north);
+\draw[flow] (resolve) -- (constrain);
+\draw[flow] (constrain) -- (select);
+
+\draw[box,draw=red,fill=redwash] (272,29) rectangle (502,228);
+\fill[red,rounded corners=2pt] (272,207) rectangle (502,228);
+\node[band,anchor=west] at (280,217.5) {Memory runtime};
+\node[smalltext,text=white,anchor=east] at (495,217.5) {Execution time};
+\node[box,draw=red,minimum width=206pt,minimum height=33pt] (contract) at (387,179.5)
+ {\textbf{Epoch contract}\\versions + pins + bounds + optional hints};
+\node[box,draw=red,minimum width=206pt,minimum height=29pt] (admit) at (387,135.5)
+ {\textbf{Controller: revalidate and admit}\\reserve capacity; apply pressure feedback};
+\node[box,minimum width=96pt,minimum height=27pt] (wa) at (332,92.5)
+ {Worker A\\private DRAM / output};
+\node[box,minimum width=96pt,minimum height=27pt] (wb) at (442,92.5)
+ {Worker B\\private DRAM / output};
+\node[object,minimum width=206pt,minimum height=25pt] (pool) at (387,51)
+ {\textbf{CXL pool: immutable object versions}\\one backing allocation; authorized readers};
+\draw[flow,draw=blue] (select.east) -- (260,51) -- (260,179.5) -- (contract.west);
+\draw[flow] (contract) -- (admit);
+\draw[flow] (admit.south) -- (387,113) -| (wa.north);
+\draw[flow] (387,113) -| (wb.north);
+\draw[flow,draw=green] ([xshift=-55pt]pool.north) -- (wa.south);
+\draw[flow,draw=green] ([xshift=55pt]pool.north) -- (wb.south);
+\draw[feedback] (387,29) -- (387,16) -- (125,16) -- (125,29);
+\node[smalltext,text=red] at (251,5) {Completion, pressure, or changed plan $\rightarrow$ update the next epoch};
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,5 @@
+{"task": "draft-0", "policy": "scope", "success": true, "protocol": {"complete": true, "missing": [], "events": 5}}
+{"task": "draft-1", "policy": "scope", "success": true, "protocol": {"complete": true, "missing": [], "events": 5}}
+{"task": "review-1", "policy": "scope", "success": true, "protocol": {"complete": true, "missing": [], "events": 6}}
+{"task": "review-0", "policy": "scope", "success": true, "protocol": {"complete": true, "missing": [], "events": 6}}
+{"task": "synthesis", "policy": "scope", "success": true, "protocol": {"complete": true, "missing": [], "events": 6}}

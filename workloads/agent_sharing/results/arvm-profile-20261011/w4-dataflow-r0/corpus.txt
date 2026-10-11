@@ -1,0 +1,901 @@
+Actual arVM prototype source snapshot. Inspect line context; these files are distinct modules.
+
+===== arvm_registry.py =====
+"""Executable control-path prototype for accepted, read-only object plans.
+Native mappings are exercised separately by cxl_bench.c. This module does not
+claim to interpose on arbitrary tools, manage GPU pointers, or persist state.
+"""
+from dataclasses import dataclass
+from collections import defaultdict, deque
+from threading import RLock
+
+
+@dataclass(frozen=True)
+class Handle:
+    name: str
+    generation: int
+
+
+@dataclass
+class Object:
+    handle: Handle
+    size: int
+    scopes: frozenset
+    roots: int = 1
+    pins: int = 0
+    retiring: bool = False
+    live: bool = True
+
+
+@dataclass(frozen=True)
+class Task:
+    name: str
+    predecessors: tuple
+    inputs: tuple
+    output_bound: int
+
+
+@dataclass(frozen=True)
+class Contract:
+    epoch: int
+    scope: str
+    order: tuple
+    pins: frozenset
+    reservation_bytes: int
+
+
+class Registry:
+    def __init__(self, capacity):
+        self.lock = RLock()
+        self.capacity = capacity
+        self.reserved = 0
+        self.epoch = 0
+        self.generations = defaultdict(int)
+        self.objects = {}
+        self.active = {}
+        self.next_lease = 0
+
+    def publish(self, name, size, scopes):
+        if size < 0 or not scopes: raise ValueError('invalid object')
+        with self.lock:
+            self.generations[name] += 1
+            h = Handle(name, self.generations[name])
+            self.objects[h] = Object(h, size, frozenset(scopes))
+            self.epoch += 1
+            return h
+
+    def validate(self, handle, scope):
+        obj = self.objects.get(handle)
+        if obj is None or not obj.live or obj.retiring:
+            raise ValueError('stale or retiring object')
+        if scope not in obj.scopes: raise PermissionError('unauthorized reader')
+        return obj
+
+    def admit(self, contract):
+        with self.lock:
+            if contract.epoch != self.epoch: raise ValueError('stale plan epoch')
+            objects = [self.validate(h, contract.scope) for h in contract.pins]
+            if contract.reservation_bytes < 0: raise ValueError('negative reservation')
+            if self.reserved + contract.reservation_bytes > self.capacity:
+                raise MemoryError('insufficient capacity')
+            for o in objects: o.pins += 1
+            self.reserved += contract.reservation_bytes
+            self.next_lease += 1
+            self.active[self.next_lease] = contract
+            return self.next_lease
+
+    def finish(self, lease):
+        with self.lock:
+            c = self.active.pop(lease)
+            for h in c.pins: self.objects[h].pins -= 1
+            self.reserved -= c.reservation_bytes
+
+    def retire(self, handle):
+        with self.lock:
+            o = self.objects[handle]
+            o.retiring = True
+            self.epoch += 1
+
+    def drop_root(self, handle):
+        with self.lock:
+            o = self.objects[handle]
+            if not o.roots: raise ValueError('root already dropped')
+            o.roots -= 1
+
+    def reclaim(self, handle):
+        with self.lock:
+            o = self.objects[handle]
+            if not o.live: raise ValueError('already reclaimed')
+            if not o.retiring or o.pins or o.roots:
+                raise RuntimeError('object remains reachable')
+            o.live = False
+
+
+class Compiler:
+    """Full DAG validation plus incremental updates of output bounds.
+
+    The incremental path preserves topology and input handles. Structural
+    replanning deliberately takes the full path in this minimal prototype.
+    The output reservation is a conservative sum, not an optimal liveness bound.
+    """
+    def __init__(self, registry):
+        self.registry = registry
+        self.tasks = {}
+        self.contract = None
+
+    def compile(self, tasks, scope):
+        task_map = {t.name: t for t in tasks}
+        if len(task_map) != len(tasks): raise ValueError('duplicate task name')
+        indegree = {}; children = defaultdict(list); inputs = set(); total = 0
+        for task in tasks:
+            if task.output_bound < 0: raise ValueError('negative output bound')
+            if len(set(task.predecessors)) != len(task.predecessors):
+                raise ValueError('duplicate dependency')
+            indegree[task.name] = len(task.predecessors)
+            for p in task.predecessors:
+                if p not in task_map: raise ValueError('missing predecessor')
+                children[p].append(task.name)
+            inputs.update(task.inputs); total += task.output_bound
+        ready = deque(k for k,v in indegree.items() if v == 0); order = []
+        while ready:
+            node = ready.popleft(); order.append(node)
+            for child in children[node]:
+                indegree[child] -= 1
+                if indegree[child] == 0: ready.append(child)
+        if len(order) != len(tasks): raise ValueError('cycle')
+        with self.registry.lock:
+            for h in inputs: self.registry.validate(h,scope)
+            c = Contract(self.registry.epoch,scope,tuple(order),frozenset(inputs),total)
+        self.tasks = task_map; self.contract = c
+        return c
+
+    def update_bounds(self, updates):
+        old = self.contract
+        if old is None: raise ValueError('no compiled plan')
+        with self.registry.lock:
+            if old.epoch != self.registry.epoch: raise ValueError('requires recompilation')
+            delta = 0
+            for name, bound in updates.items():
+                if bound < 0 or name not in self.tasks: raise ValueError('invalid update')
+                delta += bound-self.tasks[name].output_bound
+            c = Contract(old.epoch,old.scope,old.order,old.pins,old.reservation_bytes+delta)
+            for name,bound in updates.items():
+                t=self.tasks[name]
+                self.tasks[name]=Task(name,t.predecessors,t.inputs,bound)
+            self.contract=c
+            return c
+
+
+===== store.py =====
+"""Instrumented, single-host shared-memory objects for agent experiments.
+
+Only the pinned upstream CXL SpinLock backend is supported. Lock state is
+always resident on a verified physical CXL node. No OS file-lock fallback.
+Payloads live in tmpfs, bound before first touch; metadata and traces are separate.
+"""
+from __future__ import annotations
+
+import ctypes
+import ctypes.util
+import hashlib
+import json
+import mmap
+import os
+from pathlib import Path
+import re
+import time
+import uuid
+
+PAGE = mmap.PAGESIZE
+NAME = re.compile(r"[A-Za-z0-9_-]{1,80}\Z")
+
+
+def dump(path, value):
+    path = Path(path)
+    tmp = path.with_name(path.name + "." + uuid.uuid4().hex + ".tmp")
+    tmp.write_text(json.dumps(value, indent=2) + "\n")
+    os.replace(tmp, path)
+
+
+def validate_name(value):
+    if not isinstance(value, str) or not NAME.fullmatch(value):
+        raise ValueError("IDs must match [A-Za-z0-9_-]{1,80}")
+    return value
+
+
+def address(buf):
+    return ctypes.addressof(ctypes.c_char.from_buffer(buf))
+
+
+def bind(buf, node):
+    lib = ctypes.CDLL(ctypes.util.find_library("numa"), use_errno=True)
+    lib.mbind.argtypes = [ctypes.c_void_p, ctypes.c_ulong, ctypes.c_int,
+                          ctypes.POINTER(ctypes.c_ulong), ctypes.c_ulong, ctypes.c_uint]
+    lib.mbind.restype = ctypes.c_int
+    if node < 0 or node >= ctypes.sizeof(ctypes.c_ulong) * 8:
+        raise ValueError("node outside supported nodemask")
+    mask = ctypes.c_ulong(1 << node)
+    if lib.mbind(address(buf), len(buf), 2, ctypes.byref(mask), 8 * ctypes.sizeof(mask), 0):
+        raise OSError(ctypes.get_errno(), "mbind failed; refusing silent fallback")
+
+
+def placement(buf):
+    # Each object is a separate file VMA. numa_maps reports resident pages, not
+    # requested policy. Touch all pages before calling this function.
+    prefix = f"{address(buf):x} "
+    for line in Path("/proc/self/numa_maps").read_text().splitlines():
+        if line.startswith(prefix):
+            return {int(n): int(count) for n, count in re.findall(r"\bN(\d+)=(\d+)", line)}
+    raise RuntimeError("object mapping absent from numa_maps")
+
+
+def verify_placement(buf, node):
+    nodes = placement(buf)
+    if nodes != {node: len(buf) // PAGE}:
+        raise RuntimeError(f"placement mismatch: {nodes}; expected node {node}, {len(buf)//PAGE} pages")
+    return nodes
+
+
+def hardware(node):
+    base = Path(f"/sys/devices/system/node/node{node}")
+    blocks = sorted(int(p.name[6:]) for p in base.glob("memory[0-9]*"))
+    block_bytes = int(Path("/sys/devices/system/memory/block_size_bytes").read_text(), 16)
+    decoders = []
+    for p in Path("/sys/bus/cxl/devices").glob("decoder*"):
+        if (p / "start").exists() and (p / "size").exists():
+            decoders.append(dict(name=p.name, start=int((p/"start").read_text(), 0),
+                                 size=int((p/"size").read_text(), 0)))
+    covered = bool(blocks) and all(any(d["start"] <= b * block_bytes and
+                (b + 1) * block_bytes <= d["start"] + d["size"] for d in decoders) for b in blocks)
+    return dict(node=node, node_cpus=(base/"cpulist").read_text().strip(),
+                memory_blocks=blocks, block_bytes=block_bytes, cxl_decoders=decoders,
+                verified_cxl_node=covered, kernel=os.uname().release)
+
+
+class Store:
+    def __init__(self, root, agent="harness", trace_kind="controlled"):
+        self.root = Path(root).resolve()
+        self.config = json.loads((self.root / "store.json").read_text())
+        self.agent = validate_name(agent)
+        self.trace_kind = trace_kind
+        self.maps = {}
+        self.records = {}
+        from cxl_lock import CXLBackend
+        self.backend = CXLBackend(self.root, self.config)
+        if not getattr(self.backend, "name", ""):
+            raise ValueError("lock backend requires an explicit name")
+
+    @classmethod
+    def create(cls, root, payload_root, node=1, capacity=1024*1024,
+               granularity="object", lock_node=1, require_cxl=True):
+        root, payload_root = Path(root).resolve(), Path(payload_root).resolve()
+        if capacity <= 0 or capacity % PAGE:
+            raise ValueError("capacity must be a positive page multiple")
+        if granularity not in {"object", "global"}:
+            raise ValueError("invalid lock granularity")
+        hw = hardware(node)
+        if require_cxl and not hw["verified_cxl_node"]:
+            raise RuntimeError("NUMA node is not verified against CXL decoder ranges")
+        provenance=json.loads((Path(__file__).parent/"build/provenance.json").read_text())
+        root.mkdir(parents=True, exist_ok=False)
+        payload_root.mkdir(parents=True, exist_ok=False)
+        for name in ["locks", "meta", "events"]:
+            (root / name).mkdir()
+        config = dict(schema=1, payload_root=str(payload_root), node=node,
+                      capacity=capacity, granularity=granularity, hardware=hw,
+                      lock_node=lock_node,lock_semantics="exclusive-for-read-and-write",
+                      lock_library_sha256=provenance["library_sha256"],lock_provenance=provenance)
+        dump(root / "store.json", config)
+        store=cls(root)
+        store.backend.create("all")
+        store.backend.create("dsec-control")
+        (payload_root/".records").mkdir()
+        return store
+
+    def record(self,key,initial=None,capacity=65536):
+        """CXL-resident control record. Caller holds the matching CXL mutex.
+
+        JSON is a prototype representation, not a native capability table.
+        Disk JSON files are audit snapshots, never the live source of truth.
+        """
+        validate_name(key)
+        if key not in self.records:
+            path=Path(self.config["payload_root"])/".records"/key
+            flags=os.O_RDWR | (os.O_CREAT|os.O_EXCL if initial is not None else 0)
+            fd=os.open(path,flags,0o600)
+            try:
+                if initial is not None:os.ftruncate(fd,capacity)
+                buf=mmap.mmap(fd,os.fstat(fd).st_size)
+            finally:os.close(fd)
+            bind(buf,self.config["lock_node"])
+            if initial is not None:buf[:]=b"\0"*len(buf)
+            else:
+                for offset in range(0,len(buf),PAGE):_=buf[offset]
+            verify_placement(buf,self.config["lock_node"])
+            self.records[key]=buf
+            if initial is not None:self.write_record(key,initial)
+        return self.records[key]
+
+    def read_record(self,key):
+        buf=self.record(key)
+        size=int.from_bytes(buf[:8],"little")
+        if not 0<size<=len(buf)-8:raise RuntimeError("invalid shared control record")
+        return json.loads(buf[8:8+size])
+
+    def write_record(self,key,value):
+        buf=self.records[key]
+        encoded=json.dumps(value,separators=(",",":")).encode()
+        if len(encoded)>len(buf)-8:raise ValueError("shared control record capacity exceeded")
+        buf[8:8+len(encoded)]=encoded
+        buf[:8]=len(encoded).to_bytes(8,"little")
+
+    def seed(self, key, text):
+        """Harness-only initialization, before any workers start."""
+        key = validate_name(key)
+        data = text.encode()
+        capacity = self.config["capacity"]
+        if len(data) > capacity:
+            raise ValueError("seed exceeds capacity")
+        if key in {"all","dsec-control"}:raise ValueError("reserved object ID")
+        self.backend.create(key)
+        path = Path(self.config["payload_root"]) / key
+        fd = os.open(path, os.O_RDWR | os.O_CREAT | os.O_EXCL, 0o600)
+        try:
+            os.ftruncate(fd, capacity)
+            with mmap.mmap(fd, capacity) as buf:
+                bind(buf, self.config["node"])
+                buf.madvise(mmap.MADV_NOHUGEPAGE)
+                buf[:] = b"\0" * capacity
+                buf[:len(data)] = data
+                nodes = verify_placement(buf, self.config["node"])
+                digest = hashlib.sha256(buf).hexdigest()
+        finally:
+            os.close(fd)
+        meta=dict(version=0, size=len(data),sha256=digest, producer="harness",
+                  published_ns=time.monotonic_ns(),nodes=nodes)
+        self.record("meta-"+key,initial=meta,capacity=PAGE)
+        dump(self.root / "meta" / (key + ".json"),meta)
+
+    def close(self):
+        for buf in self.maps.values():
+            buf.close()
+        self.maps.clear()
+        for buf in self.records.values():buf.close()
+        self.records.clear()
+        self.backend.close()
+
+    def _map(self, key):
+        if key not in self.maps:
+            fd = os.open(Path(self.config["payload_root"]) / key, os.O_RDWR)
+            try:
+                buf = mmap.mmap(fd, self.config["capacity"])
+            finally:
+                os.close(fd)
+            # Bind before faults in this mapping too; do not move existing pages.
+            bind(buf, self.config["node"])
+            self.maps[key] = buf
+        return self.maps[key]
+
+    def list_objects(self):
+        return sorted(p.stem for p in (self.root / "meta").glob("*.json"))
+
+    def reclaim_payload(self,key):
+        """Harness allocator: invoke only after DSec retirement and map drain."""
+        key=validate_name(key)
+        grant=self.backend.acquire(key if self.config["granularity"]=="object" else "all","write",10)
+        try:
+            path=Path(self.config["payload_root"])/key
+            released=path.stat().st_size
+            if key in self.maps:self.maps.pop(key).close()
+            record="meta-"+key
+            if record in self.records:self.records.pop(record).close()
+            path.unlink()
+            (Path(self.config["payload_root"])/".records"/record).unlink()
+            # Keep immutable disk snapshots and lock pages for audit. Names
+            # cannot be recycled while the experiment store remains alive.
+            return released
+        finally:self.backend.release(grant["token"])
+
+    def access(self, key, op="read", text="", expected_version=None,
+               return_limit=4096, timeout_s=10, copy_node=None, session_id=None,query=None):
+        """read, CAS write, or atomic append. No lock is held during LLM thinking."""
+        key = validate_name(key)
+        if op not in {"read", "write", "append"}:
+            raise ValueError("unknown operation")
+        if op == "write" and (not isinstance(expected_version, int) or isinstance(expected_version, bool)):
+            raise ValueError("write requires integer expected_version")
+        if not isinstance(return_limit, int) or not 0 <= return_limit <= 65536:
+            raise ValueError("return_limit outside 0..65536")
+        if not 0 < timeout_s <= 60:
+            raise ValueError("timeout outside 0..60s")
+        if query is not None and (op!="read" or not isinstance(query,str) or not 1<=len(query)<=100):
+            raise ValueError("query must be 1..100 characters for a read")
+        e = dict(schema=1, event_id=uuid.uuid4().hex, agent=self.agent, pid=os.getpid(), session_id=session_id,
+                 actor=getattr(self,"actor",self.agent),phase=getattr(self,"phase","single"),
+                 kind=self.trace_kind, object=key, op=op, backend=self.backend.name,
+                 granularity=self.config["granularity"], request_ns=time.monotonic_ns(),
+                 read_bytes=0, write_bytes=0, copy_bytes=0, response_bytes=0,
+                 status="error", acquired_ns=None, released_ns=None, contended=None)
+        token = None
+        try:
+            lock_key = "all" if self.config["granularity"] == "global" else key
+            grant = self.backend.acquire(lock_key, "read" if op == "read" else "write", timeout_s)
+            token = grant["token"]
+            if token is None:
+                raise RuntimeError("lock adapter returned a None token")
+            e.update(acquired_ns=time.monotonic_ns(), contended=grant.get("contended"))
+            e.update({k:grant[k] for k in ["failed_attempts","native_wait_ns","lock_nodes","lock_semantics"]})
+            e["wait_ns"] = e["acquired_ns"] - e["request_ns"]
+            if e["contended"] is not None and not isinstance(e["contended"], bool):
+                raise RuntimeError("lock adapter contended must be bool or None")
+            meta_path = self.root / "meta" / (key + ".json")
+            meta = self.read_record("meta-"+key)
+            buf = self._map(key)
+            data_view = buf
+            private = None
+            try:
+                if copy_node is not None:
+                    private = mmap.mmap(-1, len(buf), flags=mmap.MAP_PRIVATE | mmap.MAP_ANONYMOUS)
+                    bind(private, copy_node)
+                    private[:] = memoryview(buf)
+                    e["private_nodes"] = verify_placement(private, copy_node)
+                    e["copy_bytes"] = len(buf)
+                    data_view = private
+                digest = hashlib.sha256(data_view).hexdigest()
+                e["nodes"] = verify_placement(buf, self.config["node"])
+                if digest != meta["sha256"]:
+                    raise RuntimeError("payload checksum mismatch (possible interrupted publication)")
+                e.update(read_bytes=len(buf), version_read=meta["version"],
+                         producer=meta["producer"], published_ns=meta["published_ns"],
+                         logical_bytes_read=meta["size"],backing_id=key,byte_range=[0,len(buf)],
+                         memory_tier="cxl" if self.config["hardware"]["verified_cxl_node"] else "dram")
+                stat=(Path(self.config["payload_root"])/key).stat()
+                e.update(backing_inode=stat.st_ino,backing_device=stat.st_dev,allocated_bytes=stat.st_blocks*512,
+                         mapping_address=address(buf),payload_capacity=len(buf))
+                if op == "read":
+                    content=data_view[:min(meta["size"],return_limit)].decode(errors="replace")
+                    if query is not None:
+                        lines=data_view[:meta["size"]].decode(errors="replace").splitlines()
+                        hits=[i for i,line in enumerate(lines) if query.lower() in line.lower()]
+                        selected=sorted({j for i in hits for j in range(max(0,i-2),min(len(lines),i+9))})
+                        content="\n".join(f"{i+1}: {lines[i]}" for i in selected)[:return_limit]
+                        e.update(query=query,matching_lines=len(hits),access_kind="search")
+                    result = dict(object=key, version=meta["version"], producer=meta["producer"],
+                                  text=content,
+                                  logical_bytes=meta["size"], truncated=meta["size"] > return_limit)
+                elif expected_version is not None and expected_version != meta["version"]:
+                    e["status"] = "conflict"
+                    result = dict(error="version_conflict", current_version=meta["version"])
+                else:
+                    data = (bytes(buf[:meta["size"]]) if op == "append" else b"") + text.encode()
+                    if len(data) > len(buf):
+                        raise ValueError("object capacity exceeded")
+                    buf[:len(data)] = data
+                    # Clear the old logical tail without rewriting the padding.
+                    if len(data) < meta["size"]:
+                        buf[len(data):meta["size"]] = b"\0" * (meta["size"] - len(data))
+                    new = dict(version=meta["version"]+1, size=len(data),
+                               sha256=hashlib.sha256(buf).hexdigest(), producer=self.agent,
+                               published_ns=time.monotonic_ns(), nodes=e["nodes"])
+                    self.write_record("meta-"+key,new)
+                    dump(meta_path, new)
+                    e.update(version_written=new["version"],
+                             write_bytes=max(len(data), meta["size"]),logical_bytes_written=len(data),
+                             published_written_ns=new["published_ns"])
+                    result = dict(object=key, version=new["version"], logical_bytes=len(data))
+            finally:
+                if private is not None:
+                    private.close()
+            if e["status"] == "error":
+                e["status"] = "ok"
+            e["response_bytes"] = len(json.dumps(result).encode())
+            return result
+        except Exception as exc:
+            e["error"] = type(exc).__name__ + ": " + str(exc)
+            raise
+        finally:
+            release_error = None
+            if token is not None:
+                try:
+                    self.backend.release(token)
+                except Exception as exc:
+                    release_error = exc
+                    e.update(status="error", error="lock release failed: " + str(exc))
+                finally:
+                    e["released_ns"] = time.monotonic_ns()
+                    e["hold_ns"] = e["released_ns"] - e["acquired_ns"]
+            e["end_ns"] = time.monotonic_ns()
+            # One append syscall per record, separate file for each OS process.
+            path = self.root / "events" / f"{self.agent}-{os.getpid()}.jsonl"
+            with path.open("a") as f:
+                f.write(json.dumps(e) + "\n")
+            if release_error is not None:
+                raise release_error
+
+
+===== dsec.py =====
+"""DSec: a local data-sharing execution controller for the experiment.
+
+This is our implementation, not DeepSeek's production DSec. It combines scoped
+objects, dependency admission, in-flight pins, retention, and bwrap sandboxes.
+Every shared control/data critical section uses the upstream CXL mutex.
+"""
+from contextlib import contextmanager
+import json
+import os
+from pathlib import Path
+import shutil
+import time
+import uuid
+
+from store import Store, dump, validate_name
+
+
+class DSec:
+    def __init__(self, store):
+        self.store=store
+        self.path=store.root/"dsec.json"
+
+    @classmethod
+    def initialize(cls, store, specs, retention_policy="scope", session_roots=()):
+        if (store.root/"dsec.json").exists():raise FileExistsError("DSec already initialized")
+        objects=store.list_objects()
+        if retention_policy not in {"scope","dataflow"}:raise ValueError("unknown retention policy")
+        if not set(session_roots)<=set(objects):raise ValueError("unknown session root")
+        for agent,spec in specs.items():
+            validate_name(agent)
+            if not set(spec.get("depends_on",[]))<=set(specs):raise ValueError("unknown task dependency")
+            for access,keys in spec["grants"].items():
+                if access not in {"read","write","append"} or not set(keys)<=set(objects):
+                    raise ValueError("invalid object grants")
+            for access,keys in spec.get("effects",spec["grants"]).items():
+                if not set(keys)<=set(spec["grants"].get(access,[])):
+                    raise ValueError("accepted effects exceed access scope")
+        # Reject cyclic admission graphs before publishing them.
+        visited,active=set(),set()
+        def visit(agent):
+            if agent in active:raise ValueError("cyclic sandbox dependencies")
+            if agent in visited:return
+            active.add(agent)
+            for dep in specs[agent].get("depends_on",[]):visit(dep)
+            active.remove(agent);visited.add(agent)
+        for agent in specs:visit(agent)
+        state=dict(schema=2,sandboxes={a:dict(**s,state="ready",generation=0) for a,s in specs.items()},
+                   pins={},retired=[],created_ns=time.monotonic_ns(),state_location="CXL shared memory",
+                   retention_policy=retention_policy,session_roots=list(session_roots))
+        store.record("dsec-registry",initial=state,capacity=262144)
+        dump(store.root/"dsec.json",state)
+        return cls(store)
+
+    def event(self,event,**fields):
+        row=dict(event=event,ns=time.monotonic_ns(),pid=os.getpid(),**fields)
+        with (self.store.root/f"dsec-{os.getpid()}.jsonl").open("a") as f:f.write(json.dumps(row)+"\n")
+
+    @contextmanager
+    def registry(self):
+        grant=self.store.backend.acquire("dsec-control","write",10)
+        try:
+            state=self.store.read_record("dsec-registry")
+            yield state
+            self.store.write_record("dsec-registry",state)
+        finally:self.store.backend.release(grant["token"])
+
+    def admit(self,agent):
+        with self.registry() as state:
+            task=state["sandboxes"][agent]
+            if task["state"]!="ready":raise RuntimeError("sandbox is not ready")
+            if any(state["sandboxes"][d]["state"]!="completed" for d in task.get("depends_on",[])):
+                raise RuntimeError("sandbox dependency is not completed")
+            task.update(state="running",started_ns=time.monotonic_ns())
+        self.event("admit",agent=agent)
+
+    def finish(self,agent,success):
+        with self.registry() as state:
+            task=state["sandboxes"][agent]
+            if task["state"]!="running":raise RuntimeError("sandbox is not running")
+            active=[p for p in state["pins"].values() if p["agent"]==agent]
+            if active:raise RuntimeError("cannot finish sandbox with in-flight object pins")
+            task.update(state="completed" if success else "failed",ended_ns=time.monotonic_ns())
+        self.event("finish",agent=agent,success=success)
+
+    @contextmanager
+    def pin(self,agent,key,operation):
+        begin=time.monotonic_ns()
+        token=uuid.uuid4().hex
+        with self.registry() as state:
+            task=state["sandboxes"].get(agent)
+            if task is None or task["state"]!="running":raise PermissionError("sandbox not admitted")
+            if key in state["retired"] or key not in task["grants"].get(operation,[]):
+                raise PermissionError(f"sandbox {agent} has no {operation} grant for {key}")
+            if key not in task.get("effects",task["grants"]).get(operation,[]):
+                raise PermissionError("operation not in accepted effects; a new plan is required")
+            state["pins"][token]=dict(agent=agent,object=key,op=operation,started_ns=time.monotonic_ns())
+        self.event("pin",agent=agent,object=key,op=operation,token=token,
+                   grant_ns=time.monotonic_ns()-begin,generation=task["generation"])
+        try:yield
+        finally:
+            begin=time.monotonic_ns()
+            with self.registry() as state:
+                if state["pins"].pop(token,None) is None:raise RuntimeError("missing object pin")
+            self.event("unpin",agent=agent,object=key,token=token,revoke_ns=time.monotonic_ns()-begin)
+
+    def grant(self,agent,key,operations):
+        begin=time.monotonic_ns()
+        if not set(operations)<={"read","write","append"} or not operations:
+            raise ValueError("invalid grant operations")
+        if key not in Store.list_objects(self.store):raise KeyError(key)
+        with self.registry() as state:
+            task=state["sandboxes"][agent]
+            if task["state"] not in {"ready","running"} or key in state["retired"]:
+                raise PermissionError("grant target unavailable")
+            for op in operations:
+                task["grants"][op]=sorted(set(task["grants"].get(op,[]))|{key})
+            task["generation"]+=1
+        self.event("grant",agent=agent,object=key,operations=operations,
+                   generation=task["generation"],duration_ns=time.monotonic_ns()-begin)
+
+    def revoke(self,agent,key=None):
+        """Block new tool grants; existing calls drain before finish/reclaim.
+
+        Does not revoke arbitrary CPU pointers or promise DPU isolation.
+        """
+        begin=time.monotonic_ns()
+        with self.registry() as state:
+            task=state["sandboxes"][agent]
+            task["grants"]={op:[obj for obj in ids if key is not None and obj!=key]
+                            for op,ids in task["grants"].items()}
+            task["generation"]+=1
+        self.event("revoke",agent=agent,object=key,generation=task["generation"],duration_ns=time.monotonic_ns()-begin)
+
+    def snapshot(self):
+        with self.registry() as state:dump(self.path,state)
+
+    def retire(self,key):
+        with self.registry() as state:
+            if key in state.get("session_roots",[]):raise RuntimeError("object retained by session root")
+            if any(p["object"]==key for p in state["pins"].values()):raise RuntimeError("object still pinned")
+            for task in state["sandboxes"].values():
+                uses=task.get("effects",task["grants"]) if state.get("retention_policy")=="dataflow" else task["grants"]
+                if task["state"] in {"ready","running"} and any(key in ids for ids in uses.values()):
+                    raise RuntimeError("object retained for a scheduled consumer")
+            if key not in state["retired"]:state["retired"].append(key)
+        self.event("retire",object=key)
+
+    def release_root(self,key):
+        with self.registry() as state:state["session_roots"].remove(key)
+        self.event("release_root",object=key)
+
+    def reclaim(self,key):
+        """Controller-only: task processes must have exited before finish().
+
+        Retirement prevents new pins; completed task namespaces have drained
+        cached mappings. Arbitrary external mappings are outside this protocol.
+        """
+        self.retire(key)
+        begin=time.monotonic_ns()
+        released=self.store.reclaim_payload(key)
+        self.event("reclaim",object=key,bytes=released,duration_ns=time.monotonic_ns()-begin)
+        return released
+
+
+class SandboxStore(Store):
+    def __init__(self,root,agent,trace_kind="opencode-live"):
+        super().__init__(root,agent,trace_kind)
+        self.dsec=DSec(self)
+        with self.dsec.registry() as state:
+            spec=state["sandboxes"].get(agent,{})
+            self.actor=spec.get("actor",agent)
+            self.phase=spec.get("phase","single")
+
+    def list_objects(self):
+        with self.dsec.registry() as state:
+            task=state["sandboxes"].get(self.agent)
+            if task is None or task["state"]!="running":raise PermissionError("sandbox not admitted")
+            return sorted(set(sum(task.get("effects",task["grants"]).values(),[]))-set(state["retired"]))
+
+    def access(self,key,op="read",**kwargs):
+        with self.dsec.pin(self.agent,key,op):return super().access(key,op,**kwargs)
+
+
+def sandbox_command(argv,workspace,store_root=None):
+    """Mount only the runtime, this workspace, and its experiment's object store.
+
+    Network stays in the host namespace to reach the loopback model server.
+    All capabilities are dropped; other home directories/repositories are absent.
+    """
+    bwrap=shutil.which("bwrap")
+    if not bwrap:raise RuntimeError("bwrap required; no unisolated fallback")
+    workspace=Path(workspace).resolve()
+    runtime=Path(__file__).resolve().parent
+    state=workspace/".dsec-state"
+    state.mkdir(exist_ok=True)
+    # Preserve absolute paths in OpenCode configs and Python trace provenance.
+    cmd=[bwrap,"--unshare-user","--unshare-pid","--unshare-uts","--unshare-ipc",
+         "--die-with-parent","--new-session","--cap-drop","ALL",
+         "--ro-bind","/usr","/usr","--ro-bind","/lib","/lib","--ro-bind","/lib64","/lib64",
+         "--symlink","usr/bin","/bin","--symlink","usr/sbin","/sbin",
+         "--proc","/proc","--dev","/dev","--tmpfs","/tmp","--ro-bind","/sys","/sys",
+         "--dir","/root","--ro-bind",str(runtime),str(runtime),
+         # Hide all historical experiment data and the embedded git checkout.
+         "--tmpfs",str(runtime/"results"),"--tmpfs",str(runtime/"third_party"),
+         "--bind",str(workspace),str(workspace)]
+    for path in ["/etc/ld.so.cache","/etc/hosts","/etc/resolv.conf","/etc/nsswitch.conf","/etc/passwd","/etc/ssl"]:
+        if Path(path).exists():cmd.extend(["--ro-bind",path,path])
+    executable=Path(argv[0]).resolve()
+    if not str(executable).startswith("/usr/"):cmd.extend(["--ro-bind",str(executable),str(executable)])
+    if store_root:
+        root=Path(store_root).resolve()
+        config=json.loads((root/"store.json").read_text())
+        cmd.extend(["--bind",str(root),str(root),"--bind",config["payload_root"],config["payload_root"]])
+    cmd.extend(["--setenv","XDG_CONFIG_HOME",str(state/"config"),
+                "--setenv","XDG_DATA_HOME",str(state/"data"),
+                "--setenv","XDG_CACHE_HOME",str(state/"cache"),
+                "--setenv","XDG_STATE_HOME",str(state/"state"),
+                "--chdir",str(workspace),"--",*argv])
+    return cmd
+
+
+===== dataflow.py =====
+"""Observed, versioned arVM memory dataflow; no timing model or inferred ACLs."""
+from collections import defaultdict
+import json
+from pathlib import Path
+import statistics
+
+from analyze import analyze_events, percentile
+from store import dump
+
+
+def compile_memory_contract(tasks,object_versions):
+    """Lower trusted accepted effects to sharing/retention and DSec scopes.
+
+    A permissions list alone does not identify the same version or final use.
+    This pass keeps task order, common backing and pending consumers separate.
+    Mutable versions are resolved at tool access, under the CXL object mutex.
+    """
+    order=[];active=set();ancestors={}
+    def visit(name):
+        if name in active:raise ValueError("cyclic accepted plan")
+        if name in ancestors:return
+        if name not in tasks:raise ValueError("unknown task dependency")
+        active.add(name);deps=tasks[name].get("depends_on",[]);parents=set(deps)
+        for dep in deps:visit(dep);parents.update(ancestors[dep])
+        active.remove(name);ancestors[name]=parents;order.append(name)
+    for task in tasks:visit(task)
+    objects=[];edges=[]
+    for key,version in sorted(object_versions.items()):
+        readers=[a for a,t in tasks.items() if key in t.get("effects",t["grants"]).get("read",[])]
+        writers=[a for a,t in tasks.items() if any(key in t.get("effects",t["grants"]).get(op,[]) for op in ["write","append"])]
+        for writer in writers:
+            for reader in readers:
+                if writer in ancestors[reader]:edges.append(dict(producer=writer,consumer=reader,object=key,type="publication_dependency"))
+        concurrent_writers=[[a,b] for i,a in enumerate(writers) for b in writers[i+1:]
+                            if a not in ancestors[b] and b not in ancestors[a]]
+        objects.append(dict(object=key,alias_set=key,initial_version=version,readers=readers,writers=writers,
+            sharing="immutable common backing" if not writers else "synchronized mutable backing",
+            required_sync="CXL SpinLock",concurrent_writers=concurrent_writers,
+            retention_until_tasks_complete=sorted(set(readers+writers)),
+            version_binding="fixed" if not writers else "resolve current version at admitted tool call"))
+    known=set(object_versions)
+    for task in tasks.values():
+        for op,keys in task["grants"].items():
+            if op not in {"read","write","append"} or not set(keys)<=known:raise ValueError("unknown effect")
+        for op,keys in task.get("effects",task["grants"]).items():
+            if not set(keys)<=set(task["grants"].get(op,[])):raise ValueError("effect exceeds scope")
+    return dict(schema="arvm-memory-contract-v1",tasks=tasks,admission_order=order,objects=objects,
+        data_dependencies=edges,authority="trusted harness effect summaries",reclamation="DSec checks pending tasks and in-flight pins",
+        limitations=["Object-granularity effects; no automatic alias analysis for arbitrary pointers",
+                     "Scopes are local MCP enforcement, not DPU isolation or transparent memory revocation"])
+
+
+def interval_union(intervals):
+    end=total=0
+    for a,b in sorted(intervals):
+        total+=max(0,b-max(a,end))
+        end=max(end,b)
+    return total
+
+
+def reconstruct(events):
+    events=[e for e in events if e["kind"]=="opencode-live"]
+    metrics=analyze_events(events)
+    good=sorted((e for e in events if e["status"]=="ok"),key=lambda e:e["acquired_ns"])
+    publications={}
+    uses=defaultdict(list)
+    nodes=[]
+    edges=[]
+    prior_agent=defaultdict(list)
+    for e in good:
+        nodes.append(dict(id=e["event_id"],kind="operation",agent=e["agent"],op=e["op"],
+                          start_ns=e["acquired_ns"],end_ns=e["released_ns"]))
+        k=(e["object"],e["version_read"])
+        uses[k].append(e)
+        if k not in publications:
+            if e["producer"]!="harness":raise ValueError("consumer before publication")
+            publications[k]=dict(id=f"{k[0]}@{k[1]}",object=k[0],version=k[1],producer="harness",
+                published_ns=e["published_ns"],logical_bytes=e["logical_bytes_read"],kind="object_version")
+        src=publications[k]
+        if src["published_ns"]>e["acquired_ns"]:raise ValueError("read before publish")
+        edges.append(dict(source=src["id"],destination=e["event_id"],type="RAW" if e["op"]=="read" else "RMW",
+            object=k[0],version=k[1],alias_set=e["backing_id"],byte_range=e["byte_range"],
+            bytes=e["logical_bytes_read"],memory_tier=e["memory_tier"],transform="Observe"))
+        if "version_written" in e:
+            newkey=(e["object"],e["version_written"])
+            pub=dict(id=f"{newkey[0]}@{newkey[1]}",object=newkey[0],version=newkey[1],
+                     producer=e["agent"],published_ns=e.get("published_written_ns",e["acquired_ns"]),
+                     logical_bytes=e["logical_bytes_written"],kind="object_version")
+            # The publication timestamp read by consumers is inside the lock;
+            # released_ns may be sampled after the next worker acquires it.
+            if newkey in publications:raise ValueError("duplicate publication")
+            publications[newkey]=pub
+            edges.append(dict(source=e["event_id"],destination=pub["id"],type="publish",transform="Persist"))
+            edges.append(dict(source=src["id"],destination=pub["id"],type="WAW",alias_set=e["backing_id"]))
+            for reader in uses[k]:
+                if reader["op"]=="read":
+                    edges.append(dict(source=reader["event_id"],destination=e["event_id"],type="WAR",
+                                      alias_set=e["backing_id"]))
+            # A read may influence a later model-written output. This is a
+            # conservative context dependency, not proven semantic influence.
+            for reader in prior_agent[e["agent"]]:
+                edges.append(dict(source=reader["event_id"],destination=e["event_id"],
+                                  type="may_influence",certainty="conservative agent context"))
+        if e["op"]=="read":prior_agent[e["agent"]].append(e)
+    rows=[]
+    for key,pub in sorted(publications.items()):
+        accesses=uses[key]
+        reads=[e for e in accesses if e["op"]=="read"]
+        readers=sorted({e["agent"] for e in reads})
+        first=min((e["acquired_ns"] for e in accesses),default=pub["published_ns"])
+        last=max((e["released_ns"] for e in accesses),default=first)
+        active=interval_union([(e["acquired_ns"],e["released_ns"]) for e in accesses])
+        actual_published=accesses[0]["published_ns"] if accesses else pub["published_ns"]
+        # A future overwrite ends version validity. Never merge versions just
+        # because their object IDs or backing allocation match.
+        following=publications.get((key[0],key[1]+1))
+        for e in reads:
+            if following and e["acquired_ns"]>following["published_ns"]:
+                raise ValueError("old-version read after overwrite")
+        rows.append(dict(object=key[0],version=key[1],producer=pub["producer"],readers=readers,
+            read_count=len(reads),reader_fanout=len(readers),logical_bytes=pub["logical_bytes"],
+            published_ns=actual_published,first_access_ns=first,last_access_ns=last,
+            observed_span_ns=last-first,active_union_ns=active,
+            observed_idle_gap_ns=max(0,last-first-active),
+            shared_payload_copy_opportunity_bytes=max(0,len(readers)-1)*pub["logical_bytes"]))
+    metrics.update(object_versions=len(rows),shared_versions=sum(r["reader_fanout"]>=2 for r in rows),
+        max_reader_fanout=max((r["reader_fanout"] for r in rows),default=0),
+        observed_idle_gap_ns=sum(r["observed_idle_gap_ns"] for r in rows),
+        same_version_copy_opportunity_bytes=sum(r["shared_payload_copy_opportunity_bytes"] for r in rows))
+    return dict(schema="arvm-observed-shared-state-v1",metrics=metrics,versions=rows,
+        semantic_movement_graph=dict(nodes=[*nodes,*publications.values()],edges=edges),
+        limitations=["Only instrumented MCP shared objects; not all process/KV-cache/LLM memory",
+            "RAW/WAR/WAW are observed version dependencies; may_influence is conservative, not semantic proof",
+            "Idle gaps are retrospective retention observations, not a prediction of future consumers",
+            "Version copy opportunity is logical payload bytes; model prompts/RPC still copy returned text",
+            "Mutable versions reuse one backing allocation and are not persistent snapshots"])
+
+
+def analyze_run(root):
+    root=Path(root)
+    events=[json.loads(line) for p in (root/"store/events").glob("*.jsonl") for line in p.read_text().splitlines()]
+    report=reconstruct(events)
+    config=json.loads((root/"store/store.json").read_text())
+    good=[e for e in events if e["status"]=="ok"]
+    for e in good:
+        if e["nodes"]!={str(config["node"]):config["capacity"]//4096}:raise ValueError("payload residency")
+        if e["lock_nodes"]!={str(config["lock_node"]):1}:raise ValueError("lock residency")
+    life=[json.loads(line) for p in (root/"store").glob("dsec-*.jsonl") for line in p.read_text().splitlines()]
+    pins={e["token"]:e for e in life if e["event"]=="pin"}
+    unpins={e["token"]:e for e in life if e["event"]=="unpin"}
+    if set(pins)!=set(unpins):raise ValueError("undrained or unmatched grants")
+    grants=[e["grant_ns"] for e in pins.values()]
+    revokes=[e["revoke_ns"] for e in unpins.values()]
+    report["grant_path"]=dict(samples=len(grants),grant_p50_us=percentile(grants,.5)/1000 if grants else None,
+        grant_p95_us=percentile(grants,.95)/1000 if grants else None,
+        release_p50_us=percentile(revokes,.5)/1000 if revokes else None,
+        scope="Python/CXL registry per-tool acquire/check/pin; includes cold mapping; not hardware access-control latency")
+    manifest=json.loads((root/"manifest.json").read_text())
+    report["validation"]=dict(status=manifest["status"],checks=["unique events and committed versions",
+        "read-to-producer linkage","version overwrite order","lock and payload resident CXL pages","balanced grant pins"],
+        backend=config["lock_provenance"],episode_kind=manifest["kind"])
+    dump(root/"arvm-dataflow.json",report)
+    return report

@@ -1,0 +1,36 @@
+digraph profile {
+rankdir=LR; bgcolor="white"; nodesep=0.18; ranksep=0.32; margin=0;
+graph [fontname="Helvetica", fontsize=11];
+node [fontname="Helvetica", fontsize=10, penwidth=0.8, margin="0.07,0.04"];
+edge [color="#66727A", arrowsize=0.55, penwidth=0.75];
+n0 [label="synthesis", shape=box, color="#A0522D", style=filled, fillcolor="#FCF0E8"];
+n1 [label="review-0 v1", shape=ellipse, color="#287B8E", style=filled, fillcolor="#EAF4F6"];
+n2 [label="review-1 v1", shape=ellipse, color="#287B8E", style=filled, fillcolor="#EAF4F6"];
+n3 [label="corpus v0", shape=ellipse, color="#287B8E", style=filled, fillcolor="#EAF4F6"];
+n4 [label="answer v1", shape=ellipse, color="#287B8E", style=filled, fillcolor="#EAF4F6"];
+n5 [label="Peer 1", shape=box, color="#A0522D", style=filled, fillcolor="#FCF0E8"];
+n6 [label="draft-1 v1", shape=ellipse, color="#287B8E", style=filled, fillcolor="#EAF4F6"];
+n7 [label="draft-0 v1", shape=ellipse, color="#287B8E", style=filled, fillcolor="#EAF4F6"];
+n8 [label="Peer 0", shape=box, color="#A0522D", style=filled, fillcolor="#FCF0E8"];
+n9 [label="Draft 1", shape=box, color="#A0522D", style=filled, fillcolor="#FCF0E8"];
+n10 [label="Draft 0", shape=box, color="#A0522D", style=filled, fillcolor="#FCF0E8"];
+n1 -> n0;
+n2 -> n0;
+n3 -> n0 [style=dashed, color="#97A2A8"];
+n0 -> n4;
+n6 -> n5;
+n7 -> n5;
+n3 -> n5 [style=dashed, color="#97A2A8"];
+n5 -> n2;
+n7 -> n8;
+n6 -> n8;
+n3 -> n8 [style=dashed, color="#97A2A8"];
+n8 -> n1;
+n3 -> n9 [style=dashed, color="#97A2A8"];
+n9 -> n6;
+n3 -> n10 [style=dashed, color="#97A2A8"];
+n10 -> n7;
+{rank=same; n10;n9;}
+{rank=same; n8;n5;}
+{rank=same; n0;}
+}

@@ -1,0 +1,8 @@
+{
+  "object": "answer",
+  "version": 1,
+  "producer": "synthesis",
+  "text": "# Synthesis: Admission & Retirement Safety\n\n## Implemented Guarantees\n- **Admission**: `contract.admit` validates scope and capacity; `sandbox.admit` ensures state transitions and dependencies.\n- **Retirement**: `Registry.retire` enforces pin safety, session root checks, and consumer retention.\n\n## Limitations\n- `ObjectManager.retire` lacks pin checks; only flags retiring and increments epoch.\n- `validate()` internals are opaque; scope bypass potential unverified.\n- Design separation may allow unsafe retirement if `ObjectManager` is used directly.\n\n## Proposed Test\n`test_retire_pin_safety_consistency`: Pin object via Registry, retire via ObjectManager, then attempt access. Assert safety enforcement holds despite bypass. Ensures pin safety isn't lost in mixed paths.",
+  "logical_bytes": 775,
+  "truncated": false
+}

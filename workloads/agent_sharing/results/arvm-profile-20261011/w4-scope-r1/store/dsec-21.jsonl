@@ -1,0 +1,12 @@
+{"event": "pin", "ns": 604538855388338, "pid": 21, "agent": "draft-1", "object": "corpus", "op": "read", "token": "ad2b3154cf994e969778ce240e31c9c8", "grant_ns": 289931, "generation": 0}
+{"event": "unpin", "ns": 604538864552365, "pid": 21, "agent": "draft-1", "object": "corpus", "token": "ad2b3154cf994e969778ce240e31c9c8", "revoke_ns": 124009}
+{"event": "pin", "ns": 604538864760902, "pid": 21, "agent": "draft-1", "object": "draft-1", "op": "read", "token": "e717098c2cab4ed3ad5c9ad273a8da1a", "grant_ns": 79751, "generation": 0}
+{"event": "unpin", "ns": 604538871103594, "pid": 21, "agent": "draft-1", "object": "draft-1", "token": "e717098c2cab4ed3ad5c9ad273a8da1a", "revoke_ns": 122376}
+{"event": "pin", "ns": 604541238693281, "pid": 21, "agent": "draft-1", "object": "corpus", "op": "read", "token": "b4258259f8384cecade2e7580b985227", "grant_ns": 272434, "generation": 0}
+{"event": "unpin", "ns": 604541240453424, "pid": 21, "agent": "draft-1", "object": "corpus", "token": "b4258259f8384cecade2e7580b985227", "revoke_ns": 110058}
+{"event": "pin", "ns": 604544878208383, "pid": 21, "agent": "draft-1", "object": "scratch-1", "op": "append", "token": "c7f69584d58e437c87ff548e2affd635", "grant_ns": 236980, "generation": 0}
+{"event": "unpin", "ns": 604544887360803, "pid": 21, "agent": "draft-1", "object": "scratch-1", "token": "c7f69584d58e437c87ff548e2affd635", "revoke_ns": 156047}
+{"event": "pin", "ns": 604550015390935, "pid": 21, "agent": "draft-1", "object": "draft-1", "op": "write", "token": "acaf868f6daa44e28b40ec58320f935c", "grant_ns": 318053, "generation": 0}
+{"event": "unpin", "ns": 604550017252562, "pid": 21, "agent": "draft-1", "object": "draft-1", "token": "acaf868f6daa44e28b40ec58320f935c", "revoke_ns": 241266}
+{"event": "pin", "ns": 604554218499824, "pid": 21, "agent": "draft-1", "object": "ledger", "op": "append", "token": "1592568e4b5b4a1686b603efe56fc256", "grant_ns": 421240, "generation": 0}
+{"event": "unpin", "ns": 604554228744974, "pid": 21, "agent": "draft-1", "object": "ledger", "token": "1592568e4b5b4a1686b603efe56fc256", "revoke_ns": 168696}

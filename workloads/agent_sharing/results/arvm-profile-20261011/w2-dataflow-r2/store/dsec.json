@@ -1,0 +1,235 @@
+{
+  "schema": 2,
+  "sandboxes": {
+    "draft-0": {
+      "actor": "reviewer-0",
+      "phase": "draft",
+      "depends_on": [],
+      "grants": {
+        "read": [
+          "corpus",
+          "ledger",
+          "answer",
+          "scratch-0",
+          "scratch-1",
+          "draft-0",
+          "draft-1",
+          "review-0",
+          "review-1"
+        ],
+        "write": [
+          "draft-0"
+        ],
+        "append": [
+          "scratch-0",
+          "ledger"
+        ]
+      },
+      "effects": {
+        "read": [
+          "corpus",
+          "draft-0"
+        ],
+        "write": [
+          "draft-0"
+        ],
+        "append": [
+          "scratch-0",
+          "ledger"
+        ]
+      },
+      "state": "completed",
+      "generation": 0,
+      "started_ns": 604666557335525,
+      "ended_ns": 604676150054665
+    },
+    "draft-1": {
+      "actor": "reviewer-1",
+      "phase": "draft",
+      "depends_on": [],
+      "grants": {
+        "read": [
+          "corpus",
+          "ledger",
+          "answer",
+          "scratch-0",
+          "scratch-1",
+          "draft-0",
+          "draft-1",
+          "review-0",
+          "review-1"
+        ],
+        "write": [
+          "draft-1"
+        ],
+        "append": [
+          "scratch-1",
+          "ledger"
+        ]
+      },
+      "effects": {
+        "read": [
+          "corpus",
+          "draft-1"
+        ],
+        "write": [
+          "draft-1"
+        ],
+        "append": [
+          "scratch-1",
+          "ledger"
+        ]
+      },
+      "state": "completed",
+      "generation": 0,
+      "started_ns": 604666557431811,
+      "ended_ns": 604676349862031
+    },
+    "review-0": {
+      "actor": "reviewer-0",
+      "phase": "peer-review",
+      "depends_on": [
+        "draft-0",
+        "draft-1"
+      ],
+      "grants": {
+        "read": [
+          "corpus",
+          "ledger",
+          "answer",
+          "scratch-0",
+          "scratch-1",
+          "draft-0",
+          "draft-1",
+          "review-0",
+          "review-1"
+        ],
+        "write": [
+          "review-0"
+        ],
+        "append": [
+          "ledger"
+        ]
+      },
+      "effects": {
+        "read": [
+          "corpus",
+          "draft-0",
+          "draft-1",
+          "review-0"
+        ],
+        "write": [
+          "review-0"
+        ],
+        "append": [
+          "ledger"
+        ]
+      },
+      "state": "completed",
+      "generation": 0,
+      "started_ns": 604676353903620,
+      "ended_ns": 604686496239182
+    },
+    "review-1": {
+      "actor": "reviewer-1",
+      "phase": "peer-review",
+      "depends_on": [
+        "draft-0",
+        "draft-1"
+      ],
+      "grants": {
+        "read": [
+          "corpus",
+          "ledger",
+          "answer",
+          "scratch-0",
+          "scratch-1",
+          "draft-0",
+          "draft-1",
+          "review-0",
+          "review-1"
+        ],
+        "write": [
+          "review-1"
+        ],
+        "append": [
+          "ledger"
+        ]
+      },
+      "effects": {
+        "read": [
+          "corpus",
+          "draft-1",
+          "draft-0",
+          "review-1"
+        ],
+        "write": [
+          "review-1"
+        ],
+        "append": [
+          "ledger"
+        ]
+      },
+      "state": "completed",
+      "generation": 0,
+      "started_ns": 604676353999555,
+      "ended_ns": 604686658645381
+    },
+    "synthesis": {
+      "actor": "synthesizer",
+      "phase": "synthesis",
+      "depends_on": [
+        "review-0",
+        "review-1"
+      ],
+      "grants": {
+        "read": [
+          "corpus",
+          "ledger",
+          "answer",
+          "scratch-0",
+          "scratch-1",
+          "draft-0",
+          "draft-1",
+          "review-0",
+          "review-1"
+        ],
+        "write": [
+          "answer"
+        ]
+      },
+      "effects": {
+        "read": [
+          "corpus",
+          "ledger",
+          "answer",
+          "review-0",
+          "review-1"
+        ],
+        "write": [
+          "answer"
+        ]
+      },
+      "state": "completed",
+      "generation": 0,
+      "started_ns": 604686664230103,
+      "ended_ns": 604696575062258
+    }
+  },
+  "pins": {},
+  "retired": [
+    "scratch-0",
+    "scratch-1",
+    "draft-0",
+    "draft-1",
+    "corpus",
+    "ledger",
+    "review-0",
+    "review-1",
+    "answer"
+  ],
+  "created_ns": 604666552840227,
+  "state_location": "CXL shared memory",
+  "retention_policy": "dataflow",
+  "session_roots": []
+}

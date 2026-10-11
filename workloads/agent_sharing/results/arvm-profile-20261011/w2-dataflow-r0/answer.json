@@ -1,0 +1,8 @@
+{
+  "object": "answer",
+  "version": 1,
+  "producer": "synthesis",
+  "text": "Synthesis: Pin lifetime guarantees via retire() pre-checks (lines 655-660) block retirement of pinned/session-root/scheduled objects. Retired state is administrative only\u2014cleanup deferred with no GC/drop. Guarantees: 1) Pin protection prevents unsafe retirement, 2) Scope validation at admission, 3) Epoch tracking. Limitations: 1) Deferred cleanup leaves objects in memory, 2) Incomplete source context. Test: Verify pinned object retirement raises RuntimeError without triggering cleanup callbacks.",
+  "logical_bytes": 502,
+  "truncated": false
+}

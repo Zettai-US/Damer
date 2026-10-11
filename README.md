@@ -602,7 +602,13 @@ OpenCode agents to CXL shared state through our DSec prototype. arVM compiles
 accepted task effects into sharing, admission and retention contracts; observed
 object versions reconstruct RAW/WAR/WAW dataflow after execution. All current
 data/control locks use the pinned `mutex_benchmark/fast_exp` CXL SpinLock.
-The local Qwen model is configured and six live episodes are recorded, alongside
-software grant/revoke measurements. NVIDIA Sentry comparison remains unmeasured:
+The local Qwen model is configured. Twelve additional multi-round episodes
+(84 task sessions, 484 operations) compare scope-only and future-use retention:
+median managed CXL payload occupancy falls 22.4% and 23.3% with 2 and 4 reviewers.
+All trials publish outputs; 11/12 follow every required tool step. Concurrent
+PSS probes, raw versioned traces, and paper figures accompany these results.
+See the [updated manuscript](6ac4087cf755acfa13cf5a59/main.pdf).
+The earlier six live episodes and software grant/revoke measurements remain
+separate results. NVIDIA Sentry comparison remains unmeasured:
 this machine has no BlueField hardware or configured Sentry endpoint. Historical
 file-lock controls are excluded from the current results.

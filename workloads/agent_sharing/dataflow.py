@@ -26,8 +26,8 @@ def compile_memory_contract(tasks,object_versions):
     for task in tasks:visit(task)
     objects=[];edges=[]
     for key,version in sorted(object_versions.items()):
-        readers=[a for a,t in tasks.items() if key in t["grants"].get("read",[])]
-        writers=[a for a,t in tasks.items() if any(key in t["grants"].get(op,[]) for op in ["write","append"])]
+        readers=[a for a,t in tasks.items() if key in t.get("effects",t["grants"]).get("read",[])]
+        writers=[a for a,t in tasks.items() if any(key in t.get("effects",t["grants"]).get(op,[]) for op in ["write","append"])]
         for writer in writers:
             for reader in readers:
                 if writer in ancestors[reader]:edges.append(dict(producer=writer,consumer=reader,object=key,type="publication_dependency"))
@@ -42,6 +42,8 @@ def compile_memory_contract(tasks,object_versions):
     for task in tasks.values():
         for op,keys in task["grants"].items():
             if op not in {"read","write","append"} or not set(keys)<=known:raise ValueError("unknown effect")
+        for op,keys in task.get("effects",task["grants"]).items():
+            if not set(keys)<=set(task["grants"].get(op,[])):raise ValueError("effect exceeds scope")
     return dict(schema="arvm-memory-contract-v1",tasks=tasks,admission_order=order,objects=objects,
         data_dependencies=edges,authority="trusted harness effect summaries",reclamation="DSec checks pending tasks and in-flight pins",
         limitations=["Object-granularity effects; no automatic alias analysis for arbitrary pointers",

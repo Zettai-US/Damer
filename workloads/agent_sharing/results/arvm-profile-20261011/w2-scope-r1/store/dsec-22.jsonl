@@ -1,0 +1,22 @@
+{"event": "pin", "ns": 604511056667285, "pid": 22, "agent": "draft-0", "object": "corpus", "op": "read", "token": "ed66a17e7b5647d1b8e303e533d036e1", "grant_ns": 224501, "generation": 0}
+{"event": "unpin", "ns": 604511066658049, "pid": 22, "agent": "draft-0", "object": "corpus", "token": "ed66a17e7b5647d1b8e303e533d036e1", "revoke_ns": 112711}
+{"event": "pin", "ns": 604512218115601, "pid": 22, "agent": "draft-0", "object": "scratch-0", "op": "append", "token": "accb017898f74cdaa16459ff6b45c0f0", "grant_ns": 253264, "generation": 0}
+{"event": "unpin", "ns": 604512226308524, "pid": 22, "agent": "draft-0", "object": "scratch-0", "token": "accb017898f74cdaa16459ff6b45c0f0", "revoke_ns": 99291}
+{"event": "pin", "ns": 604512226485052, "pid": 22, "agent": "draft-0", "object": "draft-0", "op": "read", "token": "04c76685967e420591a34ef329619eb8", "grant_ns": 49205, "generation": 0}
+{"event": "unpin", "ns": 604512233519695, "pid": 22, "agent": "draft-0", "object": "draft-0", "token": "04c76685967e420591a34ef329619eb8", "revoke_ns": 94613}
+{"event": "pin", "ns": 604513841883709, "pid": 22, "agent": "draft-0", "object": "draft-0", "op": "write", "token": "56787aafabb045f8a32527e8fa0dd437", "grant_ns": 248207, "generation": 0}
+{"event": "unpin", "ns": 604513843897317, "pid": 22, "agent": "draft-0", "object": "draft-0", "token": "56787aafabb045f8a32527e8fa0dd437", "revoke_ns": 124258}
+{"event": "pin", "ns": 604513844193958, "pid": 22, "agent": "draft-0", "object": "ledger", "op": "append", "token": "88a87dad05e64ad2ab264fcdba186fe8", "grant_ns": 70256, "generation": 0}
+{"event": "unpin", "ns": 604513852119234, "pid": 22, "agent": "draft-0", "object": "ledger", "token": "88a87dad05e64ad2ab264fcdba186fe8", "revoke_ns": 61574}
+{"event": "pin", "ns": 604529287154551, "pid": 22, "agent": "synthesis", "object": "review-0", "op": "read", "token": "1699ad7ec4af4c5ab560e415f79360f0", "grant_ns": 260957, "generation": 0}
+{"event": "unpin", "ns": 604529295749855, "pid": 22, "agent": "synthesis", "object": "review-0", "token": "1699ad7ec4af4c5ab560e415f79360f0", "revoke_ns": 100532}
+{"event": "pin", "ns": 604529295935877, "pid": 22, "agent": "synthesis", "object": "review-1", "op": "read", "token": "d528723724134e36b756fa90e45277aa", "grant_ns": 60301, "generation": 0}
+{"event": "unpin", "ns": 604529302403670, "pid": 22, "agent": "synthesis", "object": "review-1", "token": "d528723724134e36b756fa90e45277aa", "revoke_ns": 94293}
+{"event": "pin", "ns": 604529302580989, "pid": 22, "agent": "synthesis", "object": "ledger", "op": "read", "token": "0cca01942cba4086b5cb777ecc211750", "grant_ns": 59851, "generation": 0}
+{"event": "unpin", "ns": 604529308562373, "pid": 22, "agent": "synthesis", "object": "ledger", "token": "0cca01942cba4086b5cb777ecc211750", "revoke_ns": 87943}
+{"event": "pin", "ns": 604529308734364, "pid": 22, "agent": "synthesis", "object": "corpus", "op": "read", "token": "49840ded6ddc46a38a8a19a8de263ee5", "grant_ns": 59310, "generation": 0}
+{"event": "unpin", "ns": 604529314782570, "pid": 22, "agent": "synthesis", "object": "corpus", "token": "49840ded6ddc46a38a8a19a8de263ee5", "revoke_ns": 73953}
+{"event": "pin", "ns": 604532836588798, "pid": 22, "agent": "synthesis", "object": "answer", "op": "read", "token": "2933075e13ad41a9a319e08c5e21f05f", "grant_ns": 183799, "generation": 0}
+{"event": "unpin", "ns": 604532844906410, "pid": 22, "agent": "synthesis", "object": "answer", "token": "2933075e13ad41a9a319e08c5e21f05f", "revoke_ns": 116957}
+{"event": "pin", "ns": 604533919981041, "pid": 22, "agent": "synthesis", "object": "answer", "op": "write", "token": "1bb0822cc3bf4ce79e9a3e151dcee5ec", "grant_ns": 194145, "generation": 0}
+{"event": "unpin", "ns": 604533921591947, "pid": 22, "agent": "synthesis", "object": "answer", "token": "1bb0822cc3bf4ce79e9a3e151dcee5ec", "revoke_ns": 58920}

@@ -1,0 +1,928 @@
+{
+  "schema": "arvm-memory-contract-v1",
+  "tasks": {
+    "draft-0": {
+      "actor": "reviewer-0",
+      "phase": "draft",
+      "depends_on": [],
+      "grants": {
+        "read": [
+          "corpus",
+          "ledger",
+          "answer",
+          "scratch-0",
+          "scratch-1",
+          "scratch-2",
+          "scratch-3",
+          "draft-0",
+          "draft-1",
+          "draft-2",
+          "draft-3",
+          "review-0",
+          "review-1",
+          "review-2",
+          "review-3"
+        ],
+        "write": [
+          "draft-0"
+        ],
+        "append": [
+          "scratch-0",
+          "ledger"
+        ]
+      },
+      "effects": {
+        "read": [
+          "corpus",
+          "draft-0"
+        ],
+        "write": [
+          "draft-0"
+        ],
+        "append": [
+          "scratch-0",
+          "ledger"
+        ]
+      }
+    },
+    "draft-1": {
+      "actor": "reviewer-1",
+      "phase": "draft",
+      "depends_on": [],
+      "grants": {
+        "read": [
+          "corpus",
+          "ledger",
+          "answer",
+          "scratch-0",
+          "scratch-1",
+          "scratch-2",
+          "scratch-3",
+          "draft-0",
+          "draft-1",
+          "draft-2",
+          "draft-3",
+          "review-0",
+          "review-1",
+          "review-2",
+          "review-3"
+        ],
+        "write": [
+          "draft-1"
+        ],
+        "append": [
+          "scratch-1",
+          "ledger"
+        ]
+      },
+      "effects": {
+        "read": [
+          "corpus",
+          "draft-1"
+        ],
+        "write": [
+          "draft-1"
+        ],
+        "append": [
+          "scratch-1",
+          "ledger"
+        ]
+      }
+    },
+    "draft-2": {
+      "actor": "reviewer-2",
+      "phase": "draft",
+      "depends_on": [],
+      "grants": {
+        "read": [
+          "corpus",
+          "ledger",
+          "answer",
+          "scratch-0",
+          "scratch-1",
+          "scratch-2",
+          "scratch-3",
+          "draft-0",
+          "draft-1",
+          "draft-2",
+          "draft-3",
+          "review-0",
+          "review-1",
+          "review-2",
+          "review-3"
+        ],
+        "write": [
+          "draft-2"
+        ],
+        "append": [
+          "scratch-2",
+          "ledger"
+        ]
+      },
+      "effects": {
+        "read": [
+          "corpus",
+          "draft-2"
+        ],
+        "write": [
+          "draft-2"
+        ],
+        "append": [
+          "scratch-2",
+          "ledger"
+        ]
+      }
+    },
+    "draft-3": {
+      "actor": "reviewer-3",
+      "phase": "draft",
+      "depends_on": [],
+      "grants": {
+        "read": [
+          "corpus",
+          "ledger",
+          "answer",
+          "scratch-0",
+          "scratch-1",
+          "scratch-2",
+          "scratch-3",
+          "draft-0",
+          "draft-1",
+          "draft-2",
+          "draft-3",
+          "review-0",
+          "review-1",
+          "review-2",
+          "review-3"
+        ],
+        "write": [
+          "draft-3"
+        ],
+        "append": [
+          "scratch-3",
+          "ledger"
+        ]
+      },
+      "effects": {
+        "read": [
+          "corpus",
+          "draft-3"
+        ],
+        "write": [
+          "draft-3"
+        ],
+        "append": [
+          "scratch-3",
+          "ledger"
+        ]
+      }
+    },
+    "review-0": {
+      "actor": "reviewer-0",
+      "phase": "peer-review",
+      "depends_on": [
+        "draft-0",
+        "draft-1",
+        "draft-2",
+        "draft-3"
+      ],
+      "grants": {
+        "read": [
+          "corpus",
+          "ledger",
+          "answer",
+          "scratch-0",
+          "scratch-1",
+          "scratch-2",
+          "scratch-3",
+          "draft-0",
+          "draft-1",
+          "draft-2",
+          "draft-3",
+          "review-0",
+          "review-1",
+          "review-2",
+          "review-3"
+        ],
+        "write": [
+          "review-0"
+        ],
+        "append": [
+          "ledger"
+        ]
+      },
+      "effects": {
+        "read": [
+          "corpus",
+          "draft-0",
+          "draft-1",
+          "review-0"
+        ],
+        "write": [
+          "review-0"
+        ],
+        "append": [
+          "ledger"
+        ]
+      }
+    },
+    "review-1": {
+      "actor": "reviewer-1",
+      "phase": "peer-review",
+      "depends_on": [
+        "draft-0",
+        "draft-1",
+        "draft-2",
+        "draft-3"
+      ],
+      "grants": {
+        "read": [
+          "corpus",
+          "ledger",
+          "answer",
+          "scratch-0",
+          "scratch-1",
+          "scratch-2",
+          "scratch-3",
+          "draft-0",
+          "draft-1",
+          "draft-2",
+          "draft-3",
+          "review-0",
+          "review-1",
+          "review-2",
+          "review-3"
+        ],
+        "write": [
+          "review-1"
+        ],
+        "append": [
+          "ledger"
+        ]
+      },
+      "effects": {
+        "read": [
+          "corpus",
+          "draft-1",
+          "draft-2",
+          "review-1"
+        ],
+        "write": [
+          "review-1"
+        ],
+        "append": [
+          "ledger"
+        ]
+      }
+    },
+    "review-2": {
+      "actor": "reviewer-2",
+      "phase": "peer-review",
+      "depends_on": [
+        "draft-0",
+        "draft-1",
+        "draft-2",
+        "draft-3"
+      ],
+      "grants": {
+        "read": [
+          "corpus",
+          "ledger",
+          "answer",
+          "scratch-0",
+          "scratch-1",
+          "scratch-2",
+          "scratch-3",
+          "draft-0",
+          "draft-1",
+          "draft-2",
+          "draft-3",
+          "review-0",
+          "review-1",
+          "review-2",
+          "review-3"
+        ],
+        "write": [
+          "review-2"
+        ],
+        "append": [
+          "ledger"
+        ]
+      },
+      "effects": {
+        "read": [
+          "corpus",
+          "draft-2",
+          "draft-3",
+          "review-2"
+        ],
+        "write": [
+          "review-2"
+        ],
+        "append": [
+          "ledger"
+        ]
+      }
+    },
+    "review-3": {
+      "actor": "reviewer-3",
+      "phase": "peer-review",
+      "depends_on": [
+        "draft-0",
+        "draft-1",
+        "draft-2",
+        "draft-3"
+      ],
+      "grants": {
+        "read": [
+          "corpus",
+          "ledger",
+          "answer",
+          "scratch-0",
+          "scratch-1",
+          "scratch-2",
+          "scratch-3",
+          "draft-0",
+          "draft-1",
+          "draft-2",
+          "draft-3",
+          "review-0",
+          "review-1",
+          "review-2",
+          "review-3"
+        ],
+        "write": [
+          "review-3"
+        ],
+        "append": [
+          "ledger"
+        ]
+      },
+      "effects": {
+        "read": [
+          "corpus",
+          "draft-3",
+          "draft-0",
+          "review-3"
+        ],
+        "write": [
+          "review-3"
+        ],
+        "append": [
+          "ledger"
+        ]
+      }
+    },
+    "synthesis": {
+      "actor": "synthesizer",
+      "phase": "synthesis",
+      "depends_on": [
+        "review-0",
+        "review-1",
+        "review-2",
+        "review-3"
+      ],
+      "grants": {
+        "read": [
+          "corpus",
+          "ledger",
+          "answer",
+          "scratch-0",
+          "scratch-1",
+          "scratch-2",
+          "scratch-3",
+          "draft-0",
+          "draft-1",
+          "draft-2",
+          "draft-3",
+          "review-0",
+          "review-1",
+          "review-2",
+          "review-3"
+        ],
+        "write": [
+          "answer"
+        ]
+      },
+      "effects": {
+        "read": [
+          "corpus",
+          "ledger",
+          "answer",
+          "review-0",
+          "review-1",
+          "review-2",
+          "review-3"
+        ],
+        "write": [
+          "answer"
+        ]
+      }
+    }
+  },
+  "admission_order": [
+    "draft-0",
+    "draft-1",
+    "draft-2",
+    "draft-3",
+    "review-0",
+    "review-1",
+    "review-2",
+    "review-3",
+    "synthesis"
+  ],
+  "objects": [
+    {
+      "object": "answer",
+      "alias_set": "answer",
+      "initial_version": 0,
+      "readers": [
+        "synthesis"
+      ],
+      "writers": [
+        "synthesis"
+      ],
+      "sharing": "synchronized mutable backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [],
+      "retention_until_tasks_complete": [
+        "synthesis"
+      ],
+      "version_binding": "resolve current version at admitted tool call"
+    },
+    {
+      "object": "corpus",
+      "alias_set": "corpus",
+      "initial_version": 0,
+      "readers": [
+        "draft-0",
+        "draft-1",
+        "draft-2",
+        "draft-3",
+        "review-0",
+        "review-1",
+        "review-2",
+        "review-3",
+        "synthesis"
+      ],
+      "writers": [],
+      "sharing": "immutable common backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [],
+      "retention_until_tasks_complete": [
+        "draft-0",
+        "draft-1",
+        "draft-2",
+        "draft-3",
+        "review-0",
+        "review-1",
+        "review-2",
+        "review-3",
+        "synthesis"
+      ],
+      "version_binding": "fixed"
+    },
+    {
+      "object": "draft-0",
+      "alias_set": "draft-0",
+      "initial_version": 0,
+      "readers": [
+        "draft-0",
+        "review-0",
+        "review-3"
+      ],
+      "writers": [
+        "draft-0"
+      ],
+      "sharing": "synchronized mutable backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [],
+      "retention_until_tasks_complete": [
+        "draft-0",
+        "review-0",
+        "review-3"
+      ],
+      "version_binding": "resolve current version at admitted tool call"
+    },
+    {
+      "object": "draft-1",
+      "alias_set": "draft-1",
+      "initial_version": 0,
+      "readers": [
+        "draft-1",
+        "review-0",
+        "review-1"
+      ],
+      "writers": [
+        "draft-1"
+      ],
+      "sharing": "synchronized mutable backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [],
+      "retention_until_tasks_complete": [
+        "draft-1",
+        "review-0",
+        "review-1"
+      ],
+      "version_binding": "resolve current version at admitted tool call"
+    },
+    {
+      "object": "draft-2",
+      "alias_set": "draft-2",
+      "initial_version": 0,
+      "readers": [
+        "draft-2",
+        "review-1",
+        "review-2"
+      ],
+      "writers": [
+        "draft-2"
+      ],
+      "sharing": "synchronized mutable backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [],
+      "retention_until_tasks_complete": [
+        "draft-2",
+        "review-1",
+        "review-2"
+      ],
+      "version_binding": "resolve current version at admitted tool call"
+    },
+    {
+      "object": "draft-3",
+      "alias_set": "draft-3",
+      "initial_version": 0,
+      "readers": [
+        "draft-3",
+        "review-2",
+        "review-3"
+      ],
+      "writers": [
+        "draft-3"
+      ],
+      "sharing": "synchronized mutable backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [],
+      "retention_until_tasks_complete": [
+        "draft-3",
+        "review-2",
+        "review-3"
+      ],
+      "version_binding": "resolve current version at admitted tool call"
+    },
+    {
+      "object": "ledger",
+      "alias_set": "ledger",
+      "initial_version": 0,
+      "readers": [
+        "synthesis"
+      ],
+      "writers": [
+        "draft-0",
+        "draft-1",
+        "draft-2",
+        "draft-3",
+        "review-0",
+        "review-1",
+        "review-2",
+        "review-3"
+      ],
+      "sharing": "synchronized mutable backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [
+        [
+          "draft-0",
+          "draft-1"
+        ],
+        [
+          "draft-0",
+          "draft-2"
+        ],
+        [
+          "draft-0",
+          "draft-3"
+        ],
+        [
+          "draft-1",
+          "draft-2"
+        ],
+        [
+          "draft-1",
+          "draft-3"
+        ],
+        [
+          "draft-2",
+          "draft-3"
+        ],
+        [
+          "review-0",
+          "review-1"
+        ],
+        [
+          "review-0",
+          "review-2"
+        ],
+        [
+          "review-0",
+          "review-3"
+        ],
+        [
+          "review-1",
+          "review-2"
+        ],
+        [
+          "review-1",
+          "review-3"
+        ],
+        [
+          "review-2",
+          "review-3"
+        ]
+      ],
+      "retention_until_tasks_complete": [
+        "draft-0",
+        "draft-1",
+        "draft-2",
+        "draft-3",
+        "review-0",
+        "review-1",
+        "review-2",
+        "review-3",
+        "synthesis"
+      ],
+      "version_binding": "resolve current version at admitted tool call"
+    },
+    {
+      "object": "review-0",
+      "alias_set": "review-0",
+      "initial_version": 0,
+      "readers": [
+        "review-0",
+        "synthesis"
+      ],
+      "writers": [
+        "review-0"
+      ],
+      "sharing": "synchronized mutable backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [],
+      "retention_until_tasks_complete": [
+        "review-0",
+        "synthesis"
+      ],
+      "version_binding": "resolve current version at admitted tool call"
+    },
+    {
+      "object": "review-1",
+      "alias_set": "review-1",
+      "initial_version": 0,
+      "readers": [
+        "review-1",
+        "synthesis"
+      ],
+      "writers": [
+        "review-1"
+      ],
+      "sharing": "synchronized mutable backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [],
+      "retention_until_tasks_complete": [
+        "review-1",
+        "synthesis"
+      ],
+      "version_binding": "resolve current version at admitted tool call"
+    },
+    {
+      "object": "review-2",
+      "alias_set": "review-2",
+      "initial_version": 0,
+      "readers": [
+        "review-2",
+        "synthesis"
+      ],
+      "writers": [
+        "review-2"
+      ],
+      "sharing": "synchronized mutable backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [],
+      "retention_until_tasks_complete": [
+        "review-2",
+        "synthesis"
+      ],
+      "version_binding": "resolve current version at admitted tool call"
+    },
+    {
+      "object": "review-3",
+      "alias_set": "review-3",
+      "initial_version": 0,
+      "readers": [
+        "review-3",
+        "synthesis"
+      ],
+      "writers": [
+        "review-3"
+      ],
+      "sharing": "synchronized mutable backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [],
+      "retention_until_tasks_complete": [
+        "review-3",
+        "synthesis"
+      ],
+      "version_binding": "resolve current version at admitted tool call"
+    },
+    {
+      "object": "scratch-0",
+      "alias_set": "scratch-0",
+      "initial_version": 0,
+      "readers": [],
+      "writers": [
+        "draft-0"
+      ],
+      "sharing": "synchronized mutable backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [],
+      "retention_until_tasks_complete": [
+        "draft-0"
+      ],
+      "version_binding": "resolve current version at admitted tool call"
+    },
+    {
+      "object": "scratch-1",
+      "alias_set": "scratch-1",
+      "initial_version": 0,
+      "readers": [],
+      "writers": [
+        "draft-1"
+      ],
+      "sharing": "synchronized mutable backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [],
+      "retention_until_tasks_complete": [
+        "draft-1"
+      ],
+      "version_binding": "resolve current version at admitted tool call"
+    },
+    {
+      "object": "scratch-2",
+      "alias_set": "scratch-2",
+      "initial_version": 0,
+      "readers": [],
+      "writers": [
+        "draft-2"
+      ],
+      "sharing": "synchronized mutable backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [],
+      "retention_until_tasks_complete": [
+        "draft-2"
+      ],
+      "version_binding": "resolve current version at admitted tool call"
+    },
+    {
+      "object": "scratch-3",
+      "alias_set": "scratch-3",
+      "initial_version": 0,
+      "readers": [],
+      "writers": [
+        "draft-3"
+      ],
+      "sharing": "synchronized mutable backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [],
+      "retention_until_tasks_complete": [
+        "draft-3"
+      ],
+      "version_binding": "resolve current version at admitted tool call"
+    }
+  ],
+  "data_dependencies": [
+    {
+      "producer": "draft-0",
+      "consumer": "review-0",
+      "object": "draft-0",
+      "type": "publication_dependency"
+    },
+    {
+      "producer": "draft-0",
+      "consumer": "review-3",
+      "object": "draft-0",
+      "type": "publication_dependency"
+    },
+    {
+      "producer": "draft-1",
+      "consumer": "review-0",
+      "object": "draft-1",
+      "type": "publication_dependency"
+    },
+    {
+      "producer": "draft-1",
+      "consumer": "review-1",
+      "object": "draft-1",
+      "type": "publication_dependency"
+    },
+    {
+      "producer": "draft-2",
+      "consumer": "review-1",
+      "object": "draft-2",
+      "type": "publication_dependency"
+    },
+    {
+      "producer": "draft-2",
+      "consumer": "review-2",
+      "object": "draft-2",
+      "type": "publication_dependency"
+    },
+    {
+      "producer": "draft-3",
+      "consumer": "review-2",
+      "object": "draft-3",
+      "type": "publication_dependency"
+    },
+    {
+      "producer": "draft-3",
+      "consumer": "review-3",
+      "object": "draft-3",
+      "type": "publication_dependency"
+    },
+    {
+      "producer": "draft-0",
+      "consumer": "synthesis",
+      "object": "ledger",
+      "type": "publication_dependency"
+    },
+    {
+      "producer": "draft-1",
+      "consumer": "synthesis",
+      "object": "ledger",
+      "type": "publication_dependency"
+    },
+    {
+      "producer": "draft-2",
+      "consumer": "synthesis",
+      "object": "ledger",
+      "type": "publication_dependency"
+    },
+    {
+      "producer": "draft-3",
+      "consumer": "synthesis",
+      "object": "ledger",
+      "type": "publication_dependency"
+    },
+    {
+      "producer": "review-0",
+      "consumer": "synthesis",
+      "object": "ledger",
+      "type": "publication_dependency"
+    },
+    {
+      "producer": "review-1",
+      "consumer": "synthesis",
+      "object": "ledger",
+      "type": "publication_dependency"
+    },
+    {
+      "producer": "review-2",
+      "consumer": "synthesis",
+      "object": "ledger",
+      "type": "publication_dependency"
+    },
+    {
+      "producer": "review-3",
+      "consumer": "synthesis",
+      "object": "ledger",
+      "type": "publication_dependency"
+    },
+    {
+      "producer": "review-0",
+      "consumer": "synthesis",
+      "object": "review-0",
+      "type": "publication_dependency"
+    },
+    {
+      "producer": "review-1",
+      "consumer": "synthesis",
+      "object": "review-1",
+      "type": "publication_dependency"
+    },
+    {
+      "producer": "review-2",
+      "consumer": "synthesis",
+      "object": "review-2",
+      "type": "publication_dependency"
+    },
+    {
+      "producer": "review-3",
+      "consumer": "synthesis",
+      "object": "review-3",
+      "type": "publication_dependency"
+    }
+  ],
+  "authority": "trusted harness effect summaries",
+  "reclamation": "DSec checks pending tasks and in-flight pins",
+  "limitations": [
+    "Object-granularity effects; no automatic alias analysis for arbitrary pointers",
+    "Scopes are local MCP enforcement, not DPU isolation or transparent memory revocation"
+  ]
+}

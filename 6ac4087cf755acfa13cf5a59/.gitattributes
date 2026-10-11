@@ -1,0 +1,4 @@
+# Preserve the official template and archived observations byte for byte.
+usenix.sty -text -whitespace
+experiments/results/** -text -whitespace
+analysis/*.csv -text whitespace=-blank-at-eof,cr-at-eol
