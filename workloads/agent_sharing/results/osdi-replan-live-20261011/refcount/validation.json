@@ -1,0 +1,16 @@
+{
+  "status": "complete",
+  "tasks": 5,
+  "events": 29,
+  "protocol_complete": true,
+  "replan_commits": 2,
+  "epochs": 3,
+  "all_payload_reclaimed": true,
+  "limitations": [
+    "Only instrumented MCP shared objects; not all process/KV-cache/LLM memory",
+    "RAW/WAR/WAW are observed version dependencies; may_influence is conservative, not semantic proof",
+    "Idle gaps are retrospective retention observations, not a prediction of future consumers",
+    "Version copy opportunity is logical payload bytes; model prompts/RPC still copy returned text",
+    "Mutable versions reuse one backing allocation and are not persistent snapshots"
+  ]
+}

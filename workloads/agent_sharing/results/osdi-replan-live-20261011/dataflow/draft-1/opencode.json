@@ -1,0 +1,62 @@
+{
+  "model": "local/damer-qwen35",
+  "snapshots": false,
+  "providers": {
+    "local": {
+      "name": "local",
+      "env": [
+        "DAMER_LOCAL_API_KEY"
+      ],
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "baseURL": "http://127.0.0.1:18081/v1"
+      },
+      "models": {
+        "damer-qwen35": {
+          "name": "damer-qwen35",
+          "capabilities": {
+            "tools": true,
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "limit": {
+            "context": 16384,
+            "output": 2048
+          }
+        }
+      }
+    }
+  },
+  "permissions": [
+    {
+      "action": "*",
+      "resource": "*",
+      "effect": "deny"
+    },
+    {
+      "action": "sharing_*",
+      "resource": "*",
+      "effect": "allow"
+    }
+  ],
+  "mcp": {
+    "servers": {
+      "sharing": {
+        "type": "local",
+        "codemode": false,
+        "command": [
+          "/usr/bin/python3",
+          "/root/Damer/workloads/agent_sharing/mcp_server.py",
+          "--store",
+          "/root/Damer/workloads/agent_sharing/results/osdi-replan-live-20261011/dataflow/store",
+          "--agent",
+          "draft-1"
+        ]
+      }
+    }
+  }
+}

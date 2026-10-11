@@ -5,6 +5,8 @@ objects, dependency admission, in-flight pins, retention, and bwrap sandboxes.
 Every shared control/data critical section uses the upstream CXL mutex.
 """
 from contextlib import contextmanager
+from collections import Counter
+from copy import deepcopy
 import json
 import os
 from pathlib import Path
@@ -24,7 +26,7 @@ class DSec:
     def initialize(cls, store, specs, retention_policy="scope", session_roots=()):
         if (store.root/"dsec.json").exists():raise FileExistsError("DSec already initialized")
         objects=store.list_objects()
-        if retention_policy not in {"scope","dataflow"}:raise ValueError("unknown retention policy")
+        if retention_policy not in {"scope","dataflow","refcount"}:raise ValueError("unknown retention policy")
         if not set(session_roots)<=set(objects):raise ValueError("unknown session root")
         for agent,spec in specs.items():
             validate_name(agent)
@@ -33,7 +35,7 @@ class DSec:
                 if access not in {"read","write","append"} or not set(keys)<=set(objects):
                     raise ValueError("invalid object grants")
             for access,keys in spec.get("effects",spec["grants"]).items():
-                if not set(keys)<=set(spec["grants"].get(access,[])):
+                if access not in {"read","write","append"} or not set(keys)<=set(spec["grants"].get(access,[])):
                     raise ValueError("accepted effects exceed access scope")
         # Reject cyclic admission graphs before publishing them.
         visited,active=set(),set()
@@ -44,9 +46,11 @@ class DSec:
             for dep in specs[agent].get("depends_on",[]):visit(dep)
             active.remove(agent);visited.add(agent)
         for agent in specs:visit(agent)
-        state=dict(schema=2,sandboxes={a:dict(**s,state="ready",generation=0) for a,s in specs.items()},
+        state=dict(schema=3,sandboxes={a:dict(**deepcopy(s),state="ready",generation=0) for a,s in specs.items()},
                    pins={},retired=[],created_ns=time.monotonic_ns(),state_location="CXL shared memory",
-                   retention_policy=retention_policy,session_roots=list(session_roots))
+                   retention_policy=retention_policy,session_roots=list(session_roots),plan_epoch=0,
+                   authority={a:deepcopy(s['grants']) for a,s in specs.items()})
+        state['pending_uses']=cls._pending_uses(state['sandboxes'])
         store.record("dsec-registry",initial=state,capacity=262144)
         dump(store.root/"dsec.json",state)
         return cls(store)
@@ -64,8 +68,63 @@ class DSec:
             self.store.write_record("dsec-registry",state)
         finally:self.store.backend.release(grant["token"])
 
-    def admit(self,agent):
+    @staticmethod
+    def _uses(task):
+        return set(key for keys in task.get('effects',task['grants']).values() for key in keys)
+
+    @classmethod
+    def _pending_uses(cls,tasks):
+        return dict(Counter(key for task in tasks.values() if task['state'] in {'ready','running'}
+                            for key in cls._uses(task)))
+
+    def replan(self,replacements,*,expected_epoch,cancel=(),authorized_new=None):
+        """Trusted controller: atomically replace unstarted tasks over existing objects.
+
+        New task authority is supplied independently of the proposed effects.
+        Running/completed tasks are immutable; pins and session roots survive.
+        This is full validation/recount, not the proposed incremental compiler.
+        """
+        from dataflow import compile_memory_contract
+        authorized_new=authorized_new or {}
+        known=set(Store.list_objects(self.store))
+        started=time.monotonic_ns()
         with self.registry() as state:
+            if state.get('plan_epoch',0)!=expected_epoch:raise ValueError('stale plan epoch')
+            tasks=state['sandboxes']
+            changed=set(replacements)|set(cancel)
+            if set(replacements)&set(cancel):raise ValueError('replace and cancel overlap')
+            for name in changed:
+                if name in tasks and tasks[name]['state']!='ready':raise ValueError('only unstarted tasks can change')
+            for name in cancel:
+                if name not in tasks:raise ValueError('unknown cancellation')
+                tasks[name]['state']='cancelled'
+            for name,spec in replacements.items():
+                validate_name(name)
+                if any(k in spec for k in ['state','generation','started_ns','ended_ns']):raise ValueError('reserved task field')
+                ceiling=state['authority'].get(name,authorized_new.get(name))
+                if ceiling is None:raise PermissionError('new task requires independent authority')
+                for op,keys in spec['grants'].items():
+                    if op not in {'read','write','append'} or not set(keys)<=set(ceiling.get(op,[])):
+                        raise PermissionError('plan cannot expand authority')
+                for op,keys in spec.get('effects',spec['grants']).items():
+                    if op not in {'read','write','append'} or not set(keys)<=set(spec['grants'].get(op,[])):
+                        raise PermissionError('effect exceeds scope')
+                if self._uses(spec)&set(state['retired']):raise ValueError('plan references retired backing')
+                generation=tasks[name]['generation']+1 if name in tasks else 0
+                tasks[name]=dict(**deepcopy(spec),state='ready',generation=generation)
+                state['authority'][name]=deepcopy(ceiling)
+            candidate={name:task for name,task in tasks.items() if task['state']!='cancelled'}
+            compile_memory_contract(candidate,{key:None for key in known})
+            state['pending_uses']=self._pending_uses(tasks)
+            state['plan_epoch']=expected_epoch+1
+        self.event('replan',epoch=expected_epoch+1,replaced=sorted(replacements),cancelled=sorted(cancel),
+                   duration_ns=time.monotonic_ns()-started)
+        return expected_epoch+1
+
+    def admit(self,agent,expected_epoch=None):
+        with self.registry() as state:
+            if expected_epoch is not None and state.get('plan_epoch',0)!=expected_epoch:
+                raise ValueError('stale plan epoch')
             task=state["sandboxes"][agent]
             if task["state"]!="ready":raise RuntimeError("sandbox is not ready")
             if any(state["sandboxes"][d]["state"]!="completed" for d in task.get("depends_on",[])):
@@ -80,6 +139,10 @@ class DSec:
             active=[p for p in state["pins"].values() if p["agent"]==agent]
             if active:raise RuntimeError("cannot finish sandbox with in-flight object pins")
             task.update(state="completed" if success else "failed",ended_ns=time.monotonic_ns())
+            if 'pending_uses' in state:
+                for key in self._uses(task):
+                    state['pending_uses'][key]-=1
+                    if not state['pending_uses'][key]:del state['pending_uses'][key]
         self.event("finish",agent=agent,success=success)
 
     @contextmanager
@@ -114,7 +177,12 @@ class DSec:
                 raise PermissionError("grant target unavailable")
             for op in operations:
                 task["grants"][op]=sorted(set(task["grants"].get(op,[]))|{key})
+                if 'authority' in state:
+                    state['authority'][agent][op]=sorted(set(state['authority'][agent].get(op,[]))|{key})
             task["generation"]+=1
+            # Legacy tasks without explicit effects use their grants as the
+            # conservative use set, so authority updates also change liveness.
+            state['pending_uses']=self._pending_uses(state['sandboxes'])
         self.event("grant",agent=agent,object=key,operations=operations,
                    generation=task["generation"],duration_ns=time.monotonic_ns()-begin)
 
@@ -128,7 +196,11 @@ class DSec:
             task=state["sandboxes"][agent]
             task["grants"]={op:[obj for obj in ids if key is not None and obj!=key]
                             for op,ids in task["grants"].items()}
+            if 'authority' in state:
+                state['authority'][agent]={op:[obj for obj in ids if key is not None and obj!=key]
+                                           for op,ids in state['authority'][agent].items()}
             task["generation"]+=1
+            state['pending_uses']=self._pending_uses(state['sandboxes'])
         self.event("revoke",agent=agent,object=key,generation=task["generation"],duration_ns=time.monotonic_ns()-begin)
 
     def snapshot(self):
@@ -138,10 +210,13 @@ class DSec:
         with self.registry() as state:
             if key in state.get("session_roots",[]):raise RuntimeError("object retained by session root")
             if any(p["object"]==key for p in state["pins"].values()):raise RuntimeError("object still pinned")
-            for task in state["sandboxes"].values():
-                uses=task.get("effects",task["grants"]) if state.get("retention_policy")=="dataflow" else task["grants"]
-                if task["state"] in {"ready","running"} and any(key in ids for ids in uses.values()):
-                    raise RuntimeError("object retained for a scheduled consumer")
+            if state.get('retention_policy')=='refcount':
+                if state['pending_uses'].get(key,0):raise RuntimeError('object retained for a scheduled consumer')
+            else:
+                for task in state["sandboxes"].values():
+                    uses=task.get("effects",task["grants"]) if state.get("retention_policy")=="dataflow" else task["grants"]
+                    if task["state"] in {"ready","running"} and any(key in ids for ids in uses.values()):
+                        raise RuntimeError("object retained for a scheduled consumer")
             if key not in state["retired"]:state["retired"].append(key)
         self.event("retire",object=key)
 

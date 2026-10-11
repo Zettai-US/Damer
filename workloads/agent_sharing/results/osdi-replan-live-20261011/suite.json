@@ -1,0 +1,6 @@
+{
+  "episodes": 2,
+  "task_sessions": 10,
+  "scope": "two integration checks, not a throughput/latency comparison",
+  "model_provenance_origin": "arvm-profile-20261011; same model and server files, same launcher arguments"
+}

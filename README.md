@@ -604,9 +604,15 @@ object versions reconstruct RAW/WAR/WAW dataflow after execution. All current
 data/control locks use the pinned `mutex_benchmark/fast_exp` CXL SpinLock.
 The local Qwen model is configured. Twelve additional multi-round episodes
 (84 task sessions, 484 operations) compare scope-only and future-use retention:
-median managed CXL payload occupancy falls 22.4% and 23.3% with 2 and 4 reviewers.
-All trials publish outputs; 11/12 follow every required tool step. Concurrent
-PSS probes, raw versioned traces, and paper figures accompany these results.
+median managed allocation, including control pages, falls 15.1% and 17.6% with
+2 and 4 reviewers. The payload-only result is 22.4% and 23.3%. A reference
+counter with the same future uses matches every graph-derived death time.
+All trials publish outputs; 11/12 follow every required tool step. Two further
+live runs validate successive plan fragments; the current CXL-backed suite
+passes 20 tests. A 60-trial scaling study retains ten 129-task registry-capacity
+rejections. Shared DRAM and shared CXL have the same payload footprint in the
+tier control. Raw traces, accounting audits, and experimental figures accompany
+these bounded results.
 The manuscript is maintained separately in its Overleaf project; paper files
 are not part of this repository.
 The earlier six live episodes and software grant/revoke measurements remain

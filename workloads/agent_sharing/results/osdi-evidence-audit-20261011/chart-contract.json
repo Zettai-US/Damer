@@ -1,0 +1,10 @@
+{
+  "question": "Does the headline payload saving survive complete accounting and right-sizing?",
+  "family": "stacked and grouped bars",
+  "renderer": "matplotlib",
+  "measured_rows": 12,
+  "counterfactual_rows": 6,
+  "palette": "blue and neutral grey; hatch for control metadata",
+  "output": "accounting-audit.pdf/png",
+  "qa": "inspect rendered PDF; separate measured totals from offline right-sizing; zero baselines"
+}

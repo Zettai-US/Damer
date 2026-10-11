@@ -14,6 +14,76 @@ behavior; the controller never forcibly unlocks potentially inconsistent state.
 The manuscript is maintained separately in its Overleaf project. Damer contains
 implementation, experimental evidence, and reproduction tools, not paper files.
 
+## Evidence audit and successive fragments, 2026-10-11
+
+The stronger controls narrow the result: **accepted future uses improve
+retention over broad permissions; a DAG does not improve lifetime decisions
+over a reference counter with the same information.** Independent reference
+replay matches every graph-derived death time in all 12 original episodes,
+with 288 allocation checkpoints checked. This is an information ablation,
+not a performance comparison with a deployed object store.
+
+Including registry, version records, and mutex pages changes the memory result:
+
+| Average managed allocation, median of three trials | 2 reviewers | 4 reviewers |
+|---|---:|---:|
+| Scope-only | 911.7 KiB | 1343.6 KiB |
+| Accepted object uses | 774.4 KiB | 1106.5 KiB |
+| Reduction between those medians | 15.1% | 17.6% |
+| Control allocation in the accepted-use mode | 327.9 KiB | 370.0 KiB |
+| Payload allocation / logical content | 9.9x | 15.9x |
+
+These numbers still exclude model, interpreter, RPC, page-table, and unrelated
+memory. The older 22.4/23.3% result below counts only fixed-slot payloads.
+An **offline** page-rounded peak-size replay yields 10.6/14.0% payload savings;
+it uses retrospectively known output sizes and is not an implemented compact
+allocator. A separate lossless-backing LRU replay reports transfers and backing
+capacity without claiming measured I/O latency or unsafe recoverable eviction.
+
+`DSec.replan` now atomically validates and replaces unstarted tasks, commits an
+epoch, and updates pending-use counts. Existing authority limits the proposal;
+new tasks require independent authorization. Running tasks, pins, and roots
+survive. The caller commits new references before releasing bridging roots,
+and admits tasks against the returned epoch. Replanning cannot resurrect
+retired backing. Dynamic object creation, spilling, and pressure control are
+not implemented.
+
+Two additional **real OpenCode integration runs** use three successive
+fragments each: draft, peer review, and synthesis. Both graph-scan and
+future-reference-count modes complete all required steps: **10 task sessions,
+58 operations, and complete payload reclamation**. The harness selects the
+fragments. Two runs establish integration behavior, not comparative latency.
+
+The current suite passes **20 CXL-backed unit/multiprocess tests**. A bounded
+abstract model checks the lifetime invariant in 376 states and 1,210
+transitions; deliberately weakened variants expose missing future references,
+namespace drain, and resurrection guards. This is not an implementation proof.
+
+The scaling study retains **all 60 trials**, including ten capacity failures.
+At 65 tasks, median graph-mode pin/release cost is 2.108 ms. All ten 129-task
+plans exceed the fixed 256 KiB registry. The first full replan costs 2.28 ms
+at five tasks and 8.10 ms at 65, including cold control mapping. JSON processing,
+audit logging, and CXL locks are included; RPC, payload access, inference, and
+concurrent-controller throughput are not. The reference counter uses the same
+metadata path and has similar costs. This implementation is not a scalable
+constant-cost control path.
+
+An 18-case tier control verifies that **shared DRAM and shared CXL both use
+64 KiB payload PSS**. Private copies plus the retained CXL source use 192/320
+KiB. Sharing semantics are not specific to CXL; this probe does not compare
+tier latency. Every mode retains CXL locking.
+
+- [Accounting and baseline audit](results/osdi-evidence-audit-20261011/summary.json), [figure](results/osdi-evidence-audit-20261011/accounting-audit.pdf), [bounded model](results/osdi-evidence-audit-20261011/lifetime-model.json)
+- [Current tests and revision boundaries](results/osdi-evidence-audit-20261011/validation.json), [test output](results/osdi-evidence-audit-20261011/runtime-tests.txt)
+- [Live registry scaling](results/osdi-registry-scale-20261011/summary.json), [all trials](results/osdi-registry-scale-20261011/trials.jsonl)
+- [Successive-fragment suite](results/osdi-replan-live-20261011/suite.json), [graph run](results/osdi-replan-live-20261011/dataflow/manifest.json), [reference-count run](results/osdi-replan-live-20261011/refcount/manifest.json)
+- [DRAM/CXL sharing control](results/osdi-tier-probe-20261011/runs.jsonl)
+
+Archived runs retain their exact source revision. The current tests additionally
+cover a later fix for legacy tasks whose grants define their effects: authority
+updates now also update their future-use counters. The new performance and
+fragment runs use explicit effects and do not exercise that compatibility path.
+
 ## Multi-round sharing and retention, 2026-10-11
 
 The archived suite contains **12 episodes, 84 task sessions, and 484 object
@@ -218,16 +288,42 @@ python3 tools/arvm_shared_state.py \
   workloads/agent_sharing/results/my-live/runtime-review-r0
 ```
 
-The original shared-state suite has 12 unit/multiprocess checks, including
+The original shared-state suite had 12 unit/multiprocess checks, including
 concurrent appends, CAS conflicts, corruption, owner death, grants, dependencies,
 roots, future uses, version lineage, and actual reclamation. A separate CXL
 control smoke test covers 26 conditions and 150 operations; it is not an LLM
 motivation result or a Sentry performance comparison.
 
+Additional reproduction commands (use fresh output paths):
+
+```bash
+# Offline audits: no model service or surviving CXL payloads are needed.
+python3 workloads/agent_sharing/audit_profile.py \
+  workloads/agent_sharing/results/arvm-profile-20261011 \
+  --output workloads/agent_sharing/results/my-accounting-audit
+python3 workloads/agent_sharing/check_lifetime_model.py \
+  --output workloads/agent_sharing/results/my-lifetime-model.json
+
+# Requires actual CXL; the scaling run does not need a model.
+python3 workloads/agent_sharing/bench_registry_scale.py \
+  --output workloads/agent_sharing/results/my-registry-scale
+python3 workloads/agent_sharing/probe_sharing.py \
+  --corpus workloads/agent_sharing/results/arvm-profile-20261011/w4-scope-r0/corpus.txt \
+  --include-shared-dram --output workloads/agent_sharing/results/my-tier-probe
+
+# Requires the configured local model service.
+python3 workloads/agent_sharing/run_replan_live.py --policy dataflow \
+  --output workloads/agent_sharing/results/my-replan-dataflow
+python3 workloads/agent_sharing/run_replan_live.py --policy refcount \
+  --output workloads/agent_sharing/results/my-replan-refcount
+```
+
 ## Archive scope
 
 Formal evidence comes from `arvm-live-final-20261010`,
 `arvm-profile-20261011`, `arvm-sharing-probe-20261011`, and
-`grant-final-20261010`. `profile-development` and older exploratory directories
+`grant-final-20261010`, plus the four dated `osdi-*` suites linked above.
+The directory names identify the research audit, not a claim of venue readiness.
+`profile-development` and older exploratory directories
 are excluded. Historical file-lock runs and setup troubleshooting are not part
 of current CXL claims. All `.dsec-state` runtime caches remain untracked.

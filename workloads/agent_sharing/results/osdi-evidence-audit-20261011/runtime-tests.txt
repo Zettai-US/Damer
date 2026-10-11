@@ -1,0 +1,25 @@
+test_atomic_replan_preserves_running_pin_and_root (test_replan.ReplanTests.test_atomic_replan_preserves_running_pin_and_root) ... ok
+test_failed_replans_leave_registry_identical (test_replan.ReplanTests.test_failed_replans_leave_registry_identical) ... ok
+test_legacy_effects_follow_grant_changes_without_losing_pins (test_replan.ReplanTests.test_legacy_effects_follow_grant_changes_without_losing_pins) ... ok
+test_oversized_replan_is_transactional (test_replan.ReplanTests.test_oversized_replan_is_transactional) ... ok
+test_reference_counts_match_independent_task_scan (test_replan.ReplanTests.test_reference_counts_match_independent_task_scan) ... ok
+test_replan_and_retirement_serialize_on_cxl_lock (test_replan.ReplanTests.test_replan_and_retirement_serialize_on_cxl_lock) ... ok
+test_replan_cannot_change_running_task_or_reintroduce_revoked_right (test_replan.ReplanTests.test_replan_cannot_change_running_task_or_reintroduce_revoked_right) ... ok
+test_retired_object_cannot_be_resurrected_by_replan (test_replan.ReplanTests.test_retired_object_cannot_be_resurrected_by_replan) ... ok
+test_cas_conflict_preserves_committed_value (test_store.StoreTests.test_cas_conflict_preserves_committed_value) ... ok
+test_concurrent_updates_and_trace_lineage (test_store.StoreTests.test_concurrent_updates_and_trace_lineage) ... ok
+test_contract_derives_sharing_and_publication_dependency (test_store.StoreTests.test_contract_derives_sharing_and_publication_dependency) ... ok
+test_corruption_fails_closed_and_lock_released (test_store.StoreTests.test_corruption_fails_closed_and_lock_released) ... ok
+test_dataflow_reclaims_authorized_but_unneeded_state (test_store.StoreTests.test_dataflow_reclaims_authorized_but_unneeded_state) ... ok
+test_grants_dependencies_and_retention (test_store.StoreTests.test_grants_dependencies_and_retention) ... ok
+test_lock_timeout_and_process_death_fail_closed (test_store.StoreTests.test_lock_timeout_and_process_death_fail_closed) ... ok
+test_mcp_roundtrip_and_path_validation (test_store.StoreTests.test_mcp_roundtrip_and_path_validation) ... ok
+test_revoke_drains_existing_pin_and_denies_new_access (test_store.StoreTests.test_revoke_drains_existing_pin_and_denies_new_access) ... ok
+test_scope_retention_is_conservative_and_roots_survive (test_store.StoreTests.test_scope_retention_is_conservative_and_roots_survive) ... ok
+test_search_records_shared_backing_and_residency (test_store.StoreTests.test_search_records_shared_backing_and_residency) ... ok
+test_versioned_dataflow_keeps_distinct_versions (test_store.StoreTests.test_versioned_dataflow_keeps_distinct_versions) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 0.718s
+
+OK

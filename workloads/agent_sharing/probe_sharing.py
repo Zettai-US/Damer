@@ -28,7 +28,7 @@ def worker(root,mode,conn):
         try:
             source=store._map('corpus')
             source_hash=hashlib.sha256(source).hexdigest()
-            source_nodes=verify_placement(source,1)
+            source_nodes=verify_placement(source,store.config['node'])
             copy_ns=0
             if mode=='private-dram':
                 begin=time.monotonic_ns()
@@ -36,7 +36,7 @@ def worker(root,mode,conn):
                 bind(private,0);private[:]=source
                 copy_ns=time.monotonic_ns()-begin
                 assert hashlib.sha256(private).hexdigest()==source_hash
-            mappings=[dict(address=address(source),size=len(source),tier='cxl',nodes=source_nodes)]
+            mappings=[dict(address=address(source),size=len(source),tier='cxl' if store.config['node']==1 else 'dram',nodes=source_nodes)]
             if private is not None:mappings.append(dict(address=address(private),size=len(private),tier='dram',nodes=verify_placement(private,0)))
         finally:store.backend.release(grant['token'])
         conn.send(dict(pid=os.getpid(),mappings=mappings,sha256=source_hash,copy_ns=copy_ns))
@@ -57,7 +57,8 @@ def mapping_pss(pid,entry):
 
 def trial(out,corpus,n,mode):
     payload=Path('/dev/shm')/('arvm-probe-'+uuid.uuid4().hex)
-    store=Store.create(out/'store',payload,node=1,capacity=65536);children=[];pipes=[]
+    node=0 if mode=='shared-dram' else 1
+    store=Store.create(out/'store',payload,node=node,capacity=65536,require_cxl=node==1);children=[];pipes=[]
     try:
         store.seed('corpus',corpus)
         ctx=mp.get_context('spawn')
@@ -79,8 +80,8 @@ def trial(out,corpus,n,mode):
         for proc in children:
             proc.join(10)
             if proc.exitcode!=0:raise RuntimeError('mapping worker failed')
-        assert abs(cxl-64)<=n # Linux per-process KiB rounding.
-        assert dram==(64*n if mode=='private-dram' else 0)
+        assert abs(cxl-(0 if mode=='shared-dram' else 64))<=n # Linux per-process KiB rounding.
+        assert abs(dram-(64*n if mode=='private-dram' else 64 if mode=='shared-dram' else 0))<=n
         return dict(workers=n,mode=mode,cxl_pss_kib=cxl,dram_pss_kib=dram,total_pss_kib=cxl+dram,
                     logical_bytes=len(corpus.encode()),payload_capacity=65536,details=details,status='ok')
     finally:
@@ -95,13 +96,15 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--corpus',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--include-shared-dram',action='store_true',help='Add a same-sharing, different-tier placement control')
     a=p.parse_args();out=a.output.resolve();out.mkdir(parents=True,exist_ok=False)
     corpus=a.corpus.read_text()
-    cases=[(n,mode,r) for n in [2,4] for mode in ['shared-cxl','private-dram'] for r in range(3)]
+    modes=['shared-cxl','private-dram']+(['shared-dram'] if a.include_shared_dram else [])
+    cases=[(n,mode,r) for n in [2,4] for mode in modes for r in range(3)]
     random.Random(4128).shuffle(cases)
     dump(out/'manifest.json',dict(kind='controlled concurrent mapping probe, not agent latency',planned=len(cases),
         corpus_sha256=hashlib.sha256(corpus.encode()).hexdigest(),source_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-        baseline='both modes retain CXL source; private mode adds one DRAM copy per worker'))
+        baseline='shared-cxl and private-dram retain CXL source; private mode adds one DRAM copy per worker; shared-dram places the single source in DRAM; all modes use CXL locks'))
     shutil.copy2(__file__,out/'probe-source.py')
     for n,mode,r in cases:
         try:row=dict(repeat=r,**trial(out/f'w{n}-{mode}-r{r}',corpus,n,mode))

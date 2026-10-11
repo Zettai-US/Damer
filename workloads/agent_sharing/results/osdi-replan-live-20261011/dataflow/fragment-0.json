@@ -1,0 +1,239 @@
+{
+  "schema": "arvm-memory-contract-v1",
+  "tasks": {
+    "draft-0": {
+      "actor": "reviewer-0",
+      "phase": "draft",
+      "depends_on": [],
+      "grants": {
+        "read": [
+          "corpus",
+          "ledger",
+          "answer",
+          "scratch-0",
+          "scratch-1",
+          "draft-0",
+          "draft-1",
+          "review-0",
+          "review-1"
+        ],
+        "write": [
+          "draft-0"
+        ],
+        "append": [
+          "scratch-0",
+          "ledger"
+        ]
+      },
+      "effects": {
+        "read": [
+          "corpus",
+          "draft-0"
+        ],
+        "write": [
+          "draft-0"
+        ],
+        "append": [
+          "scratch-0",
+          "ledger"
+        ]
+      }
+    },
+    "draft-1": {
+      "actor": "reviewer-1",
+      "phase": "draft",
+      "depends_on": [],
+      "grants": {
+        "read": [
+          "corpus",
+          "ledger",
+          "answer",
+          "scratch-0",
+          "scratch-1",
+          "draft-0",
+          "draft-1",
+          "review-0",
+          "review-1"
+        ],
+        "write": [
+          "draft-1"
+        ],
+        "append": [
+          "scratch-1",
+          "ledger"
+        ]
+      },
+      "effects": {
+        "read": [
+          "corpus",
+          "draft-1"
+        ],
+        "write": [
+          "draft-1"
+        ],
+        "append": [
+          "scratch-1",
+          "ledger"
+        ]
+      }
+    }
+  },
+  "admission_order": [
+    "draft-0",
+    "draft-1"
+  ],
+  "objects": [
+    {
+      "object": "answer",
+      "alias_set": "answer",
+      "initial_version": 0,
+      "readers": [],
+      "writers": [],
+      "sharing": "immutable common backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [],
+      "retention_until_tasks_complete": [],
+      "version_binding": "fixed"
+    },
+    {
+      "object": "corpus",
+      "alias_set": "corpus",
+      "initial_version": 0,
+      "readers": [
+        "draft-0",
+        "draft-1"
+      ],
+      "writers": [],
+      "sharing": "immutable common backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [],
+      "retention_until_tasks_complete": [
+        "draft-0",
+        "draft-1"
+      ],
+      "version_binding": "fixed"
+    },
+    {
+      "object": "draft-0",
+      "alias_set": "draft-0",
+      "initial_version": 0,
+      "readers": [
+        "draft-0"
+      ],
+      "writers": [
+        "draft-0"
+      ],
+      "sharing": "synchronized mutable backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [],
+      "retention_until_tasks_complete": [
+        "draft-0"
+      ],
+      "version_binding": "resolve current version at admitted tool call"
+    },
+    {
+      "object": "draft-1",
+      "alias_set": "draft-1",
+      "initial_version": 0,
+      "readers": [
+        "draft-1"
+      ],
+      "writers": [
+        "draft-1"
+      ],
+      "sharing": "synchronized mutable backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [],
+      "retention_until_tasks_complete": [
+        "draft-1"
+      ],
+      "version_binding": "resolve current version at admitted tool call"
+    },
+    {
+      "object": "ledger",
+      "alias_set": "ledger",
+      "initial_version": 0,
+      "readers": [],
+      "writers": [
+        "draft-0",
+        "draft-1"
+      ],
+      "sharing": "synchronized mutable backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [
+        [
+          "draft-0",
+          "draft-1"
+        ]
+      ],
+      "retention_until_tasks_complete": [
+        "draft-0",
+        "draft-1"
+      ],
+      "version_binding": "resolve current version at admitted tool call"
+    },
+    {
+      "object": "review-0",
+      "alias_set": "review-0",
+      "initial_version": 0,
+      "readers": [],
+      "writers": [],
+      "sharing": "immutable common backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [],
+      "retention_until_tasks_complete": [],
+      "version_binding": "fixed"
+    },
+    {
+      "object": "review-1",
+      "alias_set": "review-1",
+      "initial_version": 0,
+      "readers": [],
+      "writers": [],
+      "sharing": "immutable common backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [],
+      "retention_until_tasks_complete": [],
+      "version_binding": "fixed"
+    },
+    {
+      "object": "scratch-0",
+      "alias_set": "scratch-0",
+      "initial_version": 0,
+      "readers": [],
+      "writers": [
+        "draft-0"
+      ],
+      "sharing": "synchronized mutable backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [],
+      "retention_until_tasks_complete": [
+        "draft-0"
+      ],
+      "version_binding": "resolve current version at admitted tool call"
+    },
+    {
+      "object": "scratch-1",
+      "alias_set": "scratch-1",
+      "initial_version": 0,
+      "readers": [],
+      "writers": [
+        "draft-1"
+      ],
+      "sharing": "synchronized mutable backing",
+      "required_sync": "CXL SpinLock",
+      "concurrent_writers": [],
+      "retention_until_tasks_complete": [
+        "draft-1"
+      ],
+      "version_binding": "resolve current version at admitted tool call"
+    }
+  ],
+  "data_dependencies": [],
+  "authority": "trusted harness effect summaries",
+  "reclamation": "DSec checks pending tasks and in-flight pins",
+  "limitations": [
+    "Object-granularity effects; no automatic alias analysis for arbitrary pointers",
+    "Scopes are local MCP enforcement, not DPU isolation or transparent memory revocation"
+  ]
+}

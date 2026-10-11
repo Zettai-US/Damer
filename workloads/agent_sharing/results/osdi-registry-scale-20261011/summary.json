@@ -1,0 +1,138 @@
+{
+  "conditions": [
+    {
+      "reviewers": 2,
+      "policy": "dataflow",
+      "attempts": 5,
+      "accepted": 5,
+      "rejected": 0,
+      "median_compile_us": 87.543,
+      "median_replan_us": 2275.876,
+      "median_encoded_registry_bytes": 2907,
+      "median_pin_release_median_us": 112.686
+    },
+    {
+      "reviewers": 2,
+      "policy": "refcount",
+      "attempts": 5,
+      "accepted": 5,
+      "rejected": 0,
+      "median_compile_us": 83.316,
+      "median_replan_us": 2213.862,
+      "median_encoded_registry_bytes": 2907,
+      "median_pin_release_median_us": 115.2445
+    },
+    {
+      "reviewers": 4,
+      "policy": "dataflow",
+      "attempts": 5,
+      "accepted": 5,
+      "rejected": 0,
+      "median_compile_us": 144.89,
+      "median_replan_us": 2060.569,
+      "median_encoded_registry_bytes": 6403,
+      "median_pin_release_median_us": 168.676
+    },
+    {
+      "reviewers": 4,
+      "policy": "refcount",
+      "attempts": 5,
+      "accepted": 5,
+      "rejected": 0,
+      "median_compile_us": 161.305,
+      "median_replan_us": 2305.191,
+      "median_encoded_registry_bytes": 6403,
+      "median_pin_release_median_us": 170.4635
+    },
+    {
+      "reviewers": 8,
+      "policy": "dataflow",
+      "attempts": 5,
+      "accepted": 5,
+      "rejected": 0,
+      "median_compile_us": 369.702,
+      "median_replan_us": 2553.577,
+      "median_encoded_registry_bytes": 16805,
+      "median_pin_release_median_us": 328.554
+    },
+    {
+      "reviewers": 8,
+      "policy": "refcount",
+      "attempts": 5,
+      "accepted": 5,
+      "rejected": 0,
+      "median_compile_us": 407.929,
+      "median_replan_us": 2579.737,
+      "median_encoded_registry_bytes": 16805,
+      "median_pin_release_median_us": 328.168
+    },
+    {
+      "reviewers": 16,
+      "policy": "dataflow",
+      "attempts": 5,
+      "accepted": 5,
+      "rejected": 0,
+      "median_compile_us": 971.836,
+      "median_replan_us": 4079.215,
+      "median_encoded_registry_bytes": 52665,
+      "median_pin_release_median_us": 812.524
+    },
+    {
+      "reviewers": 16,
+      "policy": "refcount",
+      "attempts": 5,
+      "accepted": 5,
+      "rejected": 0,
+      "median_compile_us": 985.998,
+      "median_replan_us": 4038.873,
+      "median_encoded_registry_bytes": 52665,
+      "median_pin_release_median_us": 796.3445
+    },
+    {
+      "reviewers": 32,
+      "policy": "dataflow",
+      "attempts": 5,
+      "accepted": 5,
+      "rejected": 0,
+      "median_compile_us": 3924.72,
+      "median_replan_us": 8095.594,
+      "median_encoded_registry_bytes": 184441,
+      "median_pin_release_median_us": 2107.8005000000003
+    },
+    {
+      "reviewers": 32,
+      "policy": "refcount",
+      "attempts": 5,
+      "accepted": 5,
+      "rejected": 0,
+      "median_compile_us": 3632.527,
+      "median_replan_us": 8066.25,
+      "median_encoded_registry_bytes": 184441,
+      "median_pin_release_median_us": 2178.303
+    },
+    {
+      "reviewers": 64,
+      "policy": "dataflow",
+      "attempts": 5,
+      "accepted": 0,
+      "rejected": 5
+    },
+    {
+      "reviewers": 64,
+      "policy": "refcount",
+      "attempts": 5,
+      "accepted": 0,
+      "rejected": 5
+    }
+  ],
+  "scope": "single controller, actual CXL registry, fixed 4 KiB objects; not concurrent throughput",
+  "timing": "Python API with JSON serialization and audit logging; 3 warmups then 50 pin/release samples per trial",
+  "failures": "All capacity rejections retained; no resizing or successful-only scalability claim",
+  "source_sha256": {
+    "bench_registry_scale.py": "42fa62f91f16cd4be67a1ae490ad511b03dfa0170cf95ae9f65415cfd9be3fbe",
+    "dsec.py": "a2bc4e0f5283ebec29884f11dad9e7833b9173da10e9ca9980ad775f941fd8e0",
+    "dataflow.py": "abc4ff632302479ed4ce497c6ca0a5943766a84b27641ad6088d1b92ee2fcb2d",
+    "store.py": "56246e42d352d815997a357ed9fbd41fc4312faa61fba8640376d2ce4a21fd6f",
+    "run_profile.py": "c80d2f03770f4ec253d15f104e4b86e5fc48767d9e52b36efbbcc134bde20771"
+  }
+}

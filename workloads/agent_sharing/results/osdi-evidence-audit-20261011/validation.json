@@ -1,0 +1,10 @@
+{
+  "tests": 20,
+  "scope": "Tests use the current revision. Live replanning and scale archives preserve their preceding revision; the later change fixes grant-derived reference counts for legacy tasks without explicit effects. Those benchmark paths use explicit effects and no grant/revoke mutation.",
+  "sha256": {
+    "lifetime-model-source.py": "b47b9108b764c77c88abfdaecd776eac4065513715c7da195be61499dfda7a6c",
+    "audit-source.py": "f42bacbc8a32fa0ea943b4d0e28606d3a1389287988a5b565ee269583a2353bb",
+    "test-replan-source.py": "923cfb431c29c46d7cc272e85cafef285010598c4bfc2a518e71a37eacbdea4e",
+    "tested-dsec-source.py": "3dbea9f5a62bf028135bdfca93a335948f453d12a59bde49dd7049ab8f0757fa"
+  }
+}

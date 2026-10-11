@@ -10,3 +10,7 @@ third_party/
 !/results/cxl-controls-smoke-20261010/
 !/results/arvm-profile-20261011/
 !/results/arvm-sharing-probe-20261011/
+!/results/osdi-evidence-audit-20261011/
+!/results/osdi-registry-scale-20261011/
+!/results/osdi-replan-live-20261011/
+!/results/osdi-tier-probe-20261011/

@@ -1,0 +1,91 @@
+{
+  "bound": "2 tasks, 2 objects, 1 session root, at most 1 pending-task replan/cancellation",
+  "invariant": "accepted future uses, active pins, cached mappings and roots retain live backing",
+  "assumptions": [
+    "atomic registry transitions",
+    "trustworthy task effects",
+    "namespace exit acknowledged",
+    "no host crash, hardware coherence failure, untracked native access, or object-name reuse"
+  ],
+  "interpretation": "counterexamples are deliberately weakened abstract protocols, not observed runtime failures",
+  "results": [
+    {
+      "mode": "guarded protocol",
+      "holds": true,
+      "states": 376,
+      "transitions": 1210,
+      "terminal_states": 3
+    },
+    {
+      "mode": "omit_future_uses",
+      "holds": false,
+      "states": 149,
+      "transitions": 294,
+      "shortest_counterexample": [
+        "release root",
+        "retire 0",
+        "reclaim 0"
+      ],
+      "violating_state": {
+        "a": 0,
+        "b": 0,
+        "b_object": 0,
+        "pins": 0,
+        "mappings": 0,
+        "root": false,
+        "retired": 1,
+        "live": 2,
+        "epoch": 0
+      }
+    },
+    {
+      "mode": "omit_namespace_drain",
+      "holds": false,
+      "states": 477,
+      "transitions": 1543,
+      "shortest_counterexample": [
+        "replan b to y",
+        "admit b",
+        "pin b",
+        "unpin b",
+        "finish b",
+        "retire 1",
+        "reclaim 1"
+      ],
+      "violating_state": {
+        "a": 0,
+        "b": 3,
+        "b_object": 1,
+        "pins": 0,
+        "mappings": 2,
+        "root": true,
+        "retired": 2,
+        "live": 1,
+        "epoch": 1
+      }
+    },
+    {
+      "mode": "resurrect_after_retirement",
+      "holds": false,
+      "states": 127,
+      "transitions": 272,
+      "shortest_counterexample": [
+        "retire 1",
+        "replan b to y",
+        "reclaim 1"
+      ],
+      "violating_state": {
+        "a": 0,
+        "b": 0,
+        "b_object": 1,
+        "pins": 0,
+        "mappings": 0,
+        "root": true,
+        "retired": 2,
+        "live": 1,
+        "epoch": 1
+      }
+    }
+  ],
+  "source_sha256": "b47b9108b764c77c88abfdaecd776eac4065513715c7da195be61499dfda7a6c"
+}
