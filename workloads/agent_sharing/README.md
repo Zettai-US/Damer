@@ -1,72 +1,196 @@
-# arVM 共享内存数据流 motivation 实验
+# arVM shared-state dataflow experiments
 
-当前实现把真实 OpenCode 的共享对象工具调用接到 arVM/DSec：
-先从可信 harness 的任务读写声明生成共享、发布依赖和保留约束，再在执行时检查
-grant、CXL 对象版本与 pin；执行后重建对象版本数据流。重点是共享状态及其跨阶段
-依赖，锁竞争作为附属观测。
+Real OpenCode tool calls access CXL shared objects through our DSec controller.
+Trusted task effects describe sharing, publication dependencies, and future
+uses. The runtime checks grants and pins; observed versions reconstruct
+producer-consumer dataflow after execution.
 
-只使用 [mutex_benchmark/fast_exp](https://github.com/EIRNf/mutex_benchmark/tree/fast_exp)
-的 region-backed `SpinLock`，固定提交
-`55b707259c65d79b5f12a2f216b773c2a2a84124`。没有文件锁 fallback。
-上游 `SpinLock` 对读写都互斥；不是读写锁，也不具备 owner-death 自动恢复。
+Every data/control critical section uses the region-backed `SpinLock` from
+[mutex_benchmark/fast_exp](https://github.com/EIRNf/mutex_benchmark/tree/fast_exp),
+pinned to `55b707259c65d79b5f12a2f216b773c2a2a84124`.
+Reads and writes are exclusive. Owner death causes timeout and fail-closed
+behavior; the controller never forcibly unlocks potentially inconsistent state.
 
-## 多轮协作与回收消融（2026-10-11）
+The manuscript is maintained separately in its Overleaf project. Damer contains
+implementation, experimental evidence, and reproduction tools, not paper files.
 
-已在真实 CXL node 1 上完成 **12 个 episode、84 个 OpenCode 任务会话、484 次对象操作**。
-2/4 个 reviewer 各运行 draft 和 peer-review 两轮，再由独立 synthesis 会话汇总；
-每个并发度分别运行 scope-only/dataflow 两种保留策略，各重复 3 次，按固定种子分块随机排序。
-全部发布最终结果，11/12 完整遵循工具步骤；`w4-scope-r1` 的 synthesis 漏读写入前的
-`answer`，但 CAS 写入成功。所有尝试都进入统计，没有删除这个样本。
+## Multi-round sharing and retention, 2026-10-11
 
-输入是四个真实原型模块的相同 43.6 KiB 快照。任务、角色、effects 由 harness 指定，
-真实模型负责执行工具及生成审查文本。这不是自然生成任务图的比例调查或答案质量评测。
-模型仍为本地 Qwen3.5-35B-A3B-UD-Q4_K_XL，服务只有 2 个推理 slot；4 个 reviewer
-不代表 4 路并行推理。每轮使用新的 task session，逻辑 reviewer 身份跨轮保持。
+The archived suite contains **12 episodes, 84 task sessions, and 484 object
+operations** on actual CXL NUMA node 1. Two or four reviewer roles execute draft
+and peer-review rounds, followed by synthesis. Each worker-count/policy pair
+has three trials in seeded randomized blocks. All attempts publish outputs;
+11/12 execute every required tool step. In `w4-scope-r1`, synthesis omits the
+pre-write `answer` read, but its CAS publication succeeds. That trial remains
+in every applicable aggregate.
 
-| 指标 | 2 个 reviewer | 4 个 reviewer |
+The common input is an identical 43.6 KiB snapshot of four actual prototype
+modules. The harness prescribes roles and accepted effects; the model performs
+tool calls and generates review text. This is not a survey of naturally
+discovered plans or an independent assessment of answer quality.
+OpenCode v2.0.24 uses local Qwen3.5-35B-A3B-UD-Q4_K_XL on an RTX 5090.
+Two 16K context slots serve both reviewer counts; four reviewers do not imply
+four simultaneous inference streams. Each round starts a fresh task session
+while preserving the logical reviewer identity.
+
+| Metric | 2 reviewers | 4 reviewers |
 |---|---:|---:|
-| Scope-only 平均 live payload，中位数 | 575.7 KiB | 959.6 KiB |
-| Dataflow 平均 live payload，中位数 | 446.5 KiB | 736.4 KiB |
-| 两策略占用中位数之比的降幅 | 22.4% | 23.3% |
-| 同一 dataflow 时间线重放 scope 的 byte-time 降幅中位数 | 22.2% | 23.3% |
-| Dataflow 非空读取中同版本被多个逻辑 agent 读取 | 28/37，75.7% | 51/66，77.3% |
-| Dataflow corpus 首次至末次读取跨度中位数 | 19.7 s | 37.4 s |
-| Dataflow corpus 读取临界区并集中位数 | 24.2 ms | 43.4 ms |
+| Scope-only average live payload, trial median | 575.7 KiB | 959.6 KiB |
+| Dataflow average live payload, trial median | 446.5 KiB | 736.4 KiB |
+| Reduction between those medians | 22.4% | 23.3% |
+| Median byte-time reduction in same-timeline scope replay | 22.2% | 23.3% |
+| Dataflow nonempty reads of versions shared across logical actors | 28/37, 75.7% | 51/66, 77.3% |
+| Median dataflow corpus first-to-last-read span | 19.7 s | 37.4 s |
+| Median union of corpus read critical sections | 24.2 ms | 43.4 ms |
 
-“平均 live payload”是实际分配页数乘存活时间的积分除以观测时间，再对三个 trial 取中位数。
-每个对象为 64 KiB 固定槽，包括尚未写满的输出预留空间；控制 registry、版本记录及锁字
-另行计量，不计入此表。它不是全进程 RSS、CXL 总线流量或模型内存，也不据此宣称推理加速。
-同时间线重放属于容量计算，不能充当另一次实际延迟测量。
+Average live payload is the integral of allocated payload bytes divided by the
+observation window. Fixed 64 KiB slots include unused output capacity. Registry,
+version records, mutex pages, model memory, and RPC buffers are separate.
+The table therefore does not report total process memory or CXL bus traffic.
+The same-timeline replay is a capacity calculation, not another latency run.
 
-两种策略使用相同权限、accepted effects、槽大小与 CXL 锁。Scope-only 按未结束任务的
-宽读权限保留数据；dataflow 按实际声明的未来用途、pin 和 session root 保留。
-新实现会在任务 namespace 退出后真正关闭、unlink 已死 payload：私有 scratch 在 draft
-结束后回收，draft 等待 peer 消费完，review 等待 synthesis，answer 等待根释放。
-超出已接受 effects 的访问必须重新规划；未知后续会话需要显式 root 保留。
+Both policies use identical permissions, effects, slot sizes, and CXL locks.
+Scope-only retains objects permitted to any unfinished task. Dataflow retains
+objects required by accepted effects, active pins, or session roots. After task
+namespaces exit, the controller actually closes and unlinks dead backing:
+scratch after drafting, drafts after peer consumption, reviews after synthesis,
+and the answer after its root is released. Uses outside accepted effects require
+replanning. Unknown future turns require retained roots or recovery backing.
 
-单独的并发 PSS probe 同时保持所有映射，核对 device/inode 和真实 NUMA 驻留页。
-2/4 个进程共享 CXL corpus 均合计 **64 KiB**；保留同一 CXL 源并给每个进程各建 DRAM
-副本则为 **192/320 KiB**（分别包含 128/256 KiB 私有 DRAM）。每种情况实测三次。
+A concurrent PSS probe holds all worker mappings alive while checking
+backing identity and actual page placement. Shared source mappings sum to
+**64 KiB** for either worker count. Keeping the same CXL source plus private
+DRAM replicas uses **192/320 KiB**, including 128/256 KiB of private DRAM.
+Each condition has three measurements.
 
-对全部六个 dataflow episode 做 **离线 idle-only 回收重放**：1 秒阈值下，62/103
-次非空读取（60.2%）发生在超时的访问间隙之后。这表示仍需保留或可恢复的 backing，
-没有实际执行不安全回收，也没有声称发生 use-after-free。论文因此论证的是：
-**锁和访问活跃度无法回答“还有哪些未来消费者”；arVM 需要对象版本、别名与剩余用途信息。**
-等价的 effect/reference 表也能表达这些信息，数据没有证明 DAG 是唯一实现。
+In an **offline idle-expiry replay**, 62/103 nonempty reads (60.2%) in the six
+dataflow episodes occur after an inter-access gap exceeding one second. No
+unsafe eviction is executed. These reads require retained or recoverable
+backing; the result does not show that recoverable LRU eviction is unsafe.
+Object versions, aliases, and future references inform last-use decisions.
+Equivalent effect/reference tables can encode that information; a DAG is not
+the uniquely necessary representation.
 
-- [论文 PDF](../../6ac4087cf755acfa13cf5a59/main.pdf) / [实测小节源码](../../6ac4087cf755acfa13cf5a59/profile_evaluation.tex)
-- [完整汇总](results/arvm-profile-20261011/summary.json) / [验证](results/arvm-profile-20261011/validation.json) / [全部尝试](results/arvm-profile-20261011/episodes.jsonl)
-- [实际对象版本图](results/arvm-profile-20261011/observed-dataflow.pdf) / [占用与 idle 重放图](results/arvm-profile-20261011/sharing-profile.pdf) / [存活时间线](results/arvm-profile-20261011/retention-timeline.pdf)
-- [并发 PSS 原始记录](results/arvm-sharing-probe-20261011/runs.jsonl)
+- [Summary and per-episode metrics](results/arvm-profile-20261011/summary.json)
+- [Validation](results/arvm-profile-20261011/validation.json) and [all attempts](results/arvm-profile-20261011/episodes.jsonl)
+- [Observed dataflow](results/arvm-profile-20261011/observed-dataflow.pdf), [retention and expiry replay](results/arvm-profile-20261011/sharing-profile.pdf), [lifetime timeline](results/arvm-profile-20261011/retention-timeline.pdf)
+- [Concurrent PSS observations](results/arvm-sharing-probe-20261011/runs.jsonl)
 
-重建图表不需要模型或仍存活的 payload。完整重跑需要真实 CXL 主机和运行中的本地模型：
+## Initial live suite, 2026-10-10
+
+This separate suite runs two prescribed workloads three times each, with two
+analysts and a synthesizer. Runtime review uses the actual Registry source in
+`fixtures/arvm_registry.py`; `fixtures/provenance.json` records its origin and
+hash. Incident review uses an explicitly fictional incident record.
+
+| Metric | Runtime review | Incident review |
+|---|---:|---:|
+| Attempted episodes / published outputs | 3 / 3 | 3 / 3 |
+| Complete tool-step compliance | 2 | 3 |
+| Object operations | 53 | 54 |
+| Shared-version nonempty reads | 14/23, 60.9% | 17/24, 70.8% |
+| Direct reads of another task's publication | 9 | 11 |
+| Contended object-lock acquisitions | 2 | 2 |
+| Median evidence access span | 8.532 s | 7.687 s |
+| Median evidence critical-section union | 13.688 ms | 13.133 ms |
+| Median episode duration | 17.054 s | 16.398 s |
+
+All six attempts, 18 task sessions, and 107 operations are retained. There are
+no tool errors or version conflicts. In `runtime-review-r0`, synthesis omits
+the requested evidence reread but publishes its output. Six additional model
+preflight sessions are excluded from the task-session count. Durations include
+preflight, server startup, and cleanup. Answer quality has not been independently
+scored. Plotted episode-ratio medians differ from the pooled fractions above.
+
+- [Summary](results/arvm-live-final-20261010/summary.json), [attempts](results/arvm-live-final-20261010/episodes.jsonl), [validation](results/arvm-live-final-20261010/validation.json)
+- [Figure](results/arvm-live-final-20261010/arvm-motivation.pdf), [model provenance](results/arvm-live-final-20261010/model-provenance.json)
+- [Example contract](results/arvm-live-final-20261010/runtime-review-r2/arvm-memory-contract.json), [dataflow](results/arvm-live-final-20261010/runtime-review-r2/arvm-dataflow.json), [raw OpenCode calls](results/arvm-live-final-20261010/runtime-review-r2/analyst-0/opencode.jsonl)
+
+## Grant performance and NVIDIA Sentry
+
+Here, Grant means the local access lifecycle
+`grant -> check/pin -> access -> release -> revoke`, not an identified external
+system named Grant. The microbenchmark uses the same CXL registry and lock,
+with 1/2/4 workers and five randomized trials each. It records 3,500
+check/pin/release operations, 1,500 issuance/revoke pairs, and denial after
+every revoke.
+
+| Workers | Check + pin/release p50 | p95 | Issue p50 | Revoke p50 | Throughput |
+|---|---:|---:|---:|---:|---:|
+| 1 | 59.791 us | 71.639 us | 50.747 us | 29.735 us | 14,704 ops/s |
+| 2 | 64.578 us | 77.688 us | 52.750 us | 31.177 us | 27,657 ops/s |
+| 4 | 107.423 us | 173.003 us | 55.604 us | 33.952 us | 31,852 ops/s |
+
+Cells are medians of five trial statistics, not confidence intervals. Issue
+and revoke are measured by one controller after the concurrent phase. Warm
+Python timings include JSON registry processing, CXL locking, and logging;
+they exclude inference, payload access, and RPC. Throughput includes dispatch
+and result collection. The serialized control section limits scalability.
+
+[Raw trials](results/grant-final-20261010/runs.jsonl),
+[summary](results/grant-final-20261010/summary.json), and
+[validation](results/grant-final-20261010/validation.json) preserve this earlier
+runtime revision; later implementation changes require fresh performance runs.
+
+**NVIDIA Sentry has not been measured.** The host has no BlueField device or
+configured Sentry endpoint/SDK. NVIDIA's
+[architecture description](https://www.nvidia.com/en-us/solutions/ai/agent-safety/)
+places its hardware isolation path on BlueField. OpenShell, gVisor Sentry, and
+simulated delays are not substitutes for this baseline. Local MCP grants do not
+provide equivalent DPU isolation or arbitrary-pointer revocation.
+
+The [107-request comparison input](results/arvm-live-final-20261010/sentry-comparison/requests.jsonl)
+and [comparison protocol](results/arvm-live-final-20261010/sentry-comparison/protocol.json)
+are experimental formats, not an assumed NVIDIA API. A real comparison must
+record hardware, Sentry/DOCA/firmware versions, actual policy/identity mapping,
+transport, failures, and cold/warm/end-to-end timing boundaries.
+
+## Implementation and interpretation
+
+1. `dataflow.compile_memory_contract` validates trusted effects and dependencies,
+   identifies common objects, publishers, writers, and pending consumers, and
+   emits retention requirements. It does not infer access rights from natural
+   language or analyze arbitrary native pointers.
+2. Our DSec prototype manages scopes, admission, pins, generations, roots,
+   retirement, and physical reclamation. It is separate from DeepSeek's system.
+3. Payloads, version metadata, the registry, and mutex words use shared tmpfs
+   mappings. `mbind` precedes first touch; `/proc/self/numa_maps` verifies actual
+   residency, and sysfs decoder ranges establish node 1 as CXL. Disk JSON files
+   are audit snapshots rather than live registry state.
+4. An unmodified upstream SpinLock receives real CXL addresses through a small
+   C ABI bridge compiled with `-Dcxl`. Unexpected emulated allocator calls abort.
+5. Trusted MCP processes hold shared mappings. OpenCode and the model receive
+   bounded copied text, so this is not zero-copy prompting or transparent
+   protection against malicious native tools. Each task has a separate bwrap
+   workspace/server; network isolation is not claimed.
+6. RAW/RMW/WAR/WAW edges use observed object versions. `may_influence` edges
+   conservatively connect earlier reads to later writes within a task; they do
+   not prove semantic use of evidence by the model. Mutable versions reuse the
+   same backing and are not persistent snapshots.
+
+The ledger has multiple writers; append RMW edges preserve contributions.
+Cross-task reads count explicit reads of another producer's version. Initial
+live slots are 256 KiB; multi-round profile slots are 64 KiB. Checksums scan
+padding. Instrumented scanned/copied bytes are not hardware bus transactions
+and exclude copies in JSON, RPC, and model prompts. Locks are released between
+tool calls. Revocation stops new grants and waits for pins; it does not revoke
+arbitrary CPU pointers. Volatile CXL state is not crash-durable.
+
+## Reproduction
+
+Requires Linux, actual CXL NUMA memory, libnuma, g++, bwrap, and OpenCode v2.
+Figures also require matplotlib and Graphviz. Source, library, and model hashes
+accompany results. Native binaries, upstream checkouts, and runtime caches are
+excluded from version control.
 
 ```bash
-# 使用归档结果重建、验证并导出论文图表和数值宏
-make -C 6ac4087cf755acfa13cf5a59 profile
-make -C 6ac4087cf755acfa13cf5a59 check
+python3 workloads/agent_sharing/build_cxl_lock.py
+python3 -m unittest discover -s workloads/agent_sharing -p 'test_*.py' -v
 
-# 新实验：先按下方“复现”构建 CXL 库并启动 serve_model.py
+# Start the configured local model in a separate terminal.
+python3 workloads/agent_sharing/serve_model.py
+
+# Use new output directories for each experiment suite.
 python3 workloads/agent_sharing/run_profile_suite.py \
   --output workloads/agent_sharing/results/my-profile --repeats 3
 python3 workloads/agent_sharing/probe_sharing.py \
@@ -75,164 +199,35 @@ python3 workloads/agent_sharing/probe_sharing.py \
 python3 workloads/agent_sharing/report_profile.py \
   workloads/agent_sharing/results/my-profile \
   --probe workloads/agent_sharing/results/my-probe
-```
 
-## 第一组 live 结果（2026-10-10）
+# Rebuild archived figures without running the model or accessing live payloads.
+python3 workloads/agent_sharing/report_profile.py \
+  workloads/agent_sharing/results/arvm-profile-20261011 \
+  --probe workloads/agent_sharing/results/arvm-sharing-probe-20261011
 
-日期：2026-10-10 UTC。OpenCode v2.0.24；本地 RTX 5090 上运行
-Qwen3.5-35B-A3B-UD-Q4_K_XL，2 个 16K context slot。
-模型权重、服务二进制 SHA-256、启动参数和 GPU 信息保存在
-[model-provenance.json](results/arvm-live-final-20261010/model-provenance.json)。
-
-正式套件包含两种指定任务，各重复 3 次，每次 2 个并发分析 agent 加 1 个汇总 agent。
-代码审查使用仓库中真实的 `experiments/runtime.py` Registry 源码；复现副本位于
-`fixtures/arvm_registry.py`，原始路径及 SHA-256 保存在 `fixtures/provenance.json`。事件审查输入是
-明确标为虚构的故障记录。任务图和角色是指定的，不能用这些比例估计自然 agent 工作负载的普遍性。
-
-| 指标 | arVM 代码审查 | 事件审查 |
-|---|---:|---:|
-| 尝试 episode | 3 | 3 |
-| 完成结果发布 | 3 | 3 |
-| 完整遵循要求的工具步骤 | 2 | 3 |
-| 实际共享对象操作 | 53 | 54 |
-| 非空读取中，同一版本被多 agent 读取 | 14/23，60.9% | 17/24，70.8% |
-| 直接读取其他 agent 发布版本 | 9 | 11 |
-| 发生竞争的对象锁获取 | 2 | 2 |
-| evidence 首次至末次访问跨度中位数 | 8.532 s | 7.687 s |
-| evidence 访问临界区并集中位数 | 13.688 ms | 13.133 ms |
-| episode 总耗时中位数 | 17.054 s | 16.398 s |
-
-6 次尝试、18 个任务 agent 会话、107 次对象操作全部保留，工具操作无错误/版本冲突。
-`runtime-review-r0` 的 synthesizer 未按提示重读原始 evidence，严格工具步骤检查未通过；
-其两份 finding 和 synthesis 确实已发布。因此区分“完成发布”与“完整协议遵循”，
-并未删除这个样本。另有 6 个模型 preflight 会话，不计为任务 agent。
-当前未做独立的答案正确性评分。episode 时间包含 preflight、server 启动与清理。
-
-这组数据支持的 motivation 是：同一对象版本在多个消费者间复用，且状态需要跨越
-远长于实际访问临界区的间隙。仅看到某个 agent 暂时没有访问，不能证明其状态可回收。
-访问跨度是事后观测，不是对未来读者的预测，也不是可免费提前隐藏的传输时间。
-
-- [正式汇总及逐 episode 数据](results/arvm-live-final-20261010/summary.json)
-- [原始 episode 清单](results/arvm-live-final-20261010/episodes.jsonl)
-- [完整性与协议审计](results/arvm-live-final-20261010/validation.json)
-- [PNG 图](results/arvm-live-final-20261010/arvm-motivation.png) / [PDF 图](results/arvm-live-final-20261010/arvm-motivation.pdf)
-- 示例：[arVM 内存约束](results/arvm-live-final-20261010/runtime-review-r2/arvm-memory-contract.json)、
-  [观测数据流](results/arvm-live-final-20261010/runtime-review-r2/arvm-dataflow.json)、
-  [OpenCode 原始工具调用](results/arvm-live-final-20261010/runtime-review-r2/analyst-0/opencode.jsonl)
-
-图左侧的点是各 episode 比例、横线是中位数；上表是合并分子/分母的比例，两者定义不同。
-图中时间轴使用对数坐标，显示全部 6 个 episode。
-
-## Grant 性能及 NVIDIA Sentry 对照状态
-
-目前将 Grant 解释为 arVM 内存访问的授权/撤销机制：
-`grant → check/pin → access → release → revoke`，不是另一个已识别的外部 Grant 项目。
-性能微实验使用相同本机 CXL 控制状态和 native CXL 锁，分别测试 1、2、4 个并发 worker，
-每组 5 次，随机顺序。共 3,500 次 check/pin/release 和 1,500 对 issuance/revoke；
-每次 revoke 后还验证新的访问被拒绝。
-
-| 并发 worker | check + pin/release p50 | p95 | grant issue p50 | revoke p50 | throughput |
-|---|---:|---:|---:|---:|---:|
-| 1 | 59.791 µs | 71.639 µs | 50.747 µs | 29.735 µs | 14,704 ops/s |
-| 2 | 64.578 µs | 77.688 µs | 52.750 µs | 31.177 µs | 27,657 ops/s |
-| 4 | 107.423 µs | 173.003 µs | 55.604 µs | 33.952 µs | 31,852 ops/s |
-
-表内每项是 5 次 trial 对应统计量的中位数；不是置信区间。
-issue/revoke 单独在并发阶段结束后由一个 controller 测量。
-这些是预热后的 Python API 实测，包含 CXL 锁、JSON 控制状态处理及日志开销，
-不含模型推理、payload 访问或网络 RPC。控制表的串行临界区限制了扩展性。
-吞吐包含 dispatch barrier 和结果队列；单次操作延迟不包含这些同步。
-
-[Grant 原始数据和验证](results/grant-final-20261010/validation.json)、
-[汇总](results/grant-final-20261010/summary.json)、
-[逐 trial 样本](results/grant-final-20261010/runs.jsonl)。
-
-**NVIDIA Sentry 尚未实测，不能报告相对加速比。** 本机 PCI inventory 没有 BlueField，
-也没有配置 Sentry endpoint/SDK。
-[NVIDIA 官方架构](https://www.nvidia.com/en-us/solutions/ai/agent-safety/)
-把 Sentry 的硬件隔离路径放在 BlueField DPU 上；OpenShell 是另一层软件运行时。
-这里没有用 OpenShell、gVisor Sentry、sleep 或模拟延迟代替它。
-
-已导出全部 107 次真实请求的
-[比较输入](results/arvm-live-final-20261010/sentry-comparison/requests.jsonl) 和
-[比较协议](results/arvm-live-final-20261010/sentry-comparison/protocol.json)。
-该 JSONL 是实验输入格式，不是假定的 NVIDIA API。
-接入真实 baseline 时必须记录 Sentry/DOCA/firmware、硬件拓扑、实际策略与身份映射、
-请求传输及计时边界，保留失败请求，并分别报告冷启动、warm path 和完整任务耗时。
-本地 MCP grant 不具有 DPU 的隔离边界；指针撤销、带外监控等不等价能力须单列。
-
-## 实现与数据语义
-
-1. `dataflow.compile_memory_contract` 对可信任务 effects 做 DAG 检查，识别同一 backing、
-   共享读者、发布依赖、并发写者与待完成消费者；输出 DSec 接受的权限声明。
-   它不从模型自然语言推导权限，也不分析任意程序指针。
-2. `DSec` 是本仓库自行实现的原型。它管理 scoped grants、依赖 admission、in-flight pins、
-   generation、撤销、retirement 和物理回收。accepted effects 与项目 grants 分开；
-   未开始的合法消费者、active pins 和 session roots 都会阻止提前回收。
-3. payload、版本 metadata、DSec registry 和锁字都在 `MAP_SHARED` 的 tmpfs backing 中。
-   在 first touch 前 `mbind`，随后检查 `/proc/self/numa_maps` 的真实驻留页；CXL 身份
-   再与 sysfs decoder 地址范围核对。测量主机上 node 1 为 CXL。磁盘 JSON 是审计快照。
-4. 上游 C++ SpinLock 通过小型 C ABI bridge 使用调用者提供的真实 CXL 地址。
-   `-Dcxl` 选择 region-backed 实现；旧 emucxl allocator 如果意外调用会 abort，没有模拟器路径。
-   所有控制与数据临界区都使用 CXL 锁。CAS 写和原子 append 保持版本连续性。
-5. 每个 OpenCode 角色运行于独立 bwrap workspace/server；只允许 `sharing_*` MCP 工具。
-   共享映射属于可信 MCP 工具进程，OpenCode/LLM 收到的是复制出的有限文本，
-   因而不能宣称 LLM prompt 零复制或透明拦截任意 shell/内存访问。
-   此原型不是针对恶意 native 程序的完整 sandbox/网络策略产品。
-6. 实际访问记录导出 `(object, version, producer, reader/writer, time, range, alias_set)`。
-   `RAW`、`RMW`、`WAR`、`WAW` 与发布边来自实际版本；同一 agent 较早读取对较晚输出的
-   `may_influence` 边只表示保守上下文依赖，不证明模型语义上用了该数据。
-
-`ledger` 是多写者对象；每个 append 的 RMW 边连接旧版本与新版本，因此保留传递贡献。
-表中 cross-agent reads 只数直接版本生产者与读者不同的显式 read，避免将 RMW 算作协作读取。
-可变版本复用同一 backing；它们不是同时保留的 immutable snapshot。
-第一组 live 对象固定容量 256 KiB，多轮 profile 使用 64 KiB；每次校验会扫描 padding。
-`bytes_scanned` 不是 CXL 总线流量，`bytes_copied=0` 也不代表 JSON/RPC/model prompt 无复制。
-
-锁不跨模型思考阶段持有。撤销阻止新的工具 grant；已有 pin 必须 drain 后才能结束任务或
-回收。没有任意 CPU 指针的强制撤销。持锁进程死亡时 timeout 并 fail closed，
-不会强制解锁潜在不一致对象。CXL 内存和当前对象协议不提供崩溃持久化。
-
-## 复现
-
-依赖 Linux、真实 CXL NUMA 节点、libnuma、g++、bwrap、OpenCode v2；
-制图另需 matplotlib。源码、模型与库 SHA-256 均随结果保存。
-`build/` 的 native 库和 OpenCode 二进制副本、`third_party/` checkout 不纳入源码版本控制。
-
-```bash
-python3 workloads/agent_sharing/build_cxl_lock.py
-python3 -m unittest discover -s workloads/agent_sharing -p 'test_*.py' -v
-
-# 本机模型路径与参数已在脚本内配置；在另一个终端启动服务。
-python3 workloads/agent_sharing/serve_model.py
-
-# 每个 output 使用新目录。
+# Earlier workload and Grant suites.
 python3 workloads/agent_sharing/run_live_suite.py \
   --output workloads/agent_sharing/results/my-live --repeats 3
 python3 workloads/agent_sharing/bench_grant.py \
   --output workloads/agent_sharing/results/my-grant --repeats 5 --steps 100
 python3 workloads/agent_sharing/summarize_live.py \
-  workloads/agent_sharing/results/my-live \
-  --grant workloads/agent_sharing/results/my-grant
+  workloads/agent_sharing/results/my-live --grant workloads/agent_sharing/results/my-grant
 python3 workloads/agent_sharing/export_sentry_workload.py \
   workloads/agent_sharing/results/my-live
-
-# 单 episode 的 arVM 数据流分析入口：
 python3 tools/arvm_shared_state.py \
   workloads/agent_sharing/results/my-live/runtime-review-r0
 ```
 
-12 项单元/多进程检查已通过，包括 80 次并发 append 无丢失、CAS 冲突、校验失败、
-CXL owner-death fail closed、权限/依赖/存活约束、撤销后拒绝访问、版本数据流、DAG 拒绝环、
-scope/effects 分离、未来消费者与 root 保留、实际 backing 回收及搜索的共享别名验证。
-另外完成 26 组当前 CXL 后端的控制实验 smoke check，共 150 次操作；
-该检查用于回归验证，不作为真实 agent motivation 或 Sentry 性能结论。
+The original shared-state suite has 12 unit/multiprocess checks, including
+concurrent appends, CAS conflicts, corruption, owner death, grants, dependencies,
+roots, future uses, version lineage, and actual reclamation. A separate CXL
+control smoke test covers 26 conditions and 150 operations; it is not an LLM
+motivation result or a Sentry performance comparison.
 
-## 历史目录
+## Archive scope
 
-`controlled-20261010`、早期 `opencode-live-*`、`mcp-*` 等目录是上一版文件锁控制或
-配置排错记录；`cxl-live-20261010-r0`、`arvm-review-20261010-r0`、`grant-20261010`
-是本机保留的探索运行。它们均未合入正式结果，也不纳入这次 Git 提交。
-正式 agent 数据来自 `arvm-live-final-20261010` 和 `arvm-profile-20261011`，
-并发 PSS probe 来自 `arvm-sharing-probe-20261011`，Grant 性能来自 `grant-final-20261010`。
-新套件的预实验位于 `profile-development`，不进入上述统计。所有 `.dsec-state` 运行缓存均不提交。
+Formal evidence comes from `arvm-live-final-20261010`,
+`arvm-profile-20261011`, `arvm-sharing-probe-20261011`, and
+`grant-final-20261010`. `profile-development` and older exploratory directories
+are excluded. Historical file-lock runs and setup troubleshooting are not part
+of current CXL claims. All `.dsec-state` runtime caches remain untracked.

@@ -607,7 +607,8 @@ The local Qwen model is configured. Twelve additional multi-round episodes
 median managed CXL payload occupancy falls 22.4% and 23.3% with 2 and 4 reviewers.
 All trials publish outputs; 11/12 follow every required tool step. Concurrent
 PSS probes, raw versioned traces, and paper figures accompany these results.
-See the [updated manuscript](6ac4087cf755acfa13cf5a59/main.pdf).
+The manuscript is maintained separately in its Overleaf project; paper files
+are not part of this repository.
 The earlier six live episodes and software grant/revoke measurements remain
 separate results. NVIDIA Sentry comparison remains unmeasured:
 this machine has no BlueField hardware or configured Sentry endpoint. Historical

@@ -2,3 +2,7 @@ build
 out/
 __pycache__/
 *.py[cod]
+
+# Manuscripts are maintained in a separate Overleaf project.
+/6ac4087cf755acfa13cf5a59/
+/paper/
