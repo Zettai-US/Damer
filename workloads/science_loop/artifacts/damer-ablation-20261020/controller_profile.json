@@ -1,0 +1,358 @@
+{
+  "status": "pass",
+  "loops": 60,
+  "contrasts": [
+    {
+      "kernel": "gray-scott",
+      "policy": "refetch",
+      "pairs": 5,
+      "delta_iteration_s_median": 4.561734303308185,
+      "delta_protocol_s_median": 4.560189861105755,
+      "delta_remote_s_median": -0.02344876603456214,
+      "delta_local_other_s_median": 0.02499320823699236,
+      "extra_coordinator_requests_median": 41168,
+      "extra_coordinator_payload_bytes_median": 2592479,
+      "observations": [
+        {
+          "seed": 712,
+          "delta_iteration_s": 4.561734303308185,
+          "delta_protocol_s": 4.560189861105755,
+          "delta_remote_s": -0.02344876603456214,
+          "delta_local_other_s": 0.02499320823699236,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        },
+        {
+          "seed": 713,
+          "delta_iteration_s": 4.609704656002577,
+          "delta_protocol_s": 4.579698278335854,
+          "delta_remote_s": 0.005807616165839136,
+          "delta_local_other_s": 0.024198761500883847,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        },
+        {
+          "seed": 714,
+          "delta_iteration_s": 4.567427493981086,
+          "delta_protocol_s": 4.551931964990217,
+          "delta_remote_s": -0.008719497243873775,
+          "delta_local_other_s": 0.024215026234742254,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        },
+        {
+          "seed": 715,
+          "delta_iteration_s": 4.552543221274391,
+          "delta_protocol_s": 4.5552724960725754,
+          "delta_remote_s": -0.0286294924444519,
+          "delta_local_other_s": 0.025900217646267265,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        },
+        {
+          "seed": 716,
+          "delta_iteration_s": 4.5436579220113344,
+          "delta_protocol_s": 4.560406288772356,
+          "delta_remote_s": -0.04175875353394076,
+          "delta_local_other_s": 0.025010386772919446,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        }
+      ]
+    },
+    {
+      "kernel": "gray-scott",
+      "policy": "retain",
+      "pairs": 5,
+      "delta_iteration_s_median": 4.591217727516778,
+      "delta_protocol_s_median": 4.562069940788206,
+      "delta_remote_s_median": 0.006488462444394827,
+      "delta_local_other_s_median": 0.02549318625824526,
+      "extra_coordinator_requests_median": 41168,
+      "extra_coordinator_payload_bytes_median": 2592479,
+      "observations": [
+        {
+          "seed": 712,
+          "delta_iteration_s": 4.5731540390406735,
+          "delta_protocol_s": 4.555610347830225,
+          "delta_remote_s": -0.008823025331366807,
+          "delta_local_other_s": 0.02636671654181555,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        },
+        {
+          "seed": 713,
+          "delta_iteration_s": 4.594051589490846,
+          "delta_protocol_s": 4.562069940788206,
+          "delta_remote_s": 0.006488462444394827,
+          "delta_local_other_s": 0.02549318625824526,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        },
+        {
+          "seed": 714,
+          "delta_iteration_s": 4.607620134949684,
+          "delta_protocol_s": 4.570113315770868,
+          "delta_remote_s": 0.015258245577570051,
+          "delta_local_other_s": 0.02224857360124588,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        },
+        {
+          "seed": 715,
+          "delta_iteration_s": 4.588270138541702,
+          "delta_protocol_s": 4.549823651963379,
+          "delta_remote_s": 0.014055510924663395,
+          "delta_local_other_s": 0.024390975653659552,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        },
+        {
+          "seed": 716,
+          "delta_iteration_s": 4.591217727516778,
+          "delta_protocol_s": 4.564137963636313,
+          "delta_remote_s": -0.00899345095967874,
+          "delta_local_other_s": 0.03607321484014392,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        }
+      ]
+    },
+    {
+      "kernel": "gray-scott",
+      "policy": "statistics",
+      "pairs": 5,
+      "delta_iteration_s_median": 4.60338906297693,
+      "delta_protocol_s_median": 4.572072242270224,
+      "delta_remote_s_median": 0.013711090723518282,
+      "delta_local_other_s_median": 0.0253591695218347,
+      "extra_coordinator_requests_median": 41168,
+      "extra_coordinator_payload_bytes_median": 2592479,
+      "observations": [
+        {
+          "seed": 712,
+          "delta_iteration_s": 4.628871697757859,
+          "delta_protocol_s": 4.57636135868961,
+          "delta_remote_s": 0.027151169546414167,
+          "delta_local_other_s": 0.0253591695218347,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        },
+        {
+          "seed": 713,
+          "delta_iteration_s": 4.611726667732,
+          "delta_protocol_s": 4.572072242270224,
+          "delta_remote_s": 0.013711090723518282,
+          "delta_local_other_s": 0.025943334738258272,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        },
+        {
+          "seed": 714,
+          "delta_iteration_s": 4.5937420559930615,
+          "delta_protocol_s": 4.574713182286359,
+          "delta_remote_s": -0.006895006459672004,
+          "delta_local_other_s": 0.025923880166374147,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        },
+        {
+          "seed": 715,
+          "delta_iteration_s": 4.5548345079878345,
+          "delta_protocol_s": 4.5632814397104084,
+          "delta_remote_s": -0.03309574123704806,
+          "delta_local_other_s": 0.024648809514474124,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        },
+        {
+          "seed": 716,
+          "delta_iteration_s": 4.60338906297693,
+          "delta_protocol_s": 4.563129563641269,
+          "delta_remote_s": 0.016440232226159424,
+          "delta_local_other_s": 0.023819267109502107,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        }
+      ]
+    },
+    {
+      "kernel": "wave",
+      "policy": "refetch",
+      "pairs": 5,
+      "delta_iteration_s_median": 4.589215590269305,
+      "delta_protocol_s_median": 4.56516178813763,
+      "delta_remote_s_median": 0.006619783933274448,
+      "delta_local_other_s_median": 0.024826783395837992,
+      "extra_coordinator_requests_median": 41168,
+      "extra_coordinator_payload_bytes_median": 2592479,
+      "observations": [
+        {
+          "seed": 712,
+          "delta_iteration_s": 4.608074426010717,
+          "delta_protocol_s": 4.56516178813763,
+          "delta_remote_s": 0.016095510101877153,
+          "delta_local_other_s": 0.026817127771209925,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        },
+        {
+          "seed": 713,
+          "delta_iteration_s": 4.635769303014968,
+          "delta_protocol_s": 4.5806874228292145,
+          "delta_remote_s": 0.028182950627524406,
+          "delta_local_other_s": 0.0268989295582287,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        },
+        {
+          "seed": 714,
+          "delta_iteration_s": 4.586208493274171,
+          "delta_protocol_s": 4.565786746854428,
+          "delta_remote_s": -0.003383800736628473,
+          "delta_local_other_s": 0.023805547156371176,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        },
+        {
+          "seed": 715,
+          "delta_iteration_s": 4.589215590269305,
+          "delta_protocol_s": 4.557769022940192,
+          "delta_remote_s": 0.006619783933274448,
+          "delta_local_other_s": 0.024826783395837992,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        },
+        {
+          "seed": 716,
+          "delta_iteration_s": 4.558268383494578,
+          "delta_protocol_s": 4.5639758494799025,
+          "delta_remote_s": -0.030211138306185603,
+          "delta_local_other_s": 0.02450367232086137,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        }
+      ]
+    },
+    {
+      "kernel": "wave",
+      "policy": "retain",
+      "pairs": 5,
+      "delta_iteration_s_median": 4.590983040747233,
+      "delta_protocol_s_median": 4.555425367259886,
+      "delta_remote_s_median": 0.017805375100579113,
+      "delta_local_other_s_median": 0.025121428770944476,
+      "extra_coordinator_requests_median": 41168,
+      "extra_coordinator_payload_bytes_median": 2592479,
+      "observations": [
+        {
+          "seed": 712,
+          "delta_iteration_s": 4.621938586526085,
+          "delta_protocol_s": 4.553845811053179,
+          "delta_remote_s": 0.04164315725211054,
+          "delta_local_other_s": 0.026449618220794946,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        },
+        {
+          "seed": 713,
+          "delta_iteration_s": 4.618179529439658,
+          "delta_protocol_s": 4.574299483501818,
+          "delta_remote_s": 0.017805375100579113,
+          "delta_local_other_s": 0.026074670837260783,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        },
+        {
+          "seed": 714,
+          "delta_iteration_s": 4.588455467543099,
+          "delta_protocol_s": 4.555425367259886,
+          "delta_remote_s": 0.010101419815327972,
+          "delta_local_other_s": 0.022928680467884988,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        },
+        {
+          "seed": 715,
+          "delta_iteration_s": 4.579274709278252,
+          "delta_protocol_s": 4.564179486013018,
+          "delta_remote_s": -0.010026205505710095,
+          "delta_local_other_s": 0.025121428770944476,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        },
+        {
+          "seed": 716,
+          "delta_iteration_s": 4.590983040747233,
+          "delta_protocol_s": 4.546306315343827,
+          "delta_remote_s": 0.021237767185084522,
+          "delta_local_other_s": 0.023438958218321204,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        }
+      ]
+    },
+    {
+      "kernel": "wave",
+      "policy": "statistics",
+      "pairs": 5,
+      "delta_iteration_s_median": 4.604589439521078,
+      "delta_protocol_s_median": 4.55905566283036,
+      "delta_remote_s_median": -0.0035397674655541778,
+      "delta_local_other_s_median": 0.024269042420201004,
+      "extra_coordinator_requests_median": 41168,
+      "extra_coordinator_payload_bytes_median": 2592479,
+      "observations": [
+        {
+          "seed": 712,
+          "delta_iteration_s": 4.61199787654914,
+          "delta_protocol_s": 4.55558672209736,
+          "delta_remote_s": 0.03214211203157902,
+          "delta_local_other_s": 0.024269042420201004,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        },
+        {
+          "seed": 713,
+          "delta_iteration_s": 4.574620527040679,
+          "delta_protocol_s": 4.554510422691237,
+          "delta_remote_s": -0.0035397674655541778,
+          "delta_local_other_s": 0.023649871814996004,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        },
+        {
+          "seed": 714,
+          "delta_iteration_s": 4.5576819572015665,
+          "delta_protocol_s": 4.55905566283036,
+          "delta_remote_s": -0.022406087955459952,
+          "delta_local_other_s": 0.021032382326666266,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        },
+        {
+          "seed": 715,
+          "delta_iteration_s": 4.604589439521078,
+          "delta_protocol_s": 4.590088529104833,
+          "delta_remote_s": -0.011224531859625131,
+          "delta_local_other_s": 0.02572544227587059,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        },
+        {
+          "seed": 716,
+          "delta_iteration_s": 4.64139482320752,
+          "delta_protocol_s": 4.58442977903178,
+          "delta_remote_s": 0.029368676070589572,
+          "delta_local_other_s": 0.02759636810515076,
+          "extra_coordinator_requests": 41168,
+          "extra_coordinator_payload_bytes": 2592479
+        }
+      ]
+    }
+  ],
+  "timing": "Per-iteration means; protocol I/O and remote-stage wait are nonoverlapping on the coordinator clock. Remainder includes numerics, serialization and trace work.",
+  "limits": "Protocol I/O includes both control and bulk payloads. Paired time differences include transport noise. Byte counts exclude protocol framing and are not NIC or CXL-fabric counters.",
+  "source_sha256": "17f38216b126b285a55e88c63eebdcb50a33a24e5b20355829550a0368a46feb",
+  "input_audit_sha256": "7caa8cdf71b12fbff5fd2f97e7863c7b296b8ed11ebe270c51c482d8f79efda0"
+}

@@ -1,0 +1,902 @@
+{
+  "status": "pass",
+  "loops": 380,
+  "iterations": 1520,
+  "tasks": 9000,
+  "suites": [
+    {
+      "suite": "compute",
+      "trials": 40,
+      "failed": 0
+    },
+    {
+      "suite": "instrumentation",
+      "trials": 40,
+      "failed": 0
+    },
+    {
+      "suite": "main",
+      "trials": 120,
+      "failed": 0
+    },
+    {
+      "suite": "refs",
+      "trials": 20,
+      "failed": 0
+    },
+    {
+      "suite": "scale",
+      "trials": 40,
+      "failed": 0
+    },
+    {
+      "suite": "stress",
+      "trials": 120,
+      "failed": 0
+    }
+  ],
+  "failures": [],
+  "equivalence_checks": [
+    {
+      "config": [
+        "gray-scott",
+        256,
+        256,
+        2,
+        712,
+        4
+      ],
+      "trials": 4,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "wave",
+        256,
+        256,
+        2,
+        712,
+        4
+      ],
+      "trials": 4,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "wave",
+        256,
+        256,
+        2,
+        713,
+        4
+      ],
+      "trials": 4,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "gray-scott",
+        256,
+        256,
+        2,
+        713,
+        4
+      ],
+      "trials": 4,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "gray-scott",
+        256,
+        256,
+        2,
+        714,
+        4
+      ],
+      "trials": 4,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "wave",
+        256,
+        256,
+        2,
+        714,
+        4
+      ],
+      "trials": 4,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "wave",
+        256,
+        256,
+        2,
+        715,
+        4
+      ],
+      "trials": 4,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "gray-scott",
+        256,
+        256,
+        2,
+        715,
+        4
+      ],
+      "trials": 4,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "gray-scott",
+        256,
+        256,
+        2,
+        716,
+        4
+      ],
+      "trials": 4,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "wave",
+        256,
+        256,
+        2,
+        716,
+        4
+      ],
+      "trials": 4,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "gray-scott",
+        256,
+        64,
+        2,
+        712,
+        4
+      ],
+      "trials": 16,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "wave",
+        256,
+        64,
+        2,
+        712,
+        4
+      ],
+      "trials": 16,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "wave",
+        256,
+        64,
+        2,
+        713,
+        4
+      ],
+      "trials": 16,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "gray-scott",
+        256,
+        64,
+        2,
+        713,
+        4
+      ],
+      "trials": 16,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "gray-scott",
+        256,
+        64,
+        2,
+        714,
+        4
+      ],
+      "trials": 16,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "wave",
+        256,
+        64,
+        2,
+        714,
+        4
+      ],
+      "trials": 16,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "wave",
+        256,
+        64,
+        2,
+        715,
+        4
+      ],
+      "trials": 16,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "gray-scott",
+        256,
+        64,
+        2,
+        715,
+        4
+      ],
+      "trials": 16,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "gray-scott",
+        256,
+        64,
+        2,
+        716,
+        4
+      ],
+      "trials": 16,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "wave",
+        256,
+        64,
+        2,
+        716,
+        4
+      ],
+      "trials": 16,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "wave",
+        128,
+        64,
+        2,
+        712,
+        4
+      ],
+      "trials": 6,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "gray-scott",
+        128,
+        64,
+        2,
+        712,
+        4
+      ],
+      "trials": 6,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "wave",
+        128,
+        64,
+        2,
+        713,
+        4
+      ],
+      "trials": 6,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "gray-scott",
+        128,
+        64,
+        2,
+        713,
+        4
+      ],
+      "trials": 6,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "gray-scott",
+        128,
+        64,
+        2,
+        714,
+        4
+      ],
+      "trials": 6,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "wave",
+        128,
+        64,
+        2,
+        714,
+        4
+      ],
+      "trials": 6,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "gray-scott",
+        128,
+        64,
+        2,
+        715,
+        4
+      ],
+      "trials": 6,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "wave",
+        128,
+        64,
+        2,
+        715,
+        4
+      ],
+      "trials": 6,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "gray-scott",
+        128,
+        64,
+        2,
+        716,
+        4
+      ],
+      "trials": 6,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "wave",
+        128,
+        64,
+        2,
+        716,
+        4
+      ],
+      "trials": 6,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "gray-scott",
+        512,
+        64,
+        2,
+        712,
+        4
+      ],
+      "trials": 4,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "wave",
+        512,
+        64,
+        2,
+        712,
+        4
+      ],
+      "trials": 4,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "wave",
+        512,
+        64,
+        2,
+        713,
+        4
+      ],
+      "trials": 4,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "gray-scott",
+        512,
+        64,
+        2,
+        713,
+        4
+      ],
+      "trials": 4,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "gray-scott",
+        512,
+        64,
+        2,
+        714,
+        4
+      ],
+      "trials": 4,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "wave",
+        512,
+        64,
+        2,
+        714,
+        4
+      ],
+      "trials": 4,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "wave",
+        512,
+        64,
+        2,
+        715,
+        4
+      ],
+      "trials": 4,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "gray-scott",
+        512,
+        64,
+        2,
+        715,
+        4
+      ],
+      "trials": 4,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "gray-scott",
+        512,
+        64,
+        2,
+        716,
+        4
+      ],
+      "trials": 4,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "wave",
+        512,
+        64,
+        2,
+        716,
+        4
+      ],
+      "trials": 4,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "wave",
+        256,
+        64,
+        4,
+        712,
+        4
+      ],
+      "trials": 8,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "gray-scott",
+        256,
+        64,
+        4,
+        712,
+        4
+      ],
+      "trials": 8,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "wave",
+        256,
+        64,
+        4,
+        713,
+        4
+      ],
+      "trials": 8,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "gray-scott",
+        256,
+        64,
+        4,
+        713,
+        4
+      ],
+      "trials": 8,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "gray-scott",
+        256,
+        64,
+        4,
+        714,
+        4
+      ],
+      "trials": 8,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "wave",
+        256,
+        64,
+        4,
+        714,
+        4
+      ],
+      "trials": 8,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "wave",
+        256,
+        64,
+        4,
+        715,
+        4
+      ],
+      "trials": 8,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "gray-scott",
+        256,
+        64,
+        4,
+        715,
+        4
+      ],
+      "trials": 8,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "wave",
+        256,
+        64,
+        4,
+        716,
+        4
+      ],
+      "trials": 8,
+      "all_identical": true
+    },
+    {
+      "config": [
+        "gray-scott",
+        256,
+        64,
+        4,
+        716,
+        4
+      ],
+      "trials": 8,
+      "all_identical": true
+    }
+  ],
+  "source_hashes": {
+    "compute/source/kernels.py": "b791ab26815115e2ba6ec5e1efba5fde9021e8129613ebed447dd6d02c639f48",
+    "compute/source/test_science.py": "7c98ec0837dc90c1c9c5f92daccd7515d312bff228e6deec42c2c000bc8a3181",
+    "compute/source/analyze.py": "19747e924d02d97c9d45626b350d8de2c00fadad4449f2dd57c2aef4255287b5",
+    "compute/source/run.py": "2bc825e07a604f5ec742378a16e697f023a1a3c553ca68727596dc91871a3fc9",
+    "compute/source/store.py": "56246e42d352d815997a357ed9fbd41fc4312faa61fba8640376d2ce4a21fd6f",
+    "compute/source/dsec.py": "3dbea9f5a62bf028135bdfca93a335948f453d12a59bde49dd7049ab8f0757fa",
+    "compute/source/cxl_lock.py": "a74674fdbd8decf18937e262c23f389f0be0685479133d02aef89f9ddd2b16e3",
+    "compute/source/dataflow.py": "abc4ff632302479ed4ce497c6ca0a5943766a84b27641ad6088d1b92ee2fcb2d",
+    "instrumentation/source/kernels.py": "b791ab26815115e2ba6ec5e1efba5fde9021e8129613ebed447dd6d02c639f48",
+    "instrumentation/source/test_science.py": "7c98ec0837dc90c1c9c5f92daccd7515d312bff228e6deec42c2c000bc8a3181",
+    "instrumentation/source/analyze.py": "19747e924d02d97c9d45626b350d8de2c00fadad4449f2dd57c2aef4255287b5",
+    "instrumentation/source/run.py": "2bc825e07a604f5ec742378a16e697f023a1a3c553ca68727596dc91871a3fc9",
+    "instrumentation/source/store.py": "56246e42d352d815997a357ed9fbd41fc4312faa61fba8640376d2ce4a21fd6f",
+    "instrumentation/source/dsec.py": "3dbea9f5a62bf028135bdfca93a335948f453d12a59bde49dd7049ab8f0757fa",
+    "instrumentation/source/cxl_lock.py": "a74674fdbd8decf18937e262c23f389f0be0685479133d02aef89f9ddd2b16e3",
+    "instrumentation/source/dataflow.py": "abc4ff632302479ed4ce497c6ca0a5943766a84b27641ad6088d1b92ee2fcb2d",
+    "main/source/kernels.py": "b791ab26815115e2ba6ec5e1efba5fde9021e8129613ebed447dd6d02c639f48",
+    "main/source/test_science.py": "7c98ec0837dc90c1c9c5f92daccd7515d312bff228e6deec42c2c000bc8a3181",
+    "main/source/analyze.py": "19747e924d02d97c9d45626b350d8de2c00fadad4449f2dd57c2aef4255287b5",
+    "main/source/run.py": "2bc825e07a604f5ec742378a16e697f023a1a3c553ca68727596dc91871a3fc9",
+    "main/source/store.py": "56246e42d352d815997a357ed9fbd41fc4312faa61fba8640376d2ce4a21fd6f",
+    "main/source/dsec.py": "3dbea9f5a62bf028135bdfca93a335948f453d12a59bde49dd7049ab8f0757fa",
+    "main/source/cxl_lock.py": "a74674fdbd8decf18937e262c23f389f0be0685479133d02aef89f9ddd2b16e3",
+    "main/source/dataflow.py": "abc4ff632302479ed4ce497c6ca0a5943766a84b27641ad6088d1b92ee2fcb2d",
+    "refs/source/kernels.py": "b791ab26815115e2ba6ec5e1efba5fde9021e8129613ebed447dd6d02c639f48",
+    "refs/source/test_science.py": "7c98ec0837dc90c1c9c5f92daccd7515d312bff228e6deec42c2c000bc8a3181",
+    "refs/source/analyze.py": "19747e924d02d97c9d45626b350d8de2c00fadad4449f2dd57c2aef4255287b5",
+    "refs/source/run.py": "2bc825e07a604f5ec742378a16e697f023a1a3c553ca68727596dc91871a3fc9",
+    "refs/source/store.py": "56246e42d352d815997a357ed9fbd41fc4312faa61fba8640376d2ce4a21fd6f",
+    "refs/source/dsec.py": "3dbea9f5a62bf028135bdfca93a335948f453d12a59bde49dd7049ab8f0757fa",
+    "refs/source/cxl_lock.py": "a74674fdbd8decf18937e262c23f389f0be0685479133d02aef89f9ddd2b16e3",
+    "refs/source/dataflow.py": "abc4ff632302479ed4ce497c6ca0a5943766a84b27641ad6088d1b92ee2fcb2d",
+    "scale/source/kernels.py": "b791ab26815115e2ba6ec5e1efba5fde9021e8129613ebed447dd6d02c639f48",
+    "scale/source/test_science.py": "7c98ec0837dc90c1c9c5f92daccd7515d312bff228e6deec42c2c000bc8a3181",
+    "scale/source/analyze.py": "19747e924d02d97c9d45626b350d8de2c00fadad4449f2dd57c2aef4255287b5",
+    "scale/source/run.py": "2bc825e07a604f5ec742378a16e697f023a1a3c553ca68727596dc91871a3fc9",
+    "scale/source/store.py": "56246e42d352d815997a357ed9fbd41fc4312faa61fba8640376d2ce4a21fd6f",
+    "scale/source/dsec.py": "3dbea9f5a62bf028135bdfca93a335948f453d12a59bde49dd7049ab8f0757fa",
+    "scale/source/cxl_lock.py": "a74674fdbd8decf18937e262c23f389f0be0685479133d02aef89f9ddd2b16e3",
+    "scale/source/dataflow.py": "abc4ff632302479ed4ce497c6ca0a5943766a84b27641ad6088d1b92ee2fcb2d",
+    "stress/source/kernels.py": "b791ab26815115e2ba6ec5e1efba5fde9021e8129613ebed447dd6d02c639f48",
+    "stress/source/test_science.py": "7c98ec0837dc90c1c9c5f92daccd7515d312bff228e6deec42c2c000bc8a3181",
+    "stress/source/analyze.py": "19747e924d02d97c9d45626b350d8de2c00fadad4449f2dd57c2aef4255287b5",
+    "stress/source/run.py": "2bc825e07a604f5ec742378a16e697f023a1a3c553ca68727596dc91871a3fc9",
+    "stress/source/store.py": "56246e42d352d815997a357ed9fbd41fc4312faa61fba8640376d2ce4a21fd6f",
+    "stress/source/dsec.py": "3dbea9f5a62bf028135bdfca93a335948f453d12a59bde49dd7049ab8f0757fa",
+    "stress/source/cxl_lock.py": "a74674fdbd8decf18937e262c23f389f0be0685479133d02aef89f9ddd2b16e3",
+    "stress/source/dataflow.py": "abc4ff632302479ed4ce497c6ca0a5943766a84b27641ad6088d1b92ee2fcb2d"
+  },
+  "residency_rechecks": [
+    {
+      "trial": "b0-08-gray-scott-n256-file-mmap-m2-c0",
+      "task": "train-1-r2",
+      "object": "model-2-1",
+      "checks": [
+        "file residency incomplete: {0: 1276}"
+      ]
+    },
+    {
+      "trial": "b1-11-wave-n256-file-durable-m2-c0",
+      "task": "train-0-r0",
+      "object": "traj-1",
+      "checks": [
+        "file residency incomplete: {0: 1984}"
+      ]
+    },
+    {
+      "trial": "b1-11-wave-n256-file-durable-m2-c0",
+      "task": "train-0-r0",
+      "object": "model-0-0",
+      "checks": [
+        "file residency incomplete: {0: 1088}"
+      ]
+    },
+    {
+      "trial": "b1-17-gray-scott-n256-file-durable-m2-c0",
+      "task": "train-0-r0",
+      "object": "traj-1",
+      "checks": [
+        "file residency incomplete: {0: 2016}"
+      ]
+    },
+    {
+      "trial": "b2-04-gray-scott-n256-file-durable-m2-c0",
+      "task": "train-0-r1",
+      "object": "model-1-0",
+      "checks": [
+        "file residency incomplete: {0: 1248}"
+      ]
+    },
+    {
+      "trial": "b2-04-gray-scott-n256-file-durable-m2-c0",
+      "task": "train-0-r3",
+      "object": "model-3-0",
+      "checks": [
+        "file residency incomplete: {0: 1184}"
+      ]
+    },
+    {
+      "trial": "b2-23-gray-scott-n256-dram-shared-m2-c0",
+      "task": "train-0-r0",
+      "object": "traj-1",
+      "checks": [
+        "placement mismatch: {0: 2047}; expected node 0, 2048 pages"
+      ]
+    },
+    {
+      "trial": "b3-03-wave-n256-cxl-cache-m2-c0",
+      "task": "train-1-r1",
+      "object": "traj-4",
+      "checks": [
+        "placement mismatch: {0: 2047}; expected node 0, 2048 pages"
+      ]
+    },
+    {
+      "trial": "b3-08-wave-n256-file-durable-m2-c0",
+      "task": "train-0-r0",
+      "object": "traj-1",
+      "checks": [
+        "file residency incomplete: {0: 1984}"
+      ]
+    },
+    {
+      "trial": "b1-03-gray-scott-n512-dram-shared-m2-c0",
+      "task": "train-1-r1",
+      "object": "traj-5",
+      "checks": [
+        "placement mismatch: {0: 8191}; expected node 0, 8192 pages",
+        "placement mismatch: {0: 8189}; expected node 0, 8192 pages"
+      ]
+    },
+    {
+      "trial": "b3-04-gray-scott-n512-dram-shared-m2-c0",
+      "task": "train-0-r3",
+      "object": "traj-6",
+      "checks": [
+        "placement mismatch: {0: 8175}; expected node 0, 8192 pages",
+        "placement mismatch: {0: 8175}; expected node 0, 8192 pages",
+        "placement mismatch: {0: 8191}; expected node 0, 8192 pages",
+        "placement mismatch: {0: 8168}; expected node 0, 8192 pages"
+      ]
+    },
+    {
+      "trial": "b3-06-gray-scott-n512-cxl-cache-m2-c0",
+      "task": "train-1-r0",
+      "object": "traj-0",
+      "checks": [
+        "placement mismatch: {0: 8169}; expected node 0, 8192 pages"
+      ]
+    },
+    {
+      "trial": "b4-04-gray-scott-n512-file-mmap-m2-c0",
+      "task": "train-0-r2",
+      "object": "model-2-0",
+      "checks": [
+        "file residency incomplete: {0: 5112}"
+      ]
+    },
+    {
+      "trial": "b0-04-gray-scott-n256-dram-shared-m4-c0",
+      "task": "train-1-r1",
+      "object": "traj-1",
+      "checks": [
+        "placement mismatch: {0: 2047}; expected node 0, 2048 pages"
+      ]
+    },
+    {
+      "trial": "b0-04-gray-scott-n256-dram-shared-m4-c0",
+      "task": "train-2-r1",
+      "object": "traj-0",
+      "checks": [
+        "placement mismatch: {0: 2046}; expected node 0, 2048 pages"
+      ]
+    },
+    {
+      "trial": "b0-04-gray-scott-n256-dram-shared-m4-c0",
+      "task": "train-3-r1",
+      "object": "traj-4",
+      "checks": [
+        "placement mismatch: {0: 2047}; expected node 0, 2048 pages"
+      ]
+    },
+    {
+      "trial": "b0-04-gray-scott-n256-dram-shared-m4-c0",
+      "task": "train-1-r3",
+      "object": "traj-1",
+      "checks": [
+        "placement mismatch: {0: 2047}; expected node 0, 2048 pages"
+      ]
+    },
+    {
+      "trial": "b0-05-wave-n256-file-mmap-m4-c1",
+      "task": "train-1-r0",
+      "object": "traj-0",
+      "checks": [
+        "file residency incomplete: {0: 2016}"
+      ]
+    },
+    {
+      "trial": "b1-17-gray-scott-n256-cxl-cache-m2-c1",
+      "task": "train-0-r2",
+      "object": "traj-7",
+      "checks": [
+        "placement mismatch: {0: 2046}; expected node 0, 2048 pages"
+      ]
+    },
+    {
+      "trial": "b1-17-gray-scott-n256-cxl-cache-m2-c1",
+      "task": "train-1-r2",
+      "object": "traj-5",
+      "checks": [
+        "placement mismatch: {0: 2047}; expected node 0, 2048 pages",
+        "placement mismatch: {0: 2046}; expected node 0, 2048 pages"
+      ]
+    },
+    {
+      "trial": "b1-17-gray-scott-n256-cxl-cache-m2-c1",
+      "task": "train-1-r2",
+      "object": "traj-6",
+      "checks": [
+        "placement mismatch: {0: 2045}; expected node 0, 2048 pages",
+        "placement mismatch: {0: 2046}; expected node 0, 2048 pages"
+      ]
+    },
+    {
+      "trial": "b3-09-gray-scott-n256-dram-shared-m4-c1",
+      "task": "train-1-r0",
+      "object": "traj-1",
+      "checks": [
+        "placement mismatch: {0: 2044}; expected node 0, 2048 pages"
+      ]
+    },
+    {
+      "trial": "b4-04-wave-n256-cxl-cache-m2-c1",
+      "task": "train-1-r2",
+      "object": "traj-5",
+      "checks": [
+        "placement mismatch: {0: 2047}; expected node 0, 2048 pages"
+      ]
+    }
+  ],
+  "checks": [
+    "complete trial inventory",
+    "source hashes",
+    "identical selected candidates, field hashes and predictions across policies",
+    "verified physical CXL and DRAM residency",
+    "managed backing reconciled to array shapes",
+    "all mappings drained by process exit before finish",
+    "all bulk objects released; zero pins/roots/future uses",
+    "phase wall times reconcile to iteration totals"
+  ],
+  "caveats": [
+    "Single host, trusted workers; no cross-host fabric sharing.",
+    "CPU polynomial field surrogate; GPU path not measured (system torch import failed).",
+    "Managed file and replica capacities are not whole-process RSS or host memory usage.",
+    "File mmap uses warm page cache; durable-file baseline has stronger persistence semantics.",
+    "Five randomized blocks on a shared host; intervals are conditional, not production guarantees.",
+    "Training data remains rooted throughout the loop; no dataflow-specific reclamation advantage claimed.",
+    "Application pool budget is fail-closed admission, not an elastic multi-host pool manager."
+  ]
+}

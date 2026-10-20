@@ -1,0 +1,16 @@
+test_physical_and_simulator_stage_names (test_barrier_control.BarrierTest.test_physical_and_simulator_stage_names) ... ok
+test_stage_order_and_manual_retirement (test_barrier_control.BarrierTest.test_stage_order_and_manual_retirement) ... ok
+test_cas_mutex_across_connections (test_memsim.SimulatorTest.test_cas_mutex_across_connections) ... ok
+test_data_capacity_excludes_server_header (test_memsim.SimulatorTest.test_data_capacity_excludes_server_header) ... ok
+test_dsec_future_uses_pins_and_stale_epoch (test_memsim.SimulatorTest.test_dsec_future_uses_pins_and_stale_epoch) ... ok
+test_pipelined_binary_and_version_reuse (test_memsim.SimulatorTest.test_pipelined_binary_and_version_reuse) ... ok
+test_budget_failure_and_undeclared_use_leave_no_backing (test_science.CXLContract.test_budget_failure_and_undeclared_use_leave_no_backing) ... ok
+test_discrete_fourier_eigenvalue (test_science.Numerics.test_discrete_fourier_eigenvalue) ... ok
+test_fields_remain_finite_and_gray_scott_nonnegative (test_science.Numerics.test_fields_remain_finite_and_gray_scott_nonnegative) ... ok
+test_streamed_training_matches_stacked_system (test_science.Numerics.test_streamed_training_matches_stacked_system) ... ok
+test_wave_one_step_independent_update (test_science.Numerics.test_wave_one_step_independent_update) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 1.792s
+
+OK

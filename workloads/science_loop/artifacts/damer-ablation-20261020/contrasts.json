@@ -1,0 +1,686 @@
+[
+  {
+    "domain": "memsim",
+    "kernel": "gray-scott",
+    "n": 64,
+    "policy": "refetch",
+    "pairs": 5,
+    "ratio_median": 2.811146158361647,
+    "bootstrap95": [
+      2.796259461098474,
+      2.8195250146700164
+    ],
+    "delta_iteration_s_median": 4.561734303308185,
+    "damer_iteration_s_median": 7.077658162510488,
+    "barrier_iteration_s_median": 2.5284623677143827,
+    "observations": [
+      {
+        "seed": 712,
+        "ratio": 2.796259461098474,
+        "delta_iteration_s": 4.561734303308185,
+        "damer_iteration_s": 7.101308569777757,
+        "barrier_iteration_s": 2.5395742664695717,
+        "coordinator_request_delta": 41168
+      },
+      {
+        "seed": 713,
+        "ratio": 2.814884043524933,
+        "delta_iteration_s": 4.609704656002577,
+        "damer_iteration_s": 7.14964910724666,
+        "barrier_iteration_s": 2.5399444512440823,
+        "coordinator_request_delta": 41168
+      },
+      {
+        "seed": 714,
+        "ratio": 2.8195250146700164,
+        "delta_iteration_s": 4.567427493981086,
+        "damer_iteration_s": 7.077658162510488,
+        "barrier_iteration_s": 2.5102306685294025,
+        "coordinator_request_delta": 41168
+      },
+      {
+        "seed": 715,
+        "ratio": 2.811146158361647,
+        "delta_iteration_s": 4.552543221274391,
+        "damer_iteration_s": 7.066168750752695,
+        "barrier_iteration_s": 2.513625529478304,
+        "coordinator_request_delta": 41168
+      },
+      {
+        "seed": 716,
+        "ratio": 2.7970043691489064,
+        "delta_iteration_s": 4.5436579220113344,
+        "damer_iteration_s": 7.072120289725717,
+        "barrier_iteration_s": 2.5284623677143827,
+        "coordinator_request_delta": 41168
+      }
+    ]
+  },
+  {
+    "domain": "memsim",
+    "kernel": "gray-scott",
+    "n": 64,
+    "policy": "retain",
+    "pairs": 5,
+    "ratio_median": 4.122563307086602,
+    "bootstrap95": [
+      4.095681912846896,
+      4.144759426614166
+    ],
+    "delta_iteration_s_median": 4.591217727516778,
+    "damer_iteration_s_median": 6.060443605994806,
+    "barrier_iteration_s_median": 1.469392190745566,
+    "observations": [
+      {
+        "seed": 712,
+        "ratio": 4.095681912846896,
+        "delta_iteration_s": 4.5731540390406735,
+        "damer_iteration_s": 6.050422753265593,
+        "barrier_iteration_s": 1.4772687142249197,
+        "coordinator_request_delta": 41168
+      },
+      {
+        "seed": 713,
+        "ratio": 4.132894572382882,
+        "delta_iteration_s": 4.594051589490846,
+        "damer_iteration_s": 6.060443605994806,
+        "barrier_iteration_s": 1.46639201650396,
+        "coordinator_request_delta": 41168
+      },
+      {
+        "seed": 714,
+        "ratio": 4.144759426614166,
+        "delta_iteration_s": 4.607620134949684,
+        "damer_iteration_s": 6.072794257954229,
+        "barrier_iteration_s": 1.4651741230045445,
+        "coordinator_request_delta": 41168
+      },
+      {
+        "seed": 715,
+        "ratio": 4.122563307086602,
+        "delta_iteration_s": 4.588270138541702,
+        "damer_iteration_s": 6.057662329287268,
+        "barrier_iteration_s": 1.469392190745566,
+        "coordinator_request_delta": 41168
+      },
+      {
+        "seed": 716,
+        "ratio": 4.09965810689542,
+        "delta_iteration_s": 4.591217727516778,
+        "damer_iteration_s": 6.072419063013513,
+        "barrier_iteration_s": 1.4812013354967348,
+        "coordinator_request_delta": 41168
+      }
+    ]
+  },
+  {
+    "domain": "memsim",
+    "kernel": "gray-scott",
+    "n": 64,
+    "policy": "statistics",
+    "pairs": 5,
+    "ratio_median": 4.155954342322005,
+    "bootstrap95": [
+      4.0699334434939605,
+      4.202428160289372
+    ],
+    "delta_iteration_s_median": 4.60338906297693,
+    "damer_iteration_s_median": 6.0620252039516345,
+    "barrier_iteration_s_median": 1.4586361409747042,
+    "observations": [
+      {
+        "seed": 712,
+        "ratio": 4.202428160289372,
+        "delta_iteration_s": 4.628871697757859,
+        "damer_iteration_s": 6.074297314218711,
+        "barrier_iteration_s": 1.4454256164608523,
+        "coordinator_request_delta": 41168
+      },
+      {
+        "seed": 713,
+        "ratio": 4.191812852912535,
+        "delta_iteration_s": 4.611726667732,
+        "damer_iteration_s": 6.0565879049827345,
+        "barrier_iteration_s": 1.4448612372507341,
+        "coordinator_request_delta": 41168
+      },
+      {
+        "seed": 714,
+        "ratio": 4.107331078588482,
+        "delta_iteration_s": 4.5937420559930615,
+        "damer_iteration_s": 6.072098220756743,
+        "barrier_iteration_s": 1.4783561647636816,
+        "coordinator_request_delta": 41168
+      },
+      {
+        "seed": 715,
+        "ratio": 4.0699334434939605,
+        "delta_iteration_s": 4.5548345079878345,
+        "damer_iteration_s": 6.038526122749317,
+        "barrier_iteration_s": 1.483691614761483,
+        "coordinator_request_delta": 41168
+      },
+      {
+        "seed": 716,
+        "ratio": 4.155954342322005,
+        "delta_iteration_s": 4.60338906297693,
+        "damer_iteration_s": 6.0620252039516345,
+        "barrier_iteration_s": 1.4586361409747042,
+        "coordinator_request_delta": 41168
+      }
+    ]
+  },
+  {
+    "domain": "memsim",
+    "kernel": "wave",
+    "n": 64,
+    "policy": "refetch",
+    "pairs": 5,
+    "ratio_median": 2.843120910124835,
+    "bootstrap95": [
+      2.811089699015263,
+      2.855778417134439
+    ],
+    "delta_iteration_s_median": 4.589215590269305,
+    "damer_iteration_s_median": 7.089954234776087,
+    "barrier_iteration_s_median": 2.5007386445067823,
+    "observations": [
+      {
+        "seed": 712,
+        "ratio": 2.855778417134439,
+        "delta_iteration_s": 4.608074426010717,
+        "damer_iteration_s": 7.091169596998952,
+        "barrier_iteration_s": 2.4830951709882356,
+        "coordinator_request_delta": 41168
+      },
+      {
+        "seed": 713,
+        "ratio": 2.852708498977039,
+        "delta_iteration_s": 4.635769303014968,
+        "damer_iteration_s": 7.137927254778333,
+        "barrier_iteration_s": 2.5021579517633654,
+        "coordinator_request_delta": 41168
+      },
+      {
+        "seed": 714,
+        "ratio": 2.843120910124835,
+        "delta_iteration_s": 4.586208493274171,
+        "damer_iteration_s": 7.0744926140177995,
+        "barrier_iteration_s": 2.4882841207436286,
+        "coordinator_request_delta": 41168
+      },
+      {
+        "seed": 715,
+        "ratio": 2.835144028485404,
+        "delta_iteration_s": 4.589215590269305,
+        "damer_iteration_s": 7.089954234776087,
+        "barrier_iteration_s": 2.5007386445067823,
+        "coordinator_request_delta": 41168
+      },
+      {
+        "seed": 716,
+        "ratio": 2.811089699015263,
+        "delta_iteration_s": 4.558268383494578,
+        "damer_iteration_s": 7.075133443227969,
+        "barrier_iteration_s": 2.516865059733391,
+        "coordinator_request_delta": 41168
+      }
+    ]
+  },
+  {
+    "domain": "memsim",
+    "kernel": "wave",
+    "n": 64,
+    "policy": "retain",
+    "pairs": 5,
+    "ratio_median": 4.147151573093464,
+    "bootstrap95": [
+      4.116784292823355,
+      4.176912722391336
+    ],
+    "delta_iteration_s_median": 4.590983040747233,
+    "damer_iteration_s_median": 6.059265097253956,
+    "barrier_iteration_s_median": 1.4587740482529625,
+    "observations": [
+      {
+        "seed": 712,
+        "ratio": 4.176912722391336,
+        "delta_iteration_s": 4.621938586526085,
+        "damer_iteration_s": 6.076790825289208,
+        "barrier_iteration_s": 1.4548522387631238,
+        "coordinator_request_delta": 41168
+      },
+      {
+        "seed": 713,
+        "ratio": 4.173002806413502,
+        "delta_iteration_s": 4.618179529439658,
+        "damer_iteration_s": 6.073639801994432,
+        "barrier_iteration_s": 1.4554602725547738,
+        "coordinator_request_delta": 41168
+      },
+      {
+        "seed": 714,
+        "ratio": 4.119680055701793,
+        "delta_iteration_s": 4.588455467543099,
+        "damer_iteration_s": 6.059265097253956,
+        "barrier_iteration_s": 1.4708096297108568,
+        "coordinator_request_delta": 41168
+      },
+      {
+        "seed": 715,
+        "ratio": 4.116784292823355,
+        "delta_iteration_s": 4.579274709278252,
+        "damer_iteration_s": 6.048505262006074,
+        "barrier_iteration_s": 1.4692305527278222,
+        "coordinator_request_delta": 41168
+      },
+      {
+        "seed": 716,
+        "ratio": 4.147151573093464,
+        "delta_iteration_s": 4.590983040747233,
+        "damer_iteration_s": 6.049757089000195,
+        "barrier_iteration_s": 1.4587740482529625,
+        "coordinator_request_delta": 41168
+      }
+    ]
+  },
+  {
+    "domain": "memsim",
+    "kernel": "wave",
+    "n": 64,
+    "policy": "statistics",
+    "pairs": 5,
+    "ratio_median": 4.1226802713133806,
+    "bootstrap95": [
+      4.088429283883307,
+      4.2177811654801864
+    ],
+    "delta_iteration_s_median": 4.604589439521078,
+    "damer_iteration_s_median": 6.049592975527048,
+    "barrier_iteration_s_median": 1.4649660322465934,
+    "observations": [
+      {
+        "seed": 712,
+        "ratio": 4.208134112190662,
+        "delta_iteration_s": 4.61199787654914,
+        "damer_iteration_s": 6.049592975527048,
+        "barrier_iteration_s": 1.4375950989779085,
+        "coordinator_request_delta": 41168
+      },
+      {
+        "seed": 713,
+        "ratio": 4.1226802713133806,
+        "delta_iteration_s": 4.574620527040679,
+        "damer_iteration_s": 6.039586559287272,
+        "barrier_iteration_s": 1.4649660322465934,
+        "coordinator_request_delta": 41168
+      },
+      {
+        "seed": 714,
+        "ratio": 4.102992355425934,
+        "delta_iteration_s": 4.5576819572015665,
+        "damer_iteration_s": 6.0264841439784504,
+        "barrier_iteration_s": 1.468802186776884,
+        "coordinator_request_delta": 41168
+      },
+      {
+        "seed": 715,
+        "ratio": 4.088429283883307,
+        "delta_iteration_s": 4.604589439521078,
+        "damer_iteration_s": 6.095505700272042,
+        "barrier_iteration_s": 1.4909162607509643,
+        "coordinator_request_delta": 41168
+      },
+      {
+        "seed": 716,
+        "ratio": 4.2177811654801864,
+        "delta_iteration_s": 4.64139482320752,
+        "damer_iteration_s": 6.083815728954505,
+        "barrier_iteration_s": 1.4424209057469852,
+        "coordinator_request_delta": 41168
+      }
+    ]
+  },
+  {
+    "domain": "physical",
+    "kernel": "gray-scott",
+    "n": 256,
+    "policy": "cxl-cache",
+    "pairs": 5,
+    "ratio_median": 1.0417097420020154,
+    "bootstrap95": [
+      0.8202895116921942,
+      1.1736900222748747
+    ],
+    "delta_iteration_s_median": 0.01023582526249811,
+    "damer_iteration_s_median": 0.2763734062900767,
+    "barrier_iteration_s_median": 0.2580656277714297,
+    "observations": [
+      {
+        "seed": 712,
+        "ratio": 1.0417097420020154,
+        "delta_iteration_s": 0.01023582526249811,
+        "damer_iteration_s": 0.2556419287575409,
+        "barrier_iteration_s": 0.24540610349504277,
+        "coordinator_request_delta": 0
+      },
+      {
+        "seed": 713,
+        "ratio": 0.9572455851026522,
+        "delta_iteration_s": -0.012352047255262733,
+        "damer_iteration_s": 0.27655489451717585,
+        "barrier_iteration_s": 0.2889069417724386,
+        "coordinator_request_delta": 0
+      },
+      {
+        "seed": 714,
+        "ratio": 1.1736900222748747,
+        "delta_iteration_s": 0.04105041828006506,
+        "damer_iteration_s": 0.27739340299740434,
+        "barrier_iteration_s": 0.23634298471733928,
+        "coordinator_request_delta": 0
+      },
+      {
+        "seed": 715,
+        "ratio": 1.0709423361675359,
+        "delta_iteration_s": 0.018307778518646955,
+        "damer_iteration_s": 0.2763734062900767,
+        "barrier_iteration_s": 0.2580656277714297,
+        "coordinator_request_delta": 0
+      },
+      {
+        "seed": 716,
+        "ratio": 0.8202895116921942,
+        "delta_iteration_s": -0.05088189704110846,
+        "damer_iteration_s": 0.23225069872569293,
+        "barrier_iteration_s": 0.2831325957668014,
+        "coordinator_request_delta": 0
+      }
+    ]
+  },
+  {
+    "domain": "physical",
+    "kernel": "gray-scott",
+    "n": 256,
+    "policy": "cxl-shared",
+    "pairs": 5,
+    "ratio_median": 1.146593121613038,
+    "bootstrap95": [
+      1.00994167349694,
+      1.265493635060136
+    ],
+    "delta_iteration_s_median": 0.029195664217695594,
+    "damer_iteration_s_median": 0.2522599217481911,
+    "barrier_iteration_s_median": 0.21269007725641131,
+    "observations": [
+      {
+        "seed": 712,
+        "ratio": 1.146593121613038,
+        "delta_iteration_s": 0.029195664217695594,
+        "damer_iteration_s": 0.2283568792627193,
+        "barrier_iteration_s": 0.1991612150450237,
+        "coordinator_request_delta": 0
+      },
+      {
+        "seed": 713,
+        "ratio": 1.00994167349694,
+        "delta_iteration_s": 0.0024009092012420297,
+        "damer_iteration_s": 0.24390041147125885,
+        "barrier_iteration_s": 0.24149950227001682,
+        "coordinator_request_delta": 0
+      },
+      {
+        "seed": 714,
+        "ratio": 1.1868131501713288,
+        "delta_iteration_s": 0.03970757371280342,
+        "damer_iteration_s": 0.2522599217481911,
+        "barrier_iteration_s": 0.2125523480353877,
+        "coordinator_request_delta": 0
+      },
+      {
+        "seed": 715,
+        "ratio": 1.265493635060136,
+        "delta_iteration_s": 0.05646786175202578,
+        "damer_iteration_s": 0.2691579390084371,
+        "barrier_iteration_s": 0.21269007725641131,
+        "coordinator_request_delta": 0
+      },
+      {
+        "seed": 716,
+        "ratio": 1.0954100379770317,
+        "delta_iteration_s": 0.02203008026117459,
+        "damer_iteration_s": 0.2529290582751855,
+        "barrier_iteration_s": 0.23089897801401094,
+        "coordinator_request_delta": 0
+      }
+    ]
+  },
+  {
+    "domain": "physical",
+    "kernel": "gray-scott",
+    "n": 256,
+    "policy": "file-mmap",
+    "pairs": 5,
+    "ratio_median": 0.985319303954677,
+    "bootstrap95": [
+      0.922405293768997,
+      1.1518286017867179
+    ],
+    "delta_iteration_s_median": -0.0029256740235723555,
+    "damer_iteration_s_median": 0.21698831371031702,
+    "barrier_iteration_s_median": 0.20873547054361552,
+    "observations": [
+      {
+        "seed": 712,
+        "ratio": 1.1518286017867179,
+        "delta_iteration_s": 0.025294278049841523,
+        "damer_iteration_s": 0.1918918607989326,
+        "barrier_iteration_s": 0.1665975827490911,
+        "coordinator_request_delta": 0
+      },
+      {
+        "seed": 713,
+        "ratio": 0.985319303954677,
+        "delta_iteration_s": -0.0029256740235723555,
+        "damer_iteration_s": 0.1963614724809304,
+        "barrier_iteration_s": 0.19928714650450274,
+        "coordinator_request_delta": 0
+      },
+      {
+        "seed": 714,
+        "ratio": 0.9498543669247833,
+        "delta_iteration_s": -0.012039059191010892,
+        "damer_iteration_s": 0.22804284730227664,
+        "barrier_iteration_s": 0.24008190649328753,
+        "coordinator_request_delta": 0
+      },
+      {
+        "seed": 715,
+        "ratio": 1.1211361065304712,
+        "delta_iteration_s": 0.025285402196459472,
+        "damer_iteration_s": 0.234020872740075,
+        "barrier_iteration_s": 0.20873547054361552,
+        "coordinator_request_delta": 0
+      },
+      {
+        "seed": 716,
+        "ratio": 0.922405293768997,
+        "delta_iteration_s": -0.01825352106243372,
+        "damer_iteration_s": 0.21698831371031702,
+        "barrier_iteration_s": 0.23524183477275074,
+        "coordinator_request_delta": 0
+      }
+    ]
+  },
+  {
+    "domain": "physical",
+    "kernel": "wave",
+    "n": 256,
+    "policy": "cxl-cache",
+    "pairs": 5,
+    "ratio_median": 1.0391587689793496,
+    "bootstrap95": [
+      0.9975786548325939,
+      1.1689685296222085
+    ],
+    "delta_iteration_s_median": 0.010362387518398464,
+    "damer_iteration_s_median": 0.25892760953865945,
+    "barrier_iteration_s_median": 0.2339653757517226,
+    "observations": [
+      {
+        "seed": 712,
+        "ratio": 1.106691999646247,
+        "delta_iteration_s": 0.02496223378693685,
+        "damer_iteration_s": 0.25892760953865945,
+        "barrier_iteration_s": 0.2339653757517226,
+        "coordinator_request_delta": 0
+      },
+      {
+        "seed": 713,
+        "ratio": 1.0391587689793496,
+        "delta_iteration_s": 0.010362387518398464,
+        "damer_iteration_s": 0.274987343524117,
+        "barrier_iteration_s": 0.26462495600571856,
+        "coordinator_request_delta": 0
+      },
+      {
+        "seed": 714,
+        "ratio": 1.0378940536346546,
+        "delta_iteration_s": 0.008985516265965998,
+        "damer_iteration_s": 0.24610758171183988,
+        "barrier_iteration_s": 0.2371220654458739,
+        "coordinator_request_delta": 0
+      },
+      {
+        "seed": 715,
+        "ratio": 1.1689685296222085,
+        "delta_iteration_s": 0.03868461976526305,
+        "damer_iteration_s": 0.2676303284824826,
+        "barrier_iteration_s": 0.22894570871721953,
+        "coordinator_request_delta": 0
+      },
+      {
+        "seed": 716,
+        "ratio": 0.9975786548325939,
+        "delta_iteration_s": -0.000530385528691113,
+        "damer_iteration_s": 0.2185154307517223,
+        "barrier_iteration_s": 0.21904581628041342,
+        "coordinator_request_delta": 0
+      }
+    ]
+  },
+  {
+    "domain": "physical",
+    "kernel": "wave",
+    "n": 256,
+    "policy": "cxl-shared",
+    "pairs": 5,
+    "ratio_median": 1.1042591784161675,
+    "bootstrap95": [
+      0.9218525822115023,
+      1.303470163651692
+    ],
+    "delta_iteration_s_median": 0.021743878023698926,
+    "damer_iteration_s_median": 0.2359142485074699,
+    "barrier_iteration_s_median": 0.21143726672744378,
+    "observations": [
+      {
+        "seed": 712,
+        "ratio": 1.1042591784161675,
+        "delta_iteration_s": 0.021743878023698926,
+        "damer_iteration_s": 0.23029988579219207,
+        "barrier_iteration_s": 0.20855600776849315,
+        "coordinator_request_delta": 0
+      },
+      {
+        "seed": 713,
+        "ratio": 1.303470163651692,
+        "delta_iteration_s": 0.06042530277045444,
+        "damer_iteration_s": 0.25953977927565575,
+        "barrier_iteration_s": 0.1991144765052013,
+        "coordinator_request_delta": 0
+      },
+      {
+        "seed": 714,
+        "ratio": 1.115764747430161,
+        "delta_iteration_s": 0.024476981780026108,
+        "damer_iteration_s": 0.2359142485074699,
+        "barrier_iteration_s": 0.21143726672744378,
+        "coordinator_request_delta": 0
+      },
+      {
+        "seed": 715,
+        "ratio": 0.9218525822115023,
+        "delta_iteration_s": -0.018491745286155492,
+        "damer_iteration_s": 0.21813469496555626,
+        "barrier_iteration_s": 0.23662644025171176,
+        "coordinator_request_delta": 0
+      },
+      {
+        "seed": 716,
+        "ratio": 0.9534325921666477,
+        "delta_iteration_s": -0.01237996225245297,
+        "damer_iteration_s": 0.2534704002318904,
+        "barrier_iteration_s": 0.26585036248434335,
+        "coordinator_request_delta": 0
+      }
+    ]
+  },
+  {
+    "domain": "physical",
+    "kernel": "wave",
+    "n": 256,
+    "policy": "file-mmap",
+    "pairs": 5,
+    "ratio_median": 1.1746561309494536,
+    "bootstrap95": [
+      0.8204160000176292,
+      1.5304519031695523
+    ],
+    "delta_iteration_s_median": 0.032113198249135166,
+    "damer_iteration_s_median": 0.21502150350715965,
+    "barrier_iteration_s_median": 0.18386527901748195,
+    "observations": [
+      {
+        "seed": 712,
+        "ratio": 1.5304519031695523,
+        "delta_iteration_s": 0.0830082799657248,
+        "damer_iteration_s": 0.2394942487590015,
+        "barrier_iteration_s": 0.1564859687932767,
+        "coordinator_request_delta": 0
+      },
+      {
+        "seed": 713,
+        "ratio": 1.1746561309494536,
+        "delta_iteration_s": 0.032113198249135166,
+        "damer_iteration_s": 0.21597847726661712,
+        "barrier_iteration_s": 0.18386527901748195,
+        "coordinator_request_delta": 0
+      },
+      {
+        "seed": 714,
+        "ratio": 1.0142697601357007,
+        "delta_iteration_s": 0.0030251372954808176,
+        "damer_iteration_s": 0.21502150350715965,
+        "barrier_iteration_s": 0.21199636621167883,
+        "coordinator_request_delta": 0
+      },
+      {
+        "seed": 715,
+        "ratio": 1.234301306480869,
+        "delta_iteration_s": 0.04036163497949019,
+        "damer_iteration_s": 0.21262544172350317,
+        "barrier_iteration_s": 0.17226380674401298,
+        "coordinator_request_delta": 0
+      },
+      {
+        "seed": 716,
+        "ratio": 0.8204160000176292,
+        "delta_iteration_s": -0.03995989199029282,
+        "damer_iteration_s": 0.18255376175511628,
+        "barrier_iteration_s": 0.2225136537454091,
+        "coordinator_request_delta": 0
+      }
+    ]
+  }
+]

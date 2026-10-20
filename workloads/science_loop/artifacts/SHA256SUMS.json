@@ -1,0 +1,27 @@
+{
+  "archives": {
+    "science-e2e-final-20261020.tar.gz": "34d1235471c5b13a542e97ccd9adc656532457c9bd2e12ca7ad0a22ed3f95525",
+    "damer-ablation-20261020.tar.gz": "0a1473b83ec4d615e9bd8750fd018d352f7b8b84cb91dbbd4cfaeb8c296dab74",
+    "memsim-e2e-20261020.tar.gz": "2870ad5ba4538925d1a13bb1e2dc78dad94302a88b4ff4be38feb7733de58bd3",
+    "method-history-20261020.tar.gz": "72ebba70c6f5ae907c28887b85dad1563fe5340766c3c40f3fa9fad68c26fba8"
+  },
+  "final_populations": {
+    "science-e2e-final-20261020": {
+      "loops": 380,
+      "iterations": 1520,
+      "status": "pass"
+    },
+    "memsim-e2e-20261020": {
+      "loops": 80,
+      "iterations": 320,
+      "status": "pass"
+    },
+    "damer-ablation-20261020": {
+      "loops": 120,
+      "iterations": 480,
+      "status": "pass"
+    }
+  },
+  "history": "Earlier attempts and superseded revisions; never pooled into final timing statistics.",
+  "excluded": "No manuscript, paper figures, SSH configuration, model credentials, or external files."
+}

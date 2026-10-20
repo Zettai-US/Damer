@@ -619,3 +619,20 @@ The earlier six live episodes and software grant/revoke measurements remain
 separate results. NVIDIA Sentry comparison remains unmeasured:
 this machine has no BlueField hardware or configured Sentry endpoint. Historical
 file-lock controls are excluded from the current results.
+
+## Scientific Discovery Loops
+
+[workloads/science_loop](workloads/science_loop/README.md) executes adaptive
+simulation, surrogate training, and experiment selection with explicit shared
+trajectory/model lifetimes. It includes a physical-CXL host study, an actual
+three-host CXLMemSim TCP experiment, and paired with/without DSec integration
+under identical data and cache policies. The fixed-stage baseline uses the
+same CXL locks and manually safe lifetimes; it is not forced to copy more data.
+
+Complete-loop timings, scientific hashes, residency, copy/fetch accounting,
+controller state, source snapshots, and descriptive paired intervals are
+archived separately for each population. Simulator seconds include Python,
+server work and SSH/TCP; they are not predicted hardware-CXL latency. The
+current simulator uses a direct protocol adapter, not the Splash library.
+The English manuscript and editable publication figures remain in their
+separate paper repository and are excluded from this code/data push.

@@ -1,0 +1,347 @@
+{
+  "status": "pass",
+  "loops": 80,
+  "iterations": 320,
+  "failures": [],
+  "exact_policy_groups": 20,
+  "exact_groups_total": 40,
+  "cross_placement_groups": 10,
+  "cross_placement_max_absolute_error": 6.407499313354492e-05,
+  "numerical_tolerance": {
+    "rtol": 0.001,
+    "atol": 0.0001
+  },
+  "source_hashes": {
+    "kernels.py": "b791ab26815115e2ba6ec5e1efba5fde9021e8129613ebed447dd6d02c639f48",
+    "memsim_client.py": "cd18975f85568c7b3217b8242a13cc7de496c13bfdcd22fcb9720d6bc15183ac",
+    "memsim_worker.py": "89887b5809e65116f13e1a61bc2d67fdc91d23c82be9956349bd7105ed578626",
+    "memsim_store.py": "e9f7e765aa6194ec049c124cb1c1c33ad6927b0c4f9fc3fd9b9d5dfcb89a7120",
+    "run_memsim.py": "9ebbc36f5ed8df44e4c1909d911e2c2b2775be6d05f37566dc1e48b7f22fbd76",
+    "dsec.py": "3dbea9f5a62bf028135bdfca93a335948f453d12a59bde49dd7049ab8f0757fa",
+    "dataflow.py": "abc4ff632302479ed4ce497c6ca0a5943766a84b27641ad6088d1b92ee2fcb2d",
+    "store.py": "56246e42d352d815997a357ed9fbd41fc4312faa61fba8640376d2ce4a21fd6f"
+  },
+  "result_hashes": [
+    {
+      "path": "main/b0-00-wave-n32-statistics-split",
+      "sha256": "22aa61d17bc322293dfa60cdb3d6b13f30a36c8f44e69268d2f442888021f7b3"
+    },
+    {
+      "path": "main/b0-01-wave-n64-statistics-split",
+      "sha256": "b53a1cf084434fa27374fd4d552976ee8f18bbf858c23a785ca2de80318647b3"
+    },
+    {
+      "path": "main/b0-02-gray-scott-n64-statistics-split",
+      "sha256": "e1f06eb64b61f417d45764c1efc5941d7c880d3620988dcdbd067ace38551025"
+    },
+    {
+      "path": "main/b0-03-gray-scott-n32-statistics-split",
+      "sha256": "c2ae55e14f22f0e898a7f1b79702ed2f00873a162c53cbd35b653c3377111c3c"
+    },
+    {
+      "path": "main/b0-04-gray-scott-n64-refetch-split",
+      "sha256": "633cca6993c8dc9f158bd3a85c671ded527e39eb2f6b5ff18f61c97821113049"
+    },
+    {
+      "path": "main/b0-05-gray-scott-n32-refetch-split",
+      "sha256": "c240b1baf578a4c465310c5a9f42059d86031462303c0663dbd8d58ebefbe424"
+    },
+    {
+      "path": "main/b0-06-wave-n64-refetch-split",
+      "sha256": "11b0d0d467ac7b5d1be1888039995954e9971a701f645b0349f183ddf562c781"
+    },
+    {
+      "path": "main/b0-07-gray-scott-n32-retain-split",
+      "sha256": "89b108ccbd232ca526a4720bcc44046f53d880aca825edea256672a9888e8cdb"
+    },
+    {
+      "path": "main/b0-08-gray-scott-n64-retain-split",
+      "sha256": "052940dd69de7bd1ea98c2d901d3d63f704565fdddb70e1aaecc8238281d2b11"
+    },
+    {
+      "path": "main/b0-09-wave-n32-refetch-split",
+      "sha256": "a32e26e509c59e556a55fdc0111a4e2f2b419b1c04e4080d8469c6d7f662233f"
+    },
+    {
+      "path": "main/b0-10-wave-n64-retain-split",
+      "sha256": "55f56f0d9b68451deb2928562568b11c1f9a5c9e81ae4332a406edf07a04adb7"
+    },
+    {
+      "path": "main/b0-11-wave-n32-retain-split",
+      "sha256": "fbb744cc7bb9af15896cce0199859bab62b65846459f99139f9ec51c420f7fd4"
+    },
+    {
+      "path": "main/b1-00-gray-scott-n64-statistics-split",
+      "sha256": "4d236950c526e78a122b02f1452c00dc006bc1e5d5445cb9dffddffd7b68c430"
+    },
+    {
+      "path": "main/b1-01-gray-scott-n32-retain-split",
+      "sha256": "1306b20fe085caaa393d7ee644bdae60dbac311edeb34ca843184462bd278ee4"
+    },
+    {
+      "path": "main/b1-02-wave-n32-retain-split",
+      "sha256": "1235af67566b4c4f6653010c8d5475e6f2fffbdec4957e4fc79d75868bae7219"
+    },
+    {
+      "path": "main/b1-03-wave-n64-retain-split",
+      "sha256": "a195a9f3ca209de3ef17f70760bda20fb90213ea12459331bf5ac7775040b9bb"
+    },
+    {
+      "path": "main/b1-04-wave-n32-statistics-split",
+      "sha256": "ea849379372d491dc8e20adc96c6f604785f1d338a1cb352b182d88a2f5cdd75"
+    },
+    {
+      "path": "main/b1-05-gray-scott-n64-refetch-split",
+      "sha256": "71c5cbe5336ebd5094ad99ad8e8ec64c8c303f4c0295439e2e704a2df8fd6824"
+    },
+    {
+      "path": "main/b1-06-wave-n64-refetch-split",
+      "sha256": "ecf8ee77772158c5b5bac97627ca2053fe68f756f49a78216a41bde7480e8f31"
+    },
+    {
+      "path": "main/b1-07-wave-n64-statistics-split",
+      "sha256": "6c090c6b3bf1e8adc76c5b0045a420033444d85feb043dfffce9b70bf358e6bd"
+    },
+    {
+      "path": "main/b1-08-gray-scott-n64-retain-split",
+      "sha256": "2b4cd741a90eaaca15edb5357dc027e7a5f6bb4427cd95f36034ccc87c32b01b"
+    },
+    {
+      "path": "main/b1-09-wave-n32-refetch-split",
+      "sha256": "437cc4f8d7b1ed49699e25ddebad497ddb01f892928bb02422b207d1196532dd"
+    },
+    {
+      "path": "main/b1-10-gray-scott-n32-statistics-split",
+      "sha256": "9f8f9e349dd207f0f7426c529edb1245ba9fb5823af3ee1b39fe938ebae7f4be"
+    },
+    {
+      "path": "main/b1-11-gray-scott-n32-refetch-split",
+      "sha256": "81a7ef6644ae2888597aa9449128ba4e6bfd6860fd30b2bed7fa60bd9e7040ac"
+    },
+    {
+      "path": "main/b2-00-gray-scott-n64-statistics-split",
+      "sha256": "23b7b65ce6db9f5c6c9d8795a5c2b021dc3abb9c75400eab923d323994c73acf"
+    },
+    {
+      "path": "main/b2-01-wave-n32-statistics-split",
+      "sha256": "e9d2c1c78fd4f1b78c65f9f2ae23fc4ed5ef3c8dfbbf8898f48caad3aea99947"
+    },
+    {
+      "path": "main/b2-02-gray-scott-n32-refetch-split",
+      "sha256": "5ffc6dd3e0d3edc53fa8573c366f1569e7641faf7ab31ca83c9a239005cdce87"
+    },
+    {
+      "path": "main/b2-03-wave-n64-retain-split",
+      "sha256": "19770073c3766164dff3de1761fb0043bedd6393f17c6300795549be1d43794c"
+    },
+    {
+      "path": "main/b2-04-wave-n64-statistics-split",
+      "sha256": "167d9b929f8843cc11b13989e2a885ad11aecaa9e4153ca2cd07e56ed52b59fc"
+    },
+    {
+      "path": "main/b2-05-wave-n32-retain-split",
+      "sha256": "5e99c7bc5fcbb62de02bb4e60b7c577e7c1f55144678243456f53a1f3ce7e466"
+    },
+    {
+      "path": "main/b2-06-wave-n32-refetch-split",
+      "sha256": "3fea3da7ddedb05cd201280cb3943f7c79350ba49f64495e094b431b62586ac4"
+    },
+    {
+      "path": "main/b2-07-wave-n64-refetch-split",
+      "sha256": "889372afab678fab1c011340aa96fa58be223ab9027c05f90a57e91a694f17b6"
+    },
+    {
+      "path": "main/b2-08-gray-scott-n32-statistics-split",
+      "sha256": "b59be2dc0a42ebcfa04c03e64d496893f64b3245513bcbc890034d1d1d899757"
+    },
+    {
+      "path": "main/b2-09-gray-scott-n64-refetch-split",
+      "sha256": "41cfe49f4fc2be3f540a24284d93aa995a80c30440477058fc9f43150097b492"
+    },
+    {
+      "path": "main/b2-10-gray-scott-n32-retain-split",
+      "sha256": "9b0df56e4112dde18408c88e916e0e359b19138099bf5b57f2417e2ebd3e1667"
+    },
+    {
+      "path": "main/b2-11-gray-scott-n64-retain-split",
+      "sha256": "121f6b09c814bc373f3d6fd9683007ad14508c38b0ca5be7db9a9f37542339a5"
+    },
+    {
+      "path": "main/b3-00-gray-scott-n32-statistics-split",
+      "sha256": "76a60e1fc8a69bf429f8c03a99bac21131c99f059101291b2867ed33f54d827c"
+    },
+    {
+      "path": "main/b3-01-gray-scott-n64-statistics-split",
+      "sha256": "b5034735e352c02ca0a6885f1b9eef1d1713ffa95deb7fafd6fd9f2d59ff6e3e"
+    },
+    {
+      "path": "main/b3-02-wave-n32-retain-split",
+      "sha256": "29d1dad14f1692831c40f5499b0723eb208fc2a98c39525d2ac520d24229765a"
+    },
+    {
+      "path": "main/b3-03-wave-n32-refetch-split",
+      "sha256": "aa50e7fe3416218ec3a405115d28f8e821cd62ce4662850cd2d6dbb7935b067a"
+    },
+    {
+      "path": "main/b3-04-gray-scott-n64-refetch-split",
+      "sha256": "d0c8bd121c903785de36bce5d253b3b67cda53d1470d075aec7f18034f3a2350"
+    },
+    {
+      "path": "main/b3-05-gray-scott-n32-refetch-split",
+      "sha256": "7318b8b934e0532f3e5b46f85bb25cd19b6ce13bd0e9819d88e7fb2b41e55fb2"
+    },
+    {
+      "path": "main/b3-06-gray-scott-n64-retain-split",
+      "sha256": "5638cda612b4cd57ae8ab110a4b8389ed8810f80501b0f6803b2b68fa916d197"
+    },
+    {
+      "path": "main/b3-07-gray-scott-n32-retain-split",
+      "sha256": "5485615500db0bffbfbea50ec038cec059b5ec30a9309d9c79544a0c55cdcec5"
+    },
+    {
+      "path": "main/b3-08-wave-n32-statistics-split",
+      "sha256": "172714c9928b26164c3091444de15776b681815b83b59d7bfcc886bfe2d12ac9"
+    },
+    {
+      "path": "main/b3-09-wave-n64-refetch-split",
+      "sha256": "aa6ce69f30778478eddfd4f7437ac796e365fb1301f6b45e907c621f06653bd7"
+    },
+    {
+      "path": "main/b3-10-wave-n64-retain-split",
+      "sha256": "ca179ec7a4c4533d845f91cebbadf07382fc16bc1b70bf964247f82d47a1d11c"
+    },
+    {
+      "path": "main/b3-11-wave-n64-statistics-split",
+      "sha256": "5248e3418f8f454e008e0a1337ee702ae8f28b78bd038ac974859755f067ce88"
+    },
+    {
+      "path": "main/b4-00-gray-scott-n32-refetch-split",
+      "sha256": "d0eb2b8929973ca74e4a67e7c97cacd0e38e61e17237f488212b128cf38d4ee4"
+    },
+    {
+      "path": "main/b4-01-gray-scott-n64-refetch-split",
+      "sha256": "a29e5a53c5867321fe9f6715248d0385a3c358a93a7d3a5678766c513a5869c6"
+    },
+    {
+      "path": "main/b4-02-gray-scott-n64-statistics-split",
+      "sha256": "f2ba4f68c52032f2777dd1b071709284d53b7613c0678048a6516c9ae4ca7371"
+    },
+    {
+      "path": "main/b4-03-wave-n64-refetch-split",
+      "sha256": "d5e9bcd7c37aae86ff469081a16d86932748df70dd2dc43e04331de9f0ad44bd"
+    },
+    {
+      "path": "main/b4-04-gray-scott-n64-retain-split",
+      "sha256": "42c1faff2464f01dcd3868905b281eca73a86c5597921839ff78b5fcc75a2010"
+    },
+    {
+      "path": "main/b4-05-gray-scott-n32-statistics-split",
+      "sha256": "5cfe04bc59c12f6c921f300064deaa99a6fe258695989b851ad494da9444c5b2"
+    },
+    {
+      "path": "main/b4-06-wave-n32-retain-split",
+      "sha256": "cc54e4acbe2e29325ff1e25c6efdada58128ba7a6018548066cd3d814504a298"
+    },
+    {
+      "path": "main/b4-07-wave-n64-retain-split",
+      "sha256": "5721bba3935b2e5245d6abbb7dede1e736027b4d19775874373af958f83dcfd1"
+    },
+    {
+      "path": "main/b4-08-wave-n32-statistics-split",
+      "sha256": "f8156f711f8476e738bbbd1b66fc4544c3517e989a0f8de0a508469029fde87f"
+    },
+    {
+      "path": "main/b4-09-gray-scott-n32-retain-split",
+      "sha256": "6687d722522a86efa1997b57adc123e283c3b724fd002facd460f819599aaf51"
+    },
+    {
+      "path": "main/b4-10-wave-n64-statistics-split",
+      "sha256": "11b1439e00d46a918941bfd602b45f15a010285a7da993b5429a552895c73cbc"
+    },
+    {
+      "path": "main/b4-11-wave-n32-refetch-split",
+      "sha256": "681c4d3e6a5164d2dd4172eff66bd2e3e05a8bc21c3dfc9edfb9c4e8ba82811c"
+    },
+    {
+      "path": "placement/b0-00-gray-scott-n64-retain-bana",
+      "sha256": "673d3c11947148c41f55a81b51f74248158fc5fb0436edd16d8e220f17adfa49"
+    },
+    {
+      "path": "placement/b0-01-gray-scott-n64-retain-6787p",
+      "sha256": "48f0e0d6d85db52af954534d32808c4bc4aeb0fa0a432c1fc7d3230c1d31e115"
+    },
+    {
+      "path": "placement/b0-02-wave-n64-retain-bana",
+      "sha256": "36b5a756d2a40e0d633f60cdd103ab61caa4bb07f7494b510bfd67e2da6a036f"
+    },
+    {
+      "path": "placement/b0-03-wave-n64-retain-6787p",
+      "sha256": "22ff9bebbb2a6bcf8f4887095ea732420d5f96ab4000d6aa55145e1ad1c4b4d8"
+    },
+    {
+      "path": "placement/b1-00-wave-n64-retain-bana",
+      "sha256": "9b6a50c7a052e1e42cf0d3bb75261c14929f665ccd530509faa54609e9bc2e69"
+    },
+    {
+      "path": "placement/b1-01-gray-scott-n64-retain-6787p",
+      "sha256": "e3c7c7b04d9cab55a3470f821c4ab2e89daeee2324b45bb75ec4f86b0119ac59"
+    },
+    {
+      "path": "placement/b1-02-wave-n64-retain-6787p",
+      "sha256": "2c62895c2e6e8b8a8865eb35c249f7805c277100c2f7e912f902cfc4f85ad3ca"
+    },
+    {
+      "path": "placement/b1-03-gray-scott-n64-retain-bana",
+      "sha256": "92980361ab411255fcc28923e47adc270d4af9ac2642a22b52728bf25ee4f078"
+    },
+    {
+      "path": "placement/b2-00-gray-scott-n64-retain-6787p",
+      "sha256": "0daf9b9b61343636127fd23166040a581a8eabe5e57ff33d737233e1d52c680d"
+    },
+    {
+      "path": "placement/b2-01-wave-n64-retain-6787p",
+      "sha256": "b532e15fbe33a66e5d66b1924ed89b30c441224e5717b7720b350fe9caed4403"
+    },
+    {
+      "path": "placement/b2-02-gray-scott-n64-retain-bana",
+      "sha256": "15f43ae283f286a2c7f66469d4e6c9635eb9eb21102a2fca2f58804603d68d8a"
+    },
+    {
+      "path": "placement/b2-03-wave-n64-retain-bana",
+      "sha256": "7fb87fb16671384bc16dc4ee0f5b3daefb7c49989803f9ebab2a22f400e9cb32"
+    },
+    {
+      "path": "placement/b3-00-gray-scott-n64-retain-6787p",
+      "sha256": "97f3d45007f756e103b0225a0be736e19874c6b27fcee0fc71bb9cf1602a0bd9"
+    },
+    {
+      "path": "placement/b3-01-wave-n64-retain-6787p",
+      "sha256": "1e96cdace23a1401910f0e808b4aa7c3d7f6eda6dc3fdadf172355be40ed8fe5"
+    },
+    {
+      "path": "placement/b3-02-wave-n64-retain-bana",
+      "sha256": "8fb694fc744e28e9e22b66ae9169701c041353a7ab14dc3d8f8edbe7e6d2df06"
+    },
+    {
+      "path": "placement/b3-03-gray-scott-n64-retain-bana",
+      "sha256": "162a4d9f88ce8804c79d1f8564c6cc29d5dc4ebb808318312beca41b04f76048"
+    },
+    {
+      "path": "placement/b4-00-wave-n64-retain-bana",
+      "sha256": "6022136431160778da54ad7d512aa48a13e658ce3f2ae59d4161722be4bd601c"
+    },
+    {
+      "path": "placement/b4-01-gray-scott-n64-retain-bana",
+      "sha256": "8225b0939163c40de83f4e8ed8f98f93f802e87d79a02cdd2f73a1f10b4356d6"
+    },
+    {
+      "path": "placement/b4-02-gray-scott-n64-retain-6787p",
+      "sha256": "1b480811ba97e5efd5a11847308dcd9611a6c90fd2c6e21d5d722e9333abdc7e"
+    },
+    {
+      "path": "placement/b4-03-wave-n64-retain-6787p",
+      "sha256": "5ade2157769fe91f0737c6ebed7f75193ecc00a9460726cafc4fab55d4b1b463"
+    }
+  ],
+  "caveat": "Wall time measures this TCP simulator, including SSH. Modeled latency sums are not predicted E2E time."
+}
