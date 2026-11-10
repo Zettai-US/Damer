@@ -21,6 +21,13 @@ damer-compile
         +--> bpftime runtime manifest
 ```
 
+## GB10 GPU Runtime
+
+The standalone [CUDA backend](workloads/gpu_runtime/README.md) runs accepted
+fixed task graphs and object lifetimes on the GPU. It includes GB10 build
+instructions, correctness checks, CUDA Graph controls, and an optional NCCL
+comparison runner. It builds separately from the middleware compiler.
+
 ## eBPF Middleware Compiler
 
 Compile the high-level switchlet form:
